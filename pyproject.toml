@@ -12,6 +12,8 @@ dependencies = [
     "pyautogui",
     "claude-code-sdk",
     "pillow",
+    "pyyaml",
+    "python-dotenv",
     "openhands-sdk; python_version >= '3.12'",
     "openhands-tools; python_version >= '3.12'",
     "brokenaxes>=0.6.2",
