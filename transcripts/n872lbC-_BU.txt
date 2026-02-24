@@ -1,0 +1,440 @@
+all right welcome back so today we're
+going to be working on animation trees
+we're going to blend together a upper
+body and lower body we're also going to
+use the various movements that we have
+imported now if we hop into Godot here I
+have a couple extra animations that I've
+already imported we had the Ford import
+from the last video but I went ahead and
+imported a back left and right from
+miximo you can use whatever you like or
+you can make your own but for the
+purposes of this tutorial I did not go
+over or record that as we already did
+that in the past episode and so for
+future episodes whenever I have a new
+animation that I need I'll just go ahead
+and grab it and I'll say that I imported
+it and if you want to know how you just
+have to go back to the previous video So
+today we're going to be going over
+animation trees for this tutorial we're
+going to be going over the first half
+which is going to be all of the basics
+and then the second half is going to be
+going over things like events method
+calls and functions and things of that
+nature but for now we've got the
+animation tree and so we have a couple
+of variables over here that we should
+probably go ahead and fill so let's go
+ahead and set the animation player to
+animation player we can't set active to
+on yet because we haven't selected a
+tree root so these are your different
+options root node is just what
+everything else derives from blend tree
+is a pretty simple canvas that you can
+go ahead and add different things to
+like animations one shots ads Blends
+State machines things like that we're
+going to be using this but I'm going to
+get back to it let's go over the other
+things first so the next one is blend
+space 1D and this just gives you a
+horizontal blend between animations and
+you can set them anywhere you like and
+if you set up an animation here by
+selecting the little arrow you can right
+click and add animation so we'll just do
+forward import and let's do back import
+over here on the left
+and we can go ahead and hit on
+then if we blend between these it will
+not exactly precisely and ideally we
+would also have a idle here in the
+center so that that way the animation
+knows what to do when it's just sitting
+in the center but now we can blend
+between these two animations next up is
+blind space 2D so if we go ahead and
+select that it's exactly like the 1D
+before but you have four directions now
+you can go in any direction you like and
+this is going to be a little bit more
+like what we're going to do for our
+movement so if we go ahead and add in a
+couple animations here
+now you can see if we go right we've got
+running right and if we go forward we've
+got running forward and that in between
+is actually handled by this now mind you
+it's never going to look as good as if
+you actually have proper animations for
+that in between but it doesn't look half
+bad there's also something else you can
+do if you select sync up here it will
+attempt to sync all the animations
+together and specifically with
+Locomotion I would highly suggest you do
+so as long as their timing are all the
+same that way if the right foot is
+forward on one of these animations it
+should be forward on all the other
+animations this really lets you have a
+bit of a better blend between all of the
+different locomotions now for hermit
+specifically I actually have a walking
+which is another set of points here in
+between the others that it Blends into
+when it's halfway between and then I
+also at some point I'm going to be
+adding angular directions as well just
+to clean up these animations the more
+animations you add to a 2d blend the
+better results you'll get next up we
+have state machine State machine are
+extremely useful for different types of
+States as the name implies and if they
+can actually be used in blend trees so
+if we add in we have a couple options
+here we can add in like a blend space 2D
+and this blind space 2D can be our
+movement and then we can add in perhaps
+an animation for waving and then we can
+transition back and forth between these
+two states so it stops moving it
+performs the wave and it comes back not
+exactly ideal but there are ways to work
+around the inadequacies of this but
+we're going to get to them in a moment
+first so for now we're going to leave
+this as is we're going to build another
+one inside of the blend tree later on
+and then lastly there is animation node
+animation which is exactly what it
+sounds all it does is just play a
+specific animation if you want
+specifically extremely old school style
+where you just hard swap between the
+animations this could actually be the
+way you want to go that way you handle
+everything via code and you just hard
+swap between animations no blending like
+they did in the older games like Donkey
+Kong and things like that but for now
+we're gonna go to blend tree so within
+blintry you have only a single thing
+when you start that's the output this is
+where the animation that is being
+compiled as it were actually gets
+applied to the character so if we go
+ahead and let's just create a blind
+space 2D so we're going to add in just
+like we did before we're gonna add in
+our animations
+let's add in a look around animation all
+right so if we just tie this into output
+and we start manipulating these
+variables 0 to 1 and to negative one
+we've got all of our different
+animations here set this to one as well
+we set that to one
+so easily you can see how this would be
+used via code in order to actually move
+however to access it via code you need
+to go up here to the parameters
+blindspace2d and that's it right there
+so it's a very handy when doing these
+things to rename them to names that make
+sense I would highly suggest you do this
+later on for code and even now it's good
+to get it in the habit of updating the
+names properly but we're not going to be
+using adjustable in space 2D we've got a
+couple of other options so if we go over
+here we can actually do things like
+blend 2. we're going to go over what
+each of these things do so first off you
+have animation that does exactly what
+you would expect you can select whatever
+animation you like and you can drag it
+into output so you can do left you can
+do right so that's how animation node
+works so next up we have one shot so one
+shot's a little bit different it has
+kind of an idle animation or an idle
+State you can say look around and then
+it has what you want the animation to
+occur on a trigger so let's do a wave
+animation so if we set this into output
+we have this right here and it just
+keeps looking around doing nothing but
+if we set to fire it'll go ahead and
+play the animation of wave you'll notice
+it's very jumpy so one shot is very
+useful specifically for
+forcing the animation into a specific
+action so if you got injured or
+something and you wanted that to an app
+and immediately with no blending then
+maybe a one shot would be the direction
+you want to go you can also edit filters
+so later on in blending this will
+actually become more but for now I'm
+going to go over it very simply filters
+allow the one shot animation to only
+apply to certain bones so let's say we
+only wanted to apply it to the hand we
+don't want it to apply to the upper body
+or the Torso and I'm not going to mess
+with the fingers right now because it
+doesn't matter I will just select the
+top ones all right so if we select
+enable filtering right here
+I forgot so I selected the right hand
+only so let's go ahead and select the
+left hand
+all right let's hit fire yeah there we
+go so you can see how the waving Works
+independent of the rest of the body the
+rest of the body is already doing
+something and the waving applies over it
+so this is how we're going to be
+blending later on the upper body to the
+lower body
+next up
+is add to so this is pretty simple and
+it can work for very specific types of
+Blends you have to be careful with this
+because adding animations can be a bit
+wonky at times so if we add in for
+example
+add in waving so if we put this into
+output
+we're running and we've got zero percent
+of wave
+so you can see it's trying to add that
+in this obviously is not ideal you can
+see how it's clipping through the body
+so basically it adds in the animation
+that you've selected but since it's
+additive it can be a bit wonky at times
+it's adding what the changes are so for
+example t-pose here isn't actually
+changing from The Base Post so it
+doesn't really help you any to add it
+back in because it's basically just a
+nothing pose so if you hit look around
+for example look around can add in but
+it its results are not exactly ideal so
+moving on I don't use add much but you
+can use it for subtleties so if you
+wanted to if you had a couple animations
+that were like leans or hunches over so
+if the if the character was tired or
+something like that you could add that
+animation in Without Really affecting
+anything else and that might be very
+useful for you
+so next up we're going to go over Blends
+so add three is the same thing as ADD to
+but with three variables so blend two
+and blend 3 are once again the same
+thing but with three variables so if we
+go ahead and select the style put let's
+um let's real quick we're gonna go ahead
+and actually create a Locomotion here so
+we have Locomotion blend space
+and we're going to name these Locomotion
+and upper body blitz so if we put that
+in there let's go ahead and add in the
+animations
+so what I went ahead and did was I
+created a one shot in the blend so I'm
+going to set this to wave animation and
+then the top one I'm just going to set
+it to look around okay so now we have
+The Locomotion on the bottom so if we
+just move this to whatever we like we
+can do Locomotion and we'll just set it
+to something like that so now it's kind
+of running off to the side
+now if we go over here we blend between
+these two it just Blends the whole body
+but once again we do have filters so if
+we go up to filters enable filtering
+let's go ahead and select everything
+from the chest up
+[Music]
+all right so now we have everything from
+the chest up so if we blend you'll
+notice just the chest up is playing that
+animation and we can go ahead and fire
+the one shot for waving now this is
+obviously still very jerky and that's
+not exactly ideal we can do other things
+with State machines within this blend
+tree but we're not going to get to that
+quite yet first we're going to go over
+the rest of the different things so time
+seek lets you actually start an
+animation from a different point so you
+can start it from any point within the
+animation this can be handy if you have
+perhaps a single animation with multiple
+sub animations within it you can have
+them broke up using the time C function
+I haven't used the time C node but I
+probably will in the future specifically
+for impacts next up we also have time
+scale so time scale I have used pretty
+liberally time scale I use mostly for
+Locomotion so if we go ahead and drag
+this into in we have our normal
+Locomotion but we can now speed up just
+the feet and you'll notice the head is
+still turning around at the same speed
+it was now this does look a little
+cartoonish but the upside is that
+everything else functions at normal
+speed so the wave functions at normal
+speed so we'll set that back to one we
+are going to leave this in here though
+because I actually really like having
+that in The Locomotion next up we also
+have a couple other options we have
+transition so it lets you tie in to
+different animations
+in the inputs and you can add as many
+states as you like and then transition
+between them so it's kind of like one
+shot but a little bit more close to a
+state machine so if we set this right
+here
+so as you can see this lets you switch
+between different states and the nice
+thing about transition is that it
+actually functions like a proper State
+machine so you can do things like have a
+0.5 second delay or blend rather you see
+how the hands move much smoother back
+and forth and then also you have other
+options like auto advance back to state
+zero so if you set it to State one it'll
+play through and then once it is done
+it'll blend right back to state zero so
+think of it as a softer one shot but the
+upside to transition is you can have
+multiple States here and you can access
+them via code you don't have to just
+have two so you can go over to the
+transition and you can via the
+transition you can request different
+states
+haven't actually used this because
+normally I just used a state machine but
+I may actually use it in the future for
+different things
+so we're going to go ahead and delete
+that speaking of which we have a couple
+blend trees here which you already know
+and we also have a state machine so
+we're going to go ahead and use a state
+machine for the upper body because State
+machines are extremely powerful and I
+like using them whenever we have
+something like an upper body where we
+want to do different actions with it so
+we'll go ahead and drag that into blend
+and right now he's uh he's trying to fly
+so we'll just call this upper body uh
+State machine
+all right so once you're in here if you
+hit open editor you get what the state
+machine was before so we can do things
+like playing an animation for looking
+around and playing an animation for
+waving what we need to do is we need to
+have a transition from start to look
+around or start to whatever your default
+animation is you just click and drag
+using the little arrow to set it to look
+around now look around we'll keep
+looping what we do want to do is have
+the ability to move to wave animation
+but we don't want it to move right away
+so what we do is we go ahead and create
+a transition and then we select that
+transition and we go down to the
+different options specifically in this
+case we're going to be going to advanced
+mode enabled so Auto makes it
+automatically move to the animation at
+the end or whenever it comes in contact
+enabled just gives you the option to do
+so so we're going to go ahead and make
+that transition back to the other one
+and that transition we're going to have
+it automatic but we are going to have it
+set to only at the end that way when the
+animation is done it just automatically
+dumps back into look around so if we go
+ahead and hit play right here it
+transitions to wave animation and then
+once the wave animation is done it
+transitions back now a lot of issues
+that people have with the animation tree
+come down to these transitions they tend
+to be very jerky and it's because people
+don't give in enough fade time so if you
+add 0.5 seconds so this is half a second
+of blend time watch the hands how they
+move see how they just smoothly blend
+back up
+and now they just smoothly blend back so
+this is how you soften up those
+transitions now you've also got X fade
+curve so you can create a curve so if
+you add a point like this at a point
+like that so that's that's your average
+sine curve right but we can make it a
+bit more something logarithmic so if we
+go ahead and hit play
+you see how it starts out very slow and
+then speeds up we set it to one second
+it'll be a bit more noticeable so it
+kind of slowly moves in and then it
+snaps to position
+now I've never actually used curves
+because most of my animation Blends are
+so subtle that I wouldn't notice it
+anyways but in this case I would
+specifically recommend using curves if
+you're doing something like a sliding
+door or something like that so now we
+have this state machine we can go ahead
+and worry about the blend so something
+to be important with Blends is it
+doesn't always make exact sense for the
+best result so for example in Hermit I
+actually have like a ax swinging upper
+body blend and I actually use the spine
+but not the chest that gets the best
+results here that looks a little bit
+wonky so I would highly suggest you
+fiddle around with this see what works
+best based off of your rig
+that being said that's pretty much it
+for today next episode we'll be going
+over how to actually call events and
+different properties within the
+animation tracks and animation play but
+audio playback and things like that
+whole method I use liberally in all my
+animations pretty much that's it for
+this week thank you all for watching and
+I will see you all back here next week
+and have a wonderful day
+[Music]

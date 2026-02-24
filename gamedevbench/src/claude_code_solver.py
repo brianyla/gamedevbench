@@ -108,7 +108,18 @@ class ClaudeCodeSolver(BaseSolver):
 
             async for message in query(prompt=prompt, options=options):
                 if self.debug:
-                    print(message, end="", flush=True)
+                    # Add newline after each message for better readability
+                    message_str = str(message)
+                    # Add separator line and newlines for all message types
+                    if message_str.startswith('SystemMessage'):
+                        print(f"\n{'='*80}\n{message_str}\n{'='*80}\n", flush=True)
+                    elif message_str.startswith('ResultMessage'):
+                        print(f"\n{'-'*80}\n{message_str}\n{'-'*80}\n", flush=True)
+                    elif message_str.startswith(('AssistantMessage', 'UserMessage')):
+                        print(f"{message_str}\n", flush=True)
+                    else:
+                        # For any other message types, just print with newline
+                        print(message_str, flush=True)
                 full_response.append(str(message))
 
                 # Check for ResultMessage which contains usage info

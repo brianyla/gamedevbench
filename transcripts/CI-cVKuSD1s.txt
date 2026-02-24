@@ -1,0 +1,567 @@
+foreign
+[Music]
+I'm a high school computer science and
+digital media teacher and for 13 years I
+ran and managed creative technology
+computer summer camps for middle
+schoolers and little younger teaching
+animation coding 3D modeling and video
+game design in this course I'll be
+introducing you to the world of Game Dev
+by creating your very own small 3D
+platformer video game using two pieces
+of software primarily Godot a free and
+open source game engine where you can
+build and code your own video games and
+blender a free and open source 3D
+Creation Suite for modeling texturing
+and animating 3D models for your games
+this course is meant for the absolute
+beginner if I can teach this to middle
+schoolers well I can teach it to you now
+if you already have even a little
+experience using blender you'll be able
+to take this project even further
+otherwise I'll be guiding you step by
+step through each phase of building and
+programming this project in including
+creating a new project in Godot and
+starting a game level adding a camera
+and a light into the game level and will
+add a simple character object we'll
+start with a cube programmed to move by
+pressing the arrow keys on the keyboard
+we'll be breaking down and covering what
+I consider to be the top 8 programming
+Concepts beginner programmers need to
+know to get started coding as we
+customize the movement of our character
+using Code create collectible objects
+coins that disappear when you collide
+with them make your character jump and
+tilt to align with the floor that he's
+standing on make the camera follow and
+be able to rotate around the character
+create keyframed animations and Trigger
+them to switch and play with code we're
+going to create enemies that turn around
+at walls and edges we're gonna make
+moving platforms using tweens a heads up
+display on screen to show how many coins
+have been collected menu screens with
+text images and coded buttons and
+because this is a 3D game we'll be using
+blender to create a few of our own
+custom game assets including a coin
+model as well as textured blocks that we
+can easily use to construct our game
+level lastly we'll finish this project
+off by exporting to a standalone windows
+program as well as publishing our game
+to a popular Indie website itch.io where
+a game will be playable right in the web
+browser for this course I'll be
+providing you with all the assets you'll
+need to complete this project right
+alongside me I can't wait for you to
+join me in creating this 3D platformer
+game and entering the world of gamedev
+to get started you'll need to install
+both Godot and blender if you're using a
+laptop I also highly recommend having a
+wheel Mouse rather than having a
+trackpad or something else I recommend
+getting both programs from the official
+sources Godot from
+godotengine.org we'll go up to downloads
+here and I recommend getting the latest
+version at least 4.0 I'm going to
+download the Windows standard 64-bit
+version as that's what will work best
+with my computer and it's a surprisingly
+small download at just about 51
+megabytes it's a zip file downloaded
+here to my downloads folder which I need
+to unzip so in Windows I'll right click
+on it and I'll say extract all
+now Godot is a bit of a funny program in
+that in Windows it doesn't need to be
+installed it's just a standalone program
+an exe file I'll go ahead and drag it to
+my desktop where I'll keep it throughout
+this course please note that in the next
+lessons of this course I was actually
+using Godot 4.0 before I upgraded to 4.1
+if you're using 4.2 or 4.3 or later
+there should be just minimal differences
+okay you can get blender from
+blender.org the latest version of
+blender for me is 3.6 though any recent
+version of blender 3 or 4 when available
+should be fine I'll go up to download or
+I'll click to download the version it
+recommends in Windows there is an
+installation process to go through to
+install blender but it's very
+straightforward once installed you
+should find blender under your start
+menu for me it's right here let's go
+ahead and get started alright let's go
+ahead and jump in and start using the
+Godot game engine in this video I'm
+showing you how to create a new game
+project in Godot and once we're in the
+Godot editor I'll be showing you around
+its interface so you're not too
+overwhelmed with everything that's going
+on on your screen inside of Godot and
+lastly in this video we're going to
+create our very own 3D scene which will
+be the main level in our game so let's
+go ahead and jump in on my desktop I
+have the Godot game engine program right
+here when I double click on it if I'm
+using a Windows based computer which I
+am right now Windows might actually pop
+up with a warning about your firewall
+settings if that's the case for you you
+can make your own best judgment about if
+you want to Grant Godot the ability to
+access your network and the internet
+I'll leave that up to you it actually
+doesn't really matter because we're not
+going to be using Ado to make
+multiplayer online games in this video
+so you can go ahead and press cancel or
+no or yes it's up to you when Godot
+first launches you actually don't see
+godot's editor instead you see godot's
+project manager which is essentially a
+list of all of your current projects if
+like me and you probably are you do not
+have any projects that you've made with
+Godot yet it'll warn you or it'll let
+you know that you currently don't have
+any projects and it'll ask you would you
+like to explore the official example
+projects in the asset Library we're
+going to go ahead and just say no cancel
+because we want to create our project
+right away to do that I'll press new
+project right here and Godot will pop up
+with a window that lets me choose my
+project name and also where I want to
+save my project on my computer now
+here's a warning for you Godot needs to
+have an empty folder for every new
+project that you create on your computer
+in my case on my desktop I'm going to
+create a new empty folder right now for
+my game project with my game project
+name and so to do that what I'll do is
+I'll press browse and navigate on my
+computer this is all of the files and
+the folders in my documents folder you
+can see that right up up here on my
+computer I don't want to be here my
+documents folder is obviously not empty
+so I can't create a new project here
+because you need a new empty folder for
+that so I'm going to press the up button
+right here to go up to my user folder
+where I have my desktop folder and on my
+desktop folder I'm going to create a new
+empty folder in just a moment just in
+case you want to save to somewhere else
+on your computer like another hard drive
+or a USB drive that you have plugged in
+you can navigate to different drives
+right here with different letters on a
+Windows based computer okay so on my
+desktop I'm going to press select
+current folder and when I do that it's
+still going to warn me that I can't save
+here because my desktop is not empty but
+what I can do is I can create a new
+folder with my project name right here
+so I'm going to type in 3D platformer
+game just like that and I will press
+create new folder and it'll make it
+right here on my desktop so create
+folder and the very last thing we have
+to do is Select our game engine renderer
+if you're not familiar with what this
+term means a renderer in 3D or game
+engine software means how it will draw
+the visual Fidelity of your game in
+other words this controls how your game
+will look how advanced it'll look and if
+it's compatible if your game is
+compatible with different types of
+platforms including mobile platforms
+like Android and iOS phones or if you
+even want to put your game on the
+internet like it's playable in a web
+browser you can select any one of these
+options don't worry you can change your
+mind later if you want so I'll just
+leave mine on Ford plus which will give
+me access to the best graphics that
+Godot can create so let's go ahead and
+press create and edit the project
+manager will disappear and the Godot
+game engine itself will load when the
+game engine loads it's a little bit
+intimidating and a little bit Bare Bones
+at the same time the main part of
+godot's interface in the the middle of
+the screen is called the workspace and
+the workspace has four different pages
+if you will up here at the top you can
+switch between working on a 2d interface
+in your game this might be for a 2d game
+or for a game menu screen there is the
+3D workspace page which has access to of
+course viewing your 3D space and your 3D
+levels next up is the script workspace
+where you do all of your coding and
+programming in this course we'll be
+spending a lot of time here coding in GD
+script of course and lastly there is the
+asset Library which is kind of like a
+store that you can access right inside
+of Godot that gives you access to other
+people's files projects and resources we
+won't spend into any time here at all
+we'll be spending most of our time
+between the first three different
+workspaces right here on the sides of
+godot's interface are what are called
+docs and docs are basically where you
+add everything and change all of the
+settings in your 3D environment so they
+are actually arguably the most important
+part of godot's interface up on the top
+left of Godot is What's called the scene
+Dock and this scene dock is the most
+important part of Godot I would argue
+because it's where you add what are
+called nodes nodes in Godot are the
+building block for everything in your
+game all objects in your game all sounds
+in your game they are all built here and
+if you press the little plus button
+right under the word scene you will get
+access to all the different types of
+nodes that Godot has for you to add now
+these nodes again are building blocks of
+a game and they are structured in this
+window in what's called a node tree a
+tree structure is where you have a
+parent node that you can expand by
+clicking the little arrow next to the
+the name and the icon and you can expand
+further branches of this tree and
+explore all different categories of
+different nodes nodes are again every
+part of your game so you should
+recognize some words here that you could
+see being in a game if you want to have
+animation in your game you might add an
+animation player node if you want to add
+sound or audio into a game like music
+you would add an audio stream player
+node there is a whole category for 3D
+objects in your game they are all under
+this node 3D branch and if you expand it
+out you can see cameras and grid maps
+and audio listeners and different types
+of collision objects and physics bodies
+including one that we're going to be
+using a whole lot called a character
+body 3D there are Collision polygons
+light probes paths skeletons everything
+you can imagine that makes up your game
+is a node inside of Godot they're very
+first know that we're going to add into
+our game level and that's what we're
+going to be doing over in the scene Doc
+is creating our own tree of different
+nodes is the basic I'll go and press
+plus again is the very first red node
+that you can see which will be the basis
+or root node of our game level the very
+first note that we add is going to be
+the node 3D node I don't actually have
+to go into this pop-up window to add it
+though if I go ahead and press the X to
+close this window all I have to do to
+add that is press 3D scene it's so
+common to start off your scene this way
+they have buttons for you here so 3D
+scene will create our first node our
+root node in our 3D environment
+establishing this scene as a 3D scene
+speaking of which in the middle of our
+screen is our workspace area which shows
+us our 3D environment and if you've
+never worked in a 3D animation program
+before or a 3D game engine before there
+are three things you need to know about
+how to navigate in this 3D space before
+we move any more forward in this lesson
+the first thing you need to know about
+how to navigate in this 3D environment
+is how to zoom in and out and that is
+simply if you have a mouse with a mouse
+wheel if you put your mouse cursor in
+the 3D environment window and you scroll
+up and down if you scroll up generally
+that will zoom in and if you scroll down
+generally that will zoom out be careful
+about zooming too far out though because
+you might in fact lose track of where
+you are in your scene things that are
+quite small or in fact normal size in
+your environment might disappear so make
+sure you're keeping within a range where
+you can see once we add objects into our
+game level you can still see them there
+okay the next thing you need to know how
+to do in your 3D environment is how to
+orbit orbiting in Godot means to spin
+your view around to look at your scene
+from different perspectives to do this
+press and hold your mouse wheel down
+like a button and while you're pressing
+down your mouse wheel move your mouse
+around when you do this well you'll be
+able to see your scene from the front
+from the back from the bottom from the
+top take a few moments and familiarize
+yourself with how to do this and get
+comfortable looking at your scene from
+any possible Direction either zoomed out
+or zoomed in okay if you don't have a
+mouse with a mouse wheel that pushes in
+like most do you might find it more easy
+to go up to this little on-screen Gizmo
+with your different axes and simply
+click and hold and drag in this little
+circular area to do the same thing which
+is called orbiting Okay the third thing
+you should know how to do is how to pan
+around your scene think of how you would
+take a panoramic photograph with your
+cell phone camera in other words you
+would want to look all the way from the
+left of your scene to the right of your
+scene or perhaps all the way from the
+bottom to the Top If You orbit in your
+3D environment button instead of just
+pressing the mouse wheel down you also
+first hold the shift key on your
+keyboard and while you're holding shift
+you then orbit well it does what's
+called panning panning can be from left
+to right so you can see from left to
+right in your environment or it can be
+up and down so be familiar with how to
+zoom in and out how to orbit and how to
+pan with the shift and orbit middle
+Mouse button there we go before we move
+forward in this lesson and create a few
+elements of our 3D scene and save this
+scene as our game level for the rest of
+this project there are two more docs on
+the screen right now that I want you to
+know about and those are on the bottom
+left of your screen is What's called the
+file system dock this file system doc
+shows you all the files that you
+currently have in your project folder if
+I go ahead and minimize Godot you can
+see on my desktop is my project folder
+which just a few moments ago was empty
+but as soon as we created our game
+project Godot actually put some content
+in this folder including a very
+important file called
+project.gado which is our actual game
+project that Godot can open we have an
+icon dot SVG scalable vector graphics
+image file we have a few other settings
+and attribute files as well as a DOT
+Godot folder which has even more
+settings files and other folders in it
+once you've made igado project please do
+not edit or rename or attempt to
+reorganize anything in this project
+folder of course you can add things into
+the project folder like 3D models
+Sprites fonts images things you want in
+your game but these need to be here okay
+the last dock that I want you to know
+about in this video is over on the
+entire right side of your screen it is
+called the inspector the inspector is
+where you can see properties and change
+properties of anything that you
+currently have selected in your game
+specifically nodes that you currently
+have in your game level right now my
+game level isn't very much in fact
+there's only one node so if I go over to
+the left side of my screen and select
+that node 2D or scenes root node I can
+then go over to the other side of my
+screen into the inspector and see all of
+its properties you can see its name up
+here at the top node 3D so once you have
+many nodes in your node tree over in the
+scene dock well you can select anyone
+into these properties over here on the
+right the node 3D node has some basic
+properties if I expand out their
+sections there's a transform section so
+I can change the location and rotation
+and scale of my 3D world please don't
+change any of these settings for any
+amount of time unless you'd want to
+change them back there is a section
+called visibility and yes our world is
+visible if I turn it off and on well
+that would actually hide game objects
+from The editor's View and when I play
+my game there are other sections here
+that we're not going to use very much
+called process and editor description
+but depending on what kind of object you
+have selected depending on what kind of
+node you have selected there will be
+different properties for those kinds of
+objects speaking of objects and nodes
+we're going to add one more object into
+our scene and that is one that is
+necessary in order for us to see our
+game level before we do that let's go
+ahead and actually save our scene before
+I save I'm going to rename this node
+simply by double clicking on its name
+right here no node 3D I'm going to call
+this level it's root note therefore
+level one when you name nodes I'm going
+to strongly suggest that you do not put
+any spaces or special characters in
+their names and that's because you'll be
+referring to those nodes sometimes in
+code and typically you don't put spaces
+in the names of things in any coding
+that you ever do okay so level one
+capital l no space I'll press enter to
+make that final if I want to save this
+scene of course I can just go up to the
+scene menu and say save scene or I could
+press of course control s if I click on
+Save scene It'll ask me because I've
+never saved this scene before where I
+want to save it and what I want to call
+this file a scene in Godot is a file
+that ends with DOT tscn I kind of think
+of the T as silent so a scene if you
+will it'll name it with the same name
+that you gave your root node in the
+scene but it might put underscores when
+it recognize those different words and
+numbers that's okay I will go ahead and
+simply press save and because the path
+where I'm saving is my res which is the
+same as my scene project folder I'll
+press save and it'll be right here level
+one dot tscn in my file system talk if I
+want to try playing this level or
+running it like I would run my game I
+could go up and press the play button
+but I would suggest that you don't
+because when you press play it's going
+to ask you to set the default scene in
+your entire game project we're not there
+yet so instead I'm simply going to press
+the play scene or play the current
+active scene button right here if I
+press it Godot will launch and I will
+see my game Run there it is and our game
+looks really boring why am I not seeing
+the same game world with my sky and my
+brown floor
+instead I'm just seeing gray well that's
+for a few reasons number one in order to
+see your world you need to have a camera
+in your game level so right now let's
+actually go into our scene dock in order
+to add a child node to our root note
+just like if I were to press the plus
+button all of the nodes in this tree
+structure have a parent and anything
+that's underneath that you can collapse
+into that node is a child of that node
+this white circle here is the root node
+or the parent node of all other nodes in
+Godot and when you have a child of this
+node that is itself a parent of other
+nodes that is called a branch we have to
+create this same sort of a tree
+structure with parents and children and
+branches with their own children in our
+scene so before you ever add any nodes
+you should always select the node that
+you want to be the parent of what you
+are about out to add so I'll click on
+little icon for level one and I'll press
+plus and I'm going to do a little search
+here for a camera and if I just type in
+camera of course if I don't want to
+search I could find the camera 3D for a
+3D scene under node 3D and then it's
+right here it's called camera 3D in fact
+there are different types of cameras but
+we'll just select that one and I will
+press create when you do that it will
+add a child node to the node that you
+just had selected which means that we
+have a camera 3D in our level one our
+camera 3D if I go ahead and zoom way in
+you will see it right here and of course
+you can use these controls on screen
+they are called gizmos to move and
+rotate the camera we don't have anything
+to look at with our camera but if I just
+move the camera back by grabbing the Z
+blue movement or transform handle and
+then the Y transform to move it up I can
+have my camera little bit back looking
+at the origin of my scene where the y z
+and X axes in my world meet let's go
+ahead and see what this looks like if I
+press Ctrl s to save and I can go up and
+press the play scene button my game will
+launch and at least now I can see
+through my camera at the middle of my
+scene and that is as far as we're gonna
+get in this lesson in this lesson we
+have covered how to create a new game
+project ingado we've done a quick
+overview of the different parts of the
+Godot editor interface including how to
+add nodes to create a game level
+including a camera and before that a
+root node 3D and we have saved our scene
+and tried running our game level it's
+worked but we don't have anything in our
+game environment yet not even a sky or
+an environment as it were we'll be
+adding those in the next lessons in this
+course but that'll be it for this one
+I'll see the next one bye
+foreign
+[Music]

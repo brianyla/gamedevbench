@@ -1,0 +1,947 @@
+hey what is up guys I'm GX here and
+welcome back to a brand new tutorial
+series here on the channel so in today's
+tutorial series I'm going to be showing
+you guys how to make a basic horror game
+in gdau now this is only going to be
+part one there will be multiple Parts in
+this series so if you do enjoy be sure
+to like comment and subscribe for more
+and without further Ado let's get right
+into it so as you can see here I am
+opened up in the gdau project manager
+and I am using gdau version 4.1.1 for
+this tutorial I do recommend that you
+guys use a gdau version 4 for this
+tutorial so yeah any gdau 4 version
+should be fine and uh what we're going
+to be doing is we're going to be
+creating a new project so when you're in
+you're a project manager what you want
+to do is you want to find the new
+project button and press that and then
+what that will do is that will then
+bring up the create new project window
+so as you can see we can change the
+project name so I'm just going to set
+mine to horror game tutorial so that's
+what my project name will be
+called and then as you can see here in
+the project path this is where our
+project will be created now if you have
+R text saying something like you cannot
+save a project in the selected path
+please make a new folder or choose A New
+Path what you do here is you can just uh
+click create folder and then boom a new
+folder will be created for your project
+and then the red text should disappear
+and then once you have a green arrow
+next to your project path that means
+it's all good to go and uh yeah so then
+next up we have the renderer options so
+we have forward Plus mobile and
+compatibility now I will be just reading
+off the dot points of what the uh
+renderer options do so yeah so for the
+forward plus render option it supports
+desktop platforms only has advanced 3D
+Graphics available can scale to large in
+complex scenes uses the rendering device
+backend and it has slower rendering of
+simple scenes so the forward plus
+renderer option is basically the most
+advanced renderer in gdau so if you want
+to have the best graphics possible in
+your game then forward plus is the way
+to go however you do need to have a
+Vulcan uh compatible GPU in order to use
+the forward plus renderer option since
+uh the forward plus renderer uses Vulcan
+as the primary renderer so yeah and then
+we have the mobile renderer option so
+this supports desktop Plus mobile
+platforms it has less Advanced 3D
+Graphics less scalable for complex
+scenes uses the rendering device backend
+and has faster rendering of simple
+scenes so basically this is similar to
+the forward plus render option only it's
+more for mobile devices and it's less
+advanced so I'm pretty sure for this you
+still do need a Vulcan compatible GPU
+however it is less advanced than the
+forward plus renderer options so yeah
+and then last but not least we have the
+compatibility rendering option so this
+supports desktop mobile and web
+platforms so if you want to make a web
+game then the compatibility option is
+the way to go it has the less Advanced
+3D Graphics available uh it's intended
+for low-end or older devices so if you
+have a low-end PC then this might be the
+best option for you
+it uses openg fre backend instead of the
+uh uh Vulcan rendering it uses openg
+rendering and then it has the fastest
+rendering of simple scenes so uh yeah so
+if you want the best performance
+available and you don't really care
+about Graphics too much or your PC just
+can't handle the forward Plus or mobile
+renderer options then compatibility is
+the way to go but for my tutorial uh for
+my project I'm going to be going for
+forward plus rendering but uh yeah you
+guys are free to choose whatever
+renderer you want but for this tutorial
+I'm going to be going with the forward
+plus option so yeah and anyways once
+you're all done you can now create and
+edit the project so let's go and now
+finally here we are um so once your
+project is ready uh it will just be
+created and that can take a bit of time
+and finally here we are so now here we
+are in our project all righty so now
+that we're in our new project now let's
+get to creating a scene so that we can
+actually uh get our player to walk
+around when we eventually make our
+player controller so what we're going to
+do is um so as you can see when you
+first launch up a new project you'll be
+opened up into an empty scene and to the
+left here you'll see a thing saying
+create root node now what the root node
+is is it's basically like the parent
+node of our scene and it's the node in
+which every single other node will go
+under so imagine nodes as like objects
+in unity if you're someone who usually
+uses Unity a lot nodes are sort of like
+objects in unity so yeah so what we're
+going to be doing is we're going to be
+creating a 3D scene and there we go so
+now we have a node 3D in our scene and
+this is going to be like the parent root
+object of our scene so what you can do
+is you can actually double click it to
+rename it and I'm just going to rename
+my node to level you guys can name it to
+whatever you like and uh yeah so
+obviously we're going to need a surface
+for our player to walk around on so
+we're going to need to get out some kind
+of flooring right well here's what we're
+going to do so we're going to click this
+plus icon here to add a child node to
+the scene and we're going to search up
+static body or just static and you
+should be able to get it and we're going
+to need a static body 3D so if you don't
+know what a static body 3D is there is a
+description here which says a 3D physics
+object I mean a 3D physics body that
+can't be moved by external forces when
+moved manually it doesn't affect other
+bodies in its path so basically it's a
+physics body which is static you know it
+doesn't move unless you manually move it
+like via an animation or something like
+that but so what it means here by when
+moved manually it doesn't affect other
+bodies in its path let me give you an
+example of this okay so in my game exus
+Slaughter um that game is actually
+available to play on it year for free if
+you want to try it out I'm in my game
+exus Slaughter
+um I have platforms which you can jump
+on now those platforms are physics body
+3DS I think is the correct node for them
+I think that's what it's called physics
+body 3D let me just look it up yeah uh
+wait no it's not um rigid body 3D that's
+what it's called so they are rigid body
+3DS right but anyways when I was first
+doing the uh the platforms they
+originally static body 3DS but I found
+that when I animated them right the
+player when jumping onto the platforms
+wouldn't actually move with the platform
+but then when I change the type to a
+rigid body 3D then the player would
+actually move along with the platform
+even when they weren't moving so
+basically the static body 3D um it's
+essentially just used for normal floors
+and walls and stuff like that you know
+just normal object Collision you know
+like when the player or another object
+collides with like a floor or a wall or
+you know just another a movable object
+then the static body 3D is what you'll
+use for order so let's get out of static
+body
+3D and so now that we have out our
+static body 3D as you can see there is
+like a yellow caution sign next to it
+and let's read what it says so it says
+this node has no shape so it can't
+Collide or interact with other objects
+so what we need to do is we need to add
+a collision shape to our static body 3D
+now I'm just going to rename this to
+floor you guys can rename it to whatever
+you like yeah so we're going to be uh
+right clicking on the floor and then
+we're going to be going ad child node
+and we're going to add some Collision to
+this so we're going to go Collision
+shape
+3D and then once you have your Collision
+shape 3D you're going to go to where it
+says shape in the inspector and you're
+going to click on empty and then you're
+going to select new box shapes since you
+know you want to walk around on a floor
+so uh you would either get out a box uh
+collider or um let's see what else there
+is um actually yeah I think that is
+probably the best one for a floor is the
+uh box collider the box shape 3D so
+consider going with that and uh
+yeah so that there is our static body 3D
+kind of setup but we do need a mesh to
+render our floor since as you can see
+right now our floor is currently
+seethrough and we can just see the
+outlines of the collider so how do we uh
+get uh like a cube say for example to
+represent our floor what we do is we
+right click on our uh on our static body
+3D node the flooor node we go ad child
+node and then we go mesh instance 3D and
+this is what's used to render objects in
+gdau so in the inspector with your mesh
+instance 3D selected you just want to go
+to where it says mesh click on empty and
+then you guys can either get out a quad
+mesh if you want that to be a floor or a
+plane mesh even but I'm going to be
+going with a box mesh oh sorry I
+accidentally just got out a capsule um
+I'm going to be going with a box mesh
+for this tutorial so there we go and now
+we have a basic uh cube in our scene so
+that there is basically how you set up a
+cube in
+good and what we're going to be doing
+with this now is we're going to be
+selecting the parent object of the floor
+so just the floor
+itself and uh we're going to be going
+transform and as you can see here we can
+actually scale our Cube rotate it
+position it whatever you like I mean you
+can even just do that with the arrows in
+the scene and by changing the tools up
+here and whatnot right yeah so as you
+can see here with the scale um this here
+actually locks the scaling this option
+here this little icon here so when you
+scale the y- axis for example every
+other access will be scaled but if you
+want to disable that what you do is you
+just click on the icon and then when it
+shows the keychain thingy looking
+snapped then that means that it is no
+longer locked so if you just want to
+scale the y- AIS you can do do that
+without scaling all the other accesses
+as well so
+yeah anyways I'm going to now be making
+a floor so I'm just going to make this
+maybe uh 30X 30 this is just going to be
+a test floor so yeah we're not going to
+be like making a horrifying scene in
+this part of the tutorial that's going
+to be saved for another part right now
+we're just making a basic scene for our
+player to walk on so
+yeah and uh what we can actually do here
+as well is now that we have floor in our
+scene let's add some walls as well to
+test out some player collision and stuff
+like that so what I'm going to do is I'm
+going to select my floor and then oh
+I've already had it selected so I'm just
+going to select my floor and then press
+contrl D to duplicate it and this is
+going to be one of our walls in the
+scene so I'm just going to rename this
+to
+wall and then I'm going to scale it to
+be more like a wall instead of a floor
+so if we go to transform um I'm just
+going to like set the x AIS to 10 the Y
+to five and that to 10 and there we go
+so we're just going to set up some basic
+Cube looking walls in our
+scene and uh so there's
+one and then there is
+another and there we go so I'm just
+going to add like one more and there so
+that there is going to be our basic
+scene for this
+tutorial and then uh if you want to save
+just press contrl s and then we can
+actually create a new folder for our
+scenes and we can call this
+scenes and then uh I'm just going to
+call this level uh you guys can name
+your scene whatever you want but then
+just save it and then boom if you look
+in your scenes folder in the file system
+Explorer thingy as you can see our scene
+is now saved in our new newly created
+scenes
+folder all right so next up I'm going to
+be showing you guys how to set up some
+basic Lighting in your scene so if you
+look here you'll see these two icons
+like an earth or a globe looking icon
+and then a sun icon so what these are
+for is these are used to preview what
+your scene would look like if it had
+Lighting in an environment but if you
+disable it you can actually see what
+your current scene lighting and uh
+environment would look like but then if
+you enable it then you can actually
+preview it but yeah so in order to add
+some lighting into our scene like some
+actual lighting what you need to do is
+you need to go to your uh level node or
+you can just press the plus icon as well
+I'm going to right click go add child
+node and we're going to add a
+directional light into our
+scene and there we go so now our scene
+has some basic uh lighting but you might
+be thinking wait but there's not really
+much change and that's because of the
+direction of the light so you can
+actually change the direction of it I
+think by going into the transform and
+then rotating it yeah there we go and
+now as you can see the directional light
+actually has a bit of impact and we can
+add shadows as well you just need to go
+to the shadow option on the inspector
+and go enabled on and there we go now we
+have shadows in our scene and so I'm
+just going to rotate this and there we
+go so I think that looks good and there
+we go now we have some basic Lighting in
+our
+scene and uh yeah if you want to rename
+the directional light that's totally
+fine I'm just going to leave it as is
+but yeah and I'll actually move it to
+the top of the hierarchy as well just so
+it's easier to find make sure you save
+as well uh press contrl S as you uh
+continue going on in case your game
+crashes or whatever or your engine
+crashes I mean so now with the
+environment just click on these three
+dots here and uh as you can see we now
+have uh some preview environment stuff
+so if you actually change some of these
+options you can actually preview what
+the environment would look like with
+these sorts of different options but
+yeah so I'm just going to be setting uh
+oh I don't think I can set that back to
+the default um we'll just set it
+something like this you know so yeah
+there we go that's a sky color and you
+can set the ground color sky energy and
+then there's a bit of postprocessing as
+well so I think this is like ambient
+occlusion then we have glowing and then
+tone mapping and then this is like
+Global
+illumination um but yeah I remember once
+enabling that and my whole PC crashed or
+my whole engine crashed I think I forget
+either way yeah cuz my PC isn't really
+the best but you know if you have a good
+PC then you can use Global illumination
+but be careful if your PC sort of low
+end like mine cuz uh yeah then it then
+it might cause a bit of issues yeah so
+to add the environment to your scene you
+just go add environment to
+scene oh click it again and there we go
+so now we have our world environment and
+now as you can see we can no longer
+toggle the Sun or Globe options to
+preview what it would look like with an
+environment or a sun because well now we
+already have it in the scene so now we
+can no longer preview it so with your
+world environment there's a bunch of
+different stuff we can change here but
+I'm going to be getting to that in a
+later part of the series since this
+isn't all needed right now but there is
+a bunch of stuff to change here I will
+tell you guys that so yeah it is pretty
+exciting and uh yeah so there we go that
+there is how you set up some lighting in
+your scene all right so now that we've
+got our basic scene set up let's Now set
+up our player so what we're going to do
+is um at the top here as you can see
+with our scenes uh you can actually uh
+press the plus icon here to add a new
+scene so we're going to add a new scene
+and it's going to be a new 3D scene and
+what we're going to do is we're going to
+rename this to player so this is going
+to be our
+player and then we're going to right
+click on the parent node here and we're
+going to change the type of it and we're
+going to type up character body 3D and
+so the character body 3D this is going
+to be used for our character controllers
+uh controlling so
+yeah so now that we have our character
+body 3D what we're going to do is we're
+going to give it some Collision so we're
+going to right click go add child node
+and then search up Collision shape
+3D and then we go shape
+empty and then we click on new capture
+3D and then now we have a capture
+Collision for our player now you guys
+are free to use whatever sort of
+collision you want whether you want to
+use cylinder or box whatever but I do
+think that using a capsule shape is
+probably the best so
+yeah so now that we have our Collision
+shape in the scene what we're going to
+be doing is we're going to right click
+in our player again we're going to go
+add child node and then mesh instance 3D
+and we're going to add uh some visuals
+to our player so then we can actually
+see our player and its scale and all
+that sort of stuff so yeah so we're
+going to click on the empty here again
+and then we're going to go new capu mesh
+and then this will set up a new capsule
+in our player so now we can actually see
+what our player looks like and it is a
+capsule so now if you actually click on
+the capsule in the inspector what you
+can do here is there's actually a bunch
+of different properties that you can set
+the radial segments this is actually
+used to define like how detailed the
+model is so if we set this to something
+like 14 as you can see uh it changes uh
+it detail a bit if we set it to
+something like four it is a lot less
+detailed and it's just not that good
+quality so yeah so the radial segment
+sort of determines the quality of the
+shape so I'm just going to set it to
+something like uh 14 looks all right I
+think 14 looks pretty good and then the
+Rings we'll leave at eight I think that
+looks all right so yeah and there we go
+so now we have our capsu all set
+up and then we can actually press
+controls to then save our player and you
+can go into your scenes folder and then
+just press save to then save your player
+and then our player is then saved into
+the scenes
+folder so what we're going to do now is
+we're now going to add a script to our
+player so you want to uh select your
+player then you want to go to where it
+says script in the inspector go empty
+and then go create new script now what's
+interesting about creating a script on a
+character body 3D
+is it will actually give you a character
+body 3D movement template so as you can
+see here um you can actually toggle the
+template on or off and it says character
+body 3D basic movement and yeah so we
+can basically just have uh you know some
+basic movement already implemented into
+our scene and that is really cool about
+gdau the fact that it already has like a
+character body 3D movement script
+implemented into it by default now this
+isn't a firsters script by any means we
+actually need to do the first person
+movement ourselves but this does just
+give you some basic movements so yeah
+and so what we're going to do is we're
+actually going to create a new folder
+for this and we're going to call it the
+scripts folder oh I'm accidentally
+creating it in the scenes folder if you
+want to go back a folder you just click
+on this Arrow here and then that will
+take you to like a a root folder
+basically we go create folder we're just
+going to create this called scripts and
+then we're going to save our script here
+just called player and then boom and now
+we can save our script if everything
+here is green and uh yeah so now let's
+go and now as you can see uh we now have
+our basic player script and this can be
+used for any purposes first person third
+person you name it but with first person
+there's a bit of a catch and that is
+that it doesn't come with camera
+rotation you need to actually do that
+yourself and that's why we're going to
+be creating a camera rotation script but
+first before we do get on with that I
+want to explain what each part of the
+script does so then you guys do
+understand it for yourselves so yeah
+let's get into explaining so extends
+character body 3D that basically just
+means that this is a character body 3D
+script this is a script that is used for
+the character body 3D and then we have
+our speed variable well this is called
+the constant now I don't really know too
+much the difference between like a
+constant and a variable i' have to look
+a bit more into that but yeah um I can
+probably show you a thing here on the
+screen right now um just showing what a
+constant is compared to a variable so
+yeah but uh yeah I I think with a
+constant it can't be changed at all cuz
+with variables they can be changed
+during a scene so if you want to change
+the speed of your character uh during
+your game right you can do that but if
+you are using a constant I'm pretty sure
+you can't do that and uh yeah and how I
+know that is cuz I've tried to do that
+before but in games where I want to
+change the player speed I always change
+the constant to a just a VAR a variable
+so if you want to do that then yeah you
+can but uh yeah so basically uh
+constants can't be changed during
+runtime of your game but variables can
+so if you want to use variables instead
+of constants you can change uh over to
+variables instead of constants but uh
+yeah but for now I'm just going to be
+using constants we might be changing to
+variables later on in a later part but
+for now it's just going to be kept to
+this since there is no reason for us to
+change anything right now and then we
+have our gravity so we have a gravity
+variable which then equals to what the
+setting of the default gravity equals to
+in our project settings so if we go into
+our project settings um and you search
+up
+gravity um I think it's here yeah um so
+the default gravity value is 9.8 but if
+you want to change this you totally can
+and then the gravity of our player will
+be changed uh based on what the project
+settings of the default gravity is set
+to so
+yeah and then we have our physics uh
+process function so this function is
+used specifically for physics purposes
+so if our player is not on the floor
+then its y velocity will go down so
+depending on what our graphity equals to
+our velocity of our character will go
+down uh depending on our gravity then
+multiplied by Delta which then will
+basically um make our uh our speed of
+the player falling time dependent
+instead of frame rate dependent because
+if it's frame rate dependent then that
+would be a bit broken so uh
+yeah and then we have the uh jump input
+here so if the player presses the UI
+accept input we will be changing this
+later on um I will be teaching you guys
+about the input system later on and the
+player is on the floor
+then the player's y velocity will equal
+to the jump velocity so the jump
+velocity is 4.5 so the player will go up
+based on the jump
+velocity and then we have um so the
+input directions so we have a variable
+created here called the input Direction
+and this will basically just be getting
+the input direction of our player's
+input based on the inputs we have so UI
+left UI right UI up and UI down I'm
+pretty sure these are the different
+arrow keys but we will be changing these
+later on in the tutorial so I will be
+getting to that and then we have the
+directions so this will be the direction
+our player moves in so
+yeah and then if our player is moving so
+if direction is equal to true so if our
+player is moving then the player's X and
+Y velocity values will then equal to
+Direction Times by the speed so that'll
+be multiplied by the speed else if the
+player isn't moving and Direction equals
+to false then it will just move towards
+the velocity value and then it will stop
+basically so yeah it will no longer move
+the player will just stop and then move
+and slide this will basically make our
+Player move so yeah and that is the
+player script explained so hopefully I
+explain that well for you guys and uh
+yeah now let's actually uh continue on
+with this tutorial so what we're going
+to be doing now is we're going to be uh
+creating our camera so for our players
+camera first off what we're going to do
+is um we're going to be going uh player
+so we're going to right click on the
+player go add child node and then we're
+going to search up camera 3D and then
+this will add our player I mean sorry a
+player a camera to our scene so now
+let's position this camera um to you
+know just a certain position like the
+head of our player and there we go I
+think that is a good position through
+our camera and also make sure that the
+camera is facing in uh this particular
+direction here facing the blue line so
+if you actually look up here you can
+actually see like the direction of which
+I am facing so the camera is currently
+facing the opposite of the Z Direction
+and this is actually forward so we want
+to make sure that our player is facing
+in this direction specifically um
+opposite of the Z AIS because you know
+that is forward and gdau and uh yeah I
+used to always think that you know
+facing towards the Z was forward but it
+isn't it is actually facing uh opposite
+of the Z yeah that is forward and
+gdau and now with our camera 3D we're
+actually going to uh right click on this
+and then we're going to go down to
+reparent to new node so we're going to
+be giving it a parent object and it's
+just going to be a standard node 3D and
+I'm going to call this head so this is
+going to be the head of our uh player or
+the head of our camera now um wait
+something that I just noticed is um it's
+not really positioned right here wait so
+uh when you add a when you add the head
+to your camera 3D something which I just
+noticed is it adds it into the middle of
+the uh scene so you know it just zeros
+it out basically at the middle of the
+scene but the problem with that is is
+now our camera isn't positioned right
+with the parent object so what you want
+to do is if this happens to you you want
+to drag out your camera 3D from
+underneath the head and then you want to
+make the head a child object of the
+camera camera 3D and then you want to
+zero out the position of your camera 3D
+so I mean of your head sorry so we're
+just going to set the Y AIS to zero and
+now it is positioned perfectly with
+where our camera is positioned and then
+if we uh make the camera 3D a child
+object of the head again and then boom
+it should all be
+fine so yeah that there is how we set up
+the uh player's camera and our scene but
+now what about the script well let's get
+to that guys so what we're going to do
+is we're just going to save there and
+then we're going to go uh click on
+script so make sure that you have your
+head selected you want to make sure that
+you have your head node selected then
+you want to go click on script empty new
+script and then uh for this I'm just
+going to be calling the script camera
+and we're going to be saving it in the
+scripts folder and unfortunately there
+is no template for a camera like
+movement script at all so there's no
+camera rotation script unfortunately uh
+that would be nice if there was a
+template for that but there isn't but so
+here's what we're going to do we're
+going to create a
+script and there we go so now let's get
+started with this all right so to start
+off for this script what we're going to
+do is we're going to get rid of the
+starter stuff here and we're going to
+enter our a new variable so it will be
+called VAR sense and this is short for
+sensitivity and I'm going to make this
+equal to
+0.005 now you guys are free to set this
+to whatever you want to but I'm just
+going to set it to
+0.5 and there is a reason as to why it
+needs to be set to so low and uh by the
+time I actually you know show you guys
+how to do this camera script if you want
+to try setting it to a much higher value
+and seeing what I mean then yeah you
+guys will get what I mean as to why we
+need to set this to such a low value but
+uh yeah so what we're going to be doing
+to start off here is we're going to be
+doing a ready function so we're going to
+go Funk uncore ready so what ready is
+for is this is for like at the start of
+our scene so when our game starts then
+the ready function will do its thing
+automatically so
+yeah so what we're going to be doing now
+is we're just going to go indent and
+then we are now going to type in the
+following input. set Mouse
+mode and then we're going to then enter
+input. mous mode captured so what this
+is going to do is this is going to set
+our Mouse mode like our cursor you know
+my cursor that you can see moving around
+right now to the captured mode and what
+that does is it locks our cursor to the
+middle of the screen and it makes it
+invisible so then our cursor isn't
+moving around and stuff as we're playing
+our game so then it's just locked to the
+middle of our screen and as we're
+rotating our player around our cursor
+isn't moving around at all and hitting
+the edges of screens and stuff like that
+so yeah so that's what setting our Mouse
+mode to input. mous mode capture does
+all righty so what we're going to do now
+now that we have our ready function
+ready is we're going to we're going to
+go down the line and then indent back to
+here and then go down another line and
+then we're going to write Funk uncore
+input and then we're going to do
+parentheses and then event and then the
+two dots and then input
+event and then after that we're then
+going to then go hyphen or Dash whatever
+that's called and then arrow and then
+void oops sorry
+void and then you just want to do the
+two dots again and then uh you just want
+to then indent and then you want to
+write if event is input event Mouse
+motion so basically if our Mouse is
+moving uh then we do the two dots getor
+parent so what get parent does is this
+actually gets our player object since
+the player object is the parent object
+of our head so we're going to do uh get
+parent Dot and then rotate uncore Y and
+then in parentheses we're going to do uh
+minus event. relative dot oh sorry dox
+and then we're going to multiply that by
+our
+sensitivity and uh yeah so that there is
+US rotating our player on its y AIS so
+you know that just means rotating left
+and right based on on the left and right
+movements of our Mouse so
+yeah and then we're going to go down a
+line and for this one we're just going
+to go rotate uncore X and then in
+parentheses we're going to go event.
+relative well minus event. relative doy
+multiplied by sents and so what this is
+going to do is this going to rotate our
+actual head itself on the x axis so when
+we move our Mouse up and down that will
+then rotate our head up and down so our
+player will rotate left and right and
+the uh head will actually rotate up and
+down that is how it is going to work
+with this and now last but not least we
+need to actually clamp our camera's
+rotation so we're going to go rotation
+dox equals clamp and then in parentheses
+rotation
+dox and then a comma and then de under _
+to rad and if you're wondering what this
+does uh deore to rad it basically
+changes uh it basically converts the
+degrees to radius or radons or something
+like that whatever it's called I forget
+what the actual term is I've looked it
+up in the gdau um uh documentation
+before but yeah it's like degrees to
+radius or something like that I'm pretty
+sure you guys um I'll probably show a
+thing here on the screen uh if I'm you
+know a bit confused on that but yeah so
+you want to do degrees to radius or just
+D to rud for short and then in here you
+just want to write 90 or whatever value
+you want so whatever you want to clamp
+your camera's um rotation to then that
+is you know totally fine you can set the
+value to whatever you like but I'm going
+to be setting it to
+90 and then what we're going to be doing
+is we're then going to be doing another
+comma and then we're going to basically
+just be copying and pasting this and
+we're going to set this to 9 so this
+will be our minimum uh our minimum clamp
+and this is our maximum clamp so
+yeah so the minimum clamp I have set is
+90 I mean negative 90 and then the
+maximum clamp is 90 so this will
+basically allow our player to look fully
+up and down but not look in a 360°
+rotation so yeah and uh yeah so that
+there is how we do our camera script it
+is pretty basic so anyways once you're
+done with your script you just want to
+press us to save it and there we go and
+now our camera should actually be ready
+like our player should actually be ready
+to be used so what we're going to do is
+we're going to go into our level scene
+so we're going to switch back to our
+level scene and then uh from our scenes
+folder I'm actually going to then drag
+in our player and now we have our player
+in our scene all right so with our
+player now in the scene let's now
+position it so then it is in a good
+position and there we go there is our
+player and boom we now now have our
+player in the scene now before we do use
+our player there is one last thing that
+we need to do and that is setting up the
+input system so I'm just going to save
+the scene and uh yeah so now we're going
+to be setting up the input system so I'm
+going to be going project project
+settings and then input map and here is
+where we can set our inputs so I'm going
+to be setting uh a new input called
+forward
+backward left
+right and then last but not least jump
+so here are our five inputs that we're
+going to be doing for this tutorial so
+you want to CLI on uh CL you want to
+click on the plus icon on each uh on
+each uh input basically so on forward
+for example click the plus icon and if
+you press a certain key on your keyboard
+like the W key for example now I'm going
+to press the W key because in order to
+move forward in most games you usually
+press the W key so yeah
+so we have the W key which will be set
+for our forward input and by the way you
+can set a controller inputs if you want
+to as well so if you want to set
+controller inputs that's totally fine
+you can do that so yeah but uh what
+we're going to be doing now is we're
+going to be setting the backward input
+to
+S and then the left input to a right
+input to D and then last but not least
+the jump input to space and there we go
+so now we have all our five main inputs
+set for this character controller and
+now we can save and if we go into our
+player script we can actually then
+change these uh input uh names here so
+UI accept can be changed to jump or
+whatever the name of your jump input
+is UI left can be changed to left UI
+right can now just be right UI up is now
+forward and UI down is now backward and
+there we go now our player is fully set
+up so now what we can actually do is um
+if you actually click on your uh scene
+in your scenes folder like your actual
+main uh level and you right click on it
+you can actually set that as your main
+scene so if you ever click the play icon
+in your uh in your in your project and
+you want to test out your game uh then
+it will just load up into your main
+scene automatically but yeah so what
+we're going to do is we're going to
+press the play button and we're going to
+test out and see if this all works and
+boom as you can see I can now freely
+move around and jump around and yeah
+everything is working
+perfectly so if you guys did enjoy this
+tutorial or you did learn something from
+it be sure to like comment and subscribe
+for more in part two we'll be doing a
+bunch more stuff I haven't thought of
+what we'll be doing for part two yet but
+I will be planning it so yeah but
+overall what we've done in this tutorial
+is I've showed you guys how to set up a
+gdo project I've showed you guys um how
+to set up a basic scene how to set up
+some some basic lighting uh how to set
+up a basic firstperson player controller
+and I think that is quite a big
+achievement for this part so yeah
+anyways again guys if you did enjoy it
+be sure to like comment and subscribe
+for more tutorials like this in the
+future and I'll see you all next time
+bye-bye

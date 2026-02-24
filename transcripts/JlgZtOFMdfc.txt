@@ -1,0 +1,738 @@
+[Music]
+coding your first 3D game character can
+be daunting with the additional third
+axis just crying to rotate the camera
+and run can be puzzling in this video
+you'll learn how to create a third
+person character in good 4 you'll learn
+how to pick between the rigid body 3D
+and character body 3D nodes choose the
+right Collision shape use an animated 3D
+model rotate the camera with the mouse
+move the character relative to the
+camera rotate the character model toward
+the movement Direction and Implement
+gravity and jumping mechanics in this
+video I assume you know some good
+encoding already if not check out our
+60-second road map to get started for
+free the link is in the description this
+video is sponsored by good game devs
+like you who invest in learning with GD
+Quest by following one of our unique
+extensive study programs to learn how to
+make games with good remember while the
+courses are still in Early Access you
+can get started below launch price for a
+limited time time I prepared an open
+source project with all the files needed
+to follow along you can find the link to
+get them in the description click the
+download button to download the file and
+we'll import it in G open gdo 4.3 or a
+more recent version and click on the
+import button navigate to the zip file
+you downloaded double click it and click
+the import and edit button to open the
+project in the editor you will land on a
+completed copy of the character
+controller template and you can run the
+project to try it out in games it's very
+common to separate what we call the
+character controller from the character
+skin the controller is invisible and
+responsible for moving the character and
+handling input and physics the skin is
+the automated 3D model made by a game
+artist that represents the character in
+the game in this video we will focus on
+the character controller and connect it
+to an open- Source character skin sopia
+you can reuse the principles and code
+you will learn here with different
+character models bear in mind though
+that animated 3D models come with
+different animations so you'll always
+have to adapt the character controller
+slightly to match the animations of the
+character skin if you want to see how
+Sophia is set up you can inspect her
+files for reference they are in the
+player/ Sophia skin folder okay let's
+get started when you import the project
+in gdau you will land on this level
+scene that contains a completed version
+of the character template and you can
+run the good project to try it
+out when creating a character controller
+the first thing you have to choose is
+which node to use as a rout so when you
+create new scene you typically want to
+pick between one of two one is the rigid
+body node it's controlled by the physics
+engine and you move it by applying
+forces to it the other one is the
+character Body nude this one is
+controlled a bit more manually and is
+known as kinematic body in other engines
+in this demo on the left the character
+uses a character body node and on the
+right a rigid body and so you can see
+that you can code a character control
+controller with either node uh but they
+feel a bit different to work with the
+character body gives you tighter control
+over how it moves and stops accelerates
+jumps and Falls you can see if you pay
+attention that the character on the left
+is snappier and the one on the right is
+a bit floatier when it jumps and Falls
+this is just the physics engine by
+default so you kind of have to
+counteract that then by default also the
+character body node will not necessarily
+interact with other rigid body nodes but
+the rigid body node will very easily be
+able to move things and make them
+stumble around those are the main
+differences back to our empty scene
+we're going to start by creating a
+character body 3D node at the root that
+I'm going to rename to player
+3D and then as a child of it the first
+thing to add is the character skin to
+have the proportions for the Collision
+shape so expand the player folder Sophia
+skin and click and drag the sophas skin.
+TSN file onto the scene this will create
+a copy of the character now we have to
+add the Collision shape so let's select
+the player 3D and add a new Collision
+shaped 3D node this will Define how the
+character collides with the environment
+now if you click the shape slot in the
+inspector there are quite a few
+Collision shapes to choose from spheres
+boxes capsules cylinders and they all
+have their advantages and
+disadvantages in 2D it's pretty common
+to use box shapes but in 3D not so much
+I think one reason is that if you don't
+rotate the box of the character it's
+very prone to getting stuck in wall
+angles like this if you rotate the box
+with characters the sharp edges can end
+up hitting something when the player
+doesn't expect another reason is that
+when you have slopes as in this example
+is the angles of the box that are going
+to collide with the slope making the
+character float in the air with a
+cylinder thanks to the round size the
+character is going to bump off Corners
+pretty well and slide against them
+pretty smoothly on slopes however just
+like with boxes the character is going
+to be offset and float in the air even
+if you make the cylinder pretty small
+however when walking off a ledge the
+cylinder ensures that the character is
+not going to start moving down as you
+walk on an
+angle with a capsule thanks to the round
+bottom the character is going to stick
+to slopes pretty well of course if you
+stop and you don't have Cod to angle the
+feet to match the slope perfectly uh the
+feet are always going to float a bit in
+the air but it's not as bad as having
+the entire character offset which
+happens when using box shapes also when
+you you walk off Ledges the character is
+going to start moving down a bit which
+can make the effect feel a bit more
+natural compared to using cylinders or
+boxes now of course the shape here is
+really big so the character can end up
+floating in the air but you can narrow
+the capsule to avoid
+this back to our character scene we can
+create a capsule shape so with the
+Collision shape node selected you can
+add a new capsule shape 3D to it and by
+default it's going to be a bit low
+compared to the character so I'm going
+to move it up using the snapping feature
+and I'm just going to use the handle on
+the side of the capsule to make it
+thinner so that we don't get that effect
+too much where the character feels like
+it's off the ledge and floating in the
+air now it's time to save the scene
+place it in a level and we can get
+working on the camera so going to save
+it in the player directory as player 3d.
+tscn create a new scene and a 3D scene
+at that where we will place the level
+I've prepared for you and the 3D
+character so first the level there's one
+prepared in the level folder that you
+can click and drag it's called level.
+tscn so you can drag it into the scene
+like this and this will be useful to
+test the character
+controller that you can drag and drop
+this time directly on onto the level
+scene to place the character at the
+start we're going to code the character
+in five broad steps first we'll code the
+camera because 3D movement depends on
+the camera angle then we'll code the
+character's ground movement we'll hook
+up ground movement to the character
+model we'll code the character's jump
+and fall and finally we'll hook up the
+jump and fall to the character
+model now we can save that at the root
+folder I'm going to call it um I don't
+know uh test. TSN this is the scene to
+test the character and then of course if
+you try to run it by clicking the Run
+current scene button you're not going to
+see anything because there's no camera
+yet so head back to the player 3D scene
+and we'll add that next for the camera
+we're going to use a setup where we not
+only have the camera node but it's
+parented to what I would call a pivot
+it's going to be a point attached to the
+character's head that makes it very easy
+to move the camera as if it was on a
+crane so in the player scene let's add a
+3D node that we're going to place in the
+character's head and I'm going to rename
+it camera
+pivot and then as a child of it add a
+camera 3D node okay so it's rotated to
+face away from the character so turning
+it uh
+180° and then I'm going to move it back
+uh let's say 10 m
+like this and now when I select the
+camera pivot and rotate it around the
+x-axis the camera moves along a circle
+that's 10 m away from the character so
+I'm going to uh move it up a bit so that
+the default view is the camera looking
+down at the character and a good thing
+about that is that anytime you can
+select the camera 3D node go to
+transform and you'll see that only the Z
+value is changed to minus 10 m and so
+you can drag this lighter to make the
+camera closer or farther to the
+character and so you could animate this
+value to create a zoom effect in
+code time to code the camera I'm going
+to Mark the camera 3D and pivot as
+access as unique name to quickly access
+them in the script and attach a new
+script to the player 3D node so you can
+click it make sure that you use the
+empty template to start with no code and
+click create let's get coding we're
+going to do it in four steps first we
+need to calculate how much the mouse
+moves on screen then we'll convert that
+into a 3D rotation we will add code to
+only rotate the camera when the mouse is
+in the game and finally We'll add a
+spring arm node to prevent the camera
+from penetrating the walls first we have
+to calculate how much the mouse is
+moving on the screen and for that we use
+the unhandled input function now before
+we Define the function it's always a
+good idea to Define a variable to
+control how sensitive the mouse motion
+is so I'm doing that there then we're
+going to use another variable to keep
+track of the mouse motion because we
+calculate the mouse Motion in one of
+Good's input functions but then we need
+to move the camera in a processing
+function like physics process to
+synchronize with the physics and use the
+Delta time to make it time dependent so
+I'm creating another variable uh that
+will store this mouse motion we get in
+the unhandled input function next I
+Define the unhandled input function and
+check if we have a mouse motion that we
+want to use for the camera I use the
+following condition for that if the
+event is a mouse motion the mouse just
+moved uh and also the mouse
+is captured in the window um this is
+when the mouse cursor disappears and is
+bound to your game window this makes
+sure that the camera will not move when
+the player is going to their web browser
+to check something or talking with
+someone in a chat then uh we do have a
+camera motion we can store the input
+Direction in our variable uh we use the
+events screen Rel relative property for
+that and we can multiply it by the M
+sensitivity to make the motion slower or
+faster to rotate the camera I first get
+a reference to my camera pivot node in
+the scene uh because this is what
+rotates The View around the character
+and then in the physics process function
+I'm going to first rotate the camera
+pivot around the x-axis for that I use
+the vertical component of my camera
+input Direction multiplied by Delta to
+make it time dependent so in the game
+view this is equivalent to doing this to
+turning around the x- axis and then we
+need to limit that a bit because if I
+take two views and set one to be the
+camera preview what you risk doing is
+rotating so much that the camera ends up
+rolling over the character and inverting
+the view so we don't want that to happen
+so back in the code I clamp the
+exportation between two values Min - < /
+6 is equivalent to -3° and Pi / 3 is
+equivalent to 60° and this limits the up
+and down rotation next is the horizontal
+rotation around the y axis so for that
+we uh take the camera pivots y rotation
+and in this case I subtract the X
+direction of my camera
+input multiplied by Delta the reason I'm
+doing that is so that when moving the
+mouse to the left the character looks to
+the left or the camera and when moving
+the mouse to the right it looks towards
+the right finally each frame we want to
+reset the input direction to zero
+otherwise if you move the mouse a bit
+and then you stop touching it the camera
+will keep rotating we are almost ready
+to test but remember how we have some
+code to check if the mouse mode is
+captured well this is not automatic so
+we need to add some code to capture the
+player's Mouse and we're going to let
+them click the game to focus it and
+capture and then press escape to release
+the mouse and be able to close the
+window easily for that you can use the
+input function which takes precedence
+over the game's user interface and we're
+going to have two conditions the first
+is if uh you have a left click on the
+game you're going to change the input.
+mouse mode to Mouse mode captured and if
+the action press is UI cancel which
+corresponds to the Escape key by default
+you're going to set the mouse mode to
+Mouse mode visible which will release
+the cursor and allow the player to close
+the game window for example the left
+click input action is one I created I
+created a few actually so we could focus
+on creating this character controller
+you can go to project project settings
+and the input map to see the input
+actions available in this
+project now it's time to test so I'm
+going to go to my test scene run it and
+when I click the game the mouse gets
+captured I can control the camera I can
+press escape to release the mouse and
+close the game window
+nice back to the player 3D scene let's
+rear the the camera to a spring arm so
+you can right click the node for that
+and select reparent to new node then
+type spring
+arm the spring arm Works a bit
+particularly so first let's select the
+camera and reset the Transformer and the
+rotation and I'll explain why in a
+second but basically you can see the
+spring arm has this little line that
+points out there and this is going to
+control the camera the camera is going
+to be moved to the tip of the spring and
+if the spring collides with something
+it's going to move the camera forward
+along that line so first we don't want
+that line pointing there we want to turn
+it to go back for that uh select the
+spring arm node and go to transform and
+set the Y rotation to
+180° and it's going to rotate it back
+then in the inspector the spring length
+property controls the length of the
+spring and up to where the camera goes
+so right now it's very close to the
+character so let's set it to a larger
+value like 10 to move the camera back
+actually the camera was a bit far from
+the character so I'll choose a smaller
+value
+eight so now uh let me show you what
+this is going to do right it's going to
+move the camera back to the tip there at
+runtime and if there's a wall in the way
+it's going to move the camera for
+forward and back along that axis to be
+right in front of the wall so that's why
+we can move the camera down to the
+character and we don't need to worry
+about its position anymore okay reselect
+the spring arm because we have more
+setup to do there's a shape property
+that controls what Collision shape the
+node uses click the empty slot and let's
+add a sphere shape I recommend it as a
+default because it's round it's going to
+make the camera smoothly go over sharp
+edges in the environment and prevent
+clipping basically finally the Collision
+mask property controls which physics
+layers the spring arm collides with in
+this case you can leave it to one
+because in this template project
+everything uses Collision layer one you
+can now go back to the test scene and
+run and you should be able to rotate the
+camera like before but if you go down to
+the ground it's going to collide and
+slide against it as you can see not
+always perfect but it will do the job
+most of the time and is a good
+default now that the camera works it's
+time to work on the character movement
+it was really important to start with
+the camera rotation because in 3D you
+need to move relative to the camera
+let's see the problem say you start the
+character is facing forward and the
+player presses left you subtract to the
+x-axis player presses right you increase
+the x-axis the character Works where
+it's supposed to be perfect but now what
+happens when the character turns if you
+just naely move along the x-axis now the
+character doesn't really move left and
+right because they're left and right
+changed that's what we need to account
+for in the movement code and for that we
+use the camera direction to code third
+person character Movement we first get
+an input Vector based on the player in
+put we extract the forward and right
+direction vectors based on how the
+character is turned we calculate the
+move Direction based on the raw input
+and the forward and right vectors then
+we calculate the character velocity and
+finally we move
+it let's head back to the player script
+to start coding the movement so first
+we're going to need to pick the
+character speed and acceleration I'm
+exporting variables for that to make it
+easy to edit in the
+inspector then we will need a reference
+to the camera to know where is forward
+and right as we rotate the view so um I
+add a new unready variable for the
+camera Noe and finally we can calculate
+the input Direction in physics process
+so first we get what I call the raw
+input it's very similar to how you
+calculate move Direction in 2D you can
+use input. getet Vector which is really
+useful to get a 2d vector and use four
+input actions remember that I created
+these for you in this
+project then uh we need to know what are
+the forward and right direction and for
+that we access the camera and we use
+what's called its Global
+basis you see when you use the move
+Widget the three arrows that you get a
+basis is kind of like that it's a set of
+three vectors that represents the
+character's orientation or rotation and
+scale and actually in gdo you can
+visualize it when you turn the character
+um when you press the W key to get the
+move mode you can then press t or click
+this icon called use local space to see
+the widget oriented to the character and
+so the basis is kind of that it's
+vectors that are oriented to the node so
+back to the script in code we access the
+cameras Global basis. Z the Z axis in GD
+is the blue one and it represents the
+forward Direction and uh in a second
+variable we extract the right direction
+so it's the xaxis this time then we can
+use that to calculate the move Direction
+so we take the raw input and we multiply
+each component by the corresponding uh
+Vector so for example what controls the
+forward movement is going to be when you
+press up and down or W and S on the
+keyboard and we want to multiply that by
+the forward Direction and for the keys A
+and D or left and right arrow keys we
+want to multiply that by the right
+direction and this is going to make the
+character move on the ground forward
+back left and
+right then when you calculate ground
+movement it's always a good measure to
+ensure that the move directions y- axis
+is set to zero the reason for that is
+that the camera is going to be looking
+down at the character so actually the
+the camera is going to be oriented a bit
+like that so the forward Vector could be
+pointing down and cause the character to
+try to move into the ground so uh you
+want to counteract that by setting the
+move Direction y to zero and then you
+normalize the vector and this gives you
+a direction in the ground plane with
+that we have our move Direction and we
+can calculate the character's velocity
+so in this case I'm making the velocity
+Vector move toward the product of the
+move Direction by the character's move
+speed so it's going to accelerate by
+acceleration time Delta and finally we
+can call move and slide to move the
+character the move toward function is
+really useful because it limits the
+value it ensures that the velocity
+cannot overshoot move Direction times
+move speed now you can run the game and
+you'll be able to move the character
+with the WD Keys it's not going to turn
+right now we'll add that next but you
+can see that already if I press in this
+case W and S or up and down the
+character does move forward and back
+based on the camera Direction so that's
+good progress already notice also how
+the character accelerates and
+decelerates smoothly this is thanks to
+how the code is if you release the keys
+the raw input will be Vector 2.0 so the
+move direction will be a vector uh with
+zero length and it's going to cause the
+velocity to move toward a vector of zero
+length making the character decelerate
+naturally let's hook up the movement to
+the model animation first we will save
+the last move direction we will turn
+toward the last move direction we will
+smooth out the character rotation so
+that it's not too sharp and we will play
+the model idle and run
+animations to turn the character we
+first need a reference to the player
+skin note so I'll head back to the
+player 3D scene and I'll right click
+Sophia skin and select access as unic
+name then back to the player script
+we're going to start back up there with
+a reference to that skin node because
+we'll rotate it in a moment and we need
+another variable that stores the last
+movement direction of the player the
+reason is that when the player releases
+the keys we don't want to turn the
+character so we're going to use this
+variable to keep the last Direction
+which the player was
+moving now back down in the physics
+process function we can store the last
+move Direction like this uh we check
+that the move Direction has a minimum
+length like it's not equal to zero and
+then we store the current move Direction
+in the last movement Direction variable
+that way when the keys are released this
+condition will not pass and the
+character look direction will not
+change we can then turn the character by
+first calculating the angle um I'm going
+to expand the script editor so we
+calculate the target angle we want to
+turn turn to this is going to be uh
+vectors 3. back uh this is the forward
+Direction in the game world and the
+angle from that to the last movement
+Direction around the vertical
+axis using signed angle 2 is very
+important here it's a vector 3 function
+that returns either a positive or
+negative value uh going towards the
+vector here at the last movement
+Direction and we can directly assign
+that to the Skin's Global rotation on
+the y- AIS and if you test the game you
+will see that now when you move the
+character is going to well instantly
+turn towards the move Direction it works
+relative to the camera because our move
+direction is relative to the camera so
+nice now we can do a bit better than
+that first of all we can make it
+animated and not instantaneous so back
+up the screen script I'm going to add a
+new variable to control the rotation
+speed and back down there uh change the
+calculation to use the lurp angle
+function that's built into GD script and
+that's made to interpolate that is um
+not exactly animate but make a weight
+average between two values so we start
+from the Skin's current vertical
+rotation go towards the target angle and
+the speed is going to be rotation speed
+times Delta and it's important to use LP
+angle here because it has special
+calculations for
+angles already with this change the
+rotation of the character is much
+smoother now we can add one last really
+important touch it's actually using the
+animations of the character skin if I go
+back to the player 3D scene and click
+the script of the Sophia skin it had a
+few functions we could use to play
+different animations so idle move fall
+and jump and so um going back to the
+player
+script I'm going to first check if the
+character has a certain uh movement
+speed on the ground so that if the
+ground speed is greater than zero I'm
+going to play the move or run animation
+on the skin otherwise play the idle
+animation now if you run the game you
+can move the ca
+it's going to play the animations and it
+already feels much nicer by the way you
+can also move up and down slopes that's
+the beauty of the character body 3D nde
+that has this feature built in when you
+use the move and SL function as we do
+the last piece is making the character
+fall and jump because right now if you
+walk off a platform you're just going to
+float in the air let's remedy that jump
+and fall go hand in hand so let's code
+them together we will Define the jump
+strength and gravity
+we'll separate the ground velocity so
+that it does not affect the vertical one
+we'll apply gravity to make the
+character fall and we'll allow jumps
+only when on the
+floor I'm going to go back up my script
+where I first Define a variable to
+represent how strong the jump is I'm
+calling it jump impulse and then another
+variable represents the gravity it's a
+downward acceleration so I'm using a
+negative number so that when I add it to
+the vertical velocity it makes the
+character accelerate down now down in
+the physics process function we need to
+modify where we calculate the velocity
+first we need to extract the vertical
+component of the Velocity like so we're
+going to store the vertical velocity in
+a variable set it to zero and then the
+line that makes the character accelerate
+or decelerate on the ground is not going
+to affect the fall or jump speed then
+after this line we can calculate the
+vertical velocity we keep the previous
+Vertical Velocity and add gravity time
+Delta with that only the character is
+going to fall if you play the game so I
+can go up the slope and fall down and
+the character
+Falls now for the jump we start by
+checking if the player is jumping so
+this can be represented by a variable or
+a condition the condition is that the
+jump button is just pressed remember
+that the jump action is something I
+created for you it's mapped to the space
+bar and the character is on floor there
+is a nice is on floor function on the
+character body 3D node that returns true
+if due to the effect of gravity the
+character body collided with the floor
+on the previous frame so when you apply
+gravity each frame the character is
+going to move and it's going to collide
+with the floor
+resetting the fal speed while it's on
+the ground and causing is on floor to
+return true it's perfect for jumps and
+then we can use that condition to make
+the character jump and jumping is just
+increasing the vertical
+velocity with that you can test the game
+press space to jump and let the
+character fall under the effect of
+gravity last but not least let's play
+the jump and fall automations we will
+play the jump and animations when in the
+air and play the idle and run animations
+when on the floor so down the physics
+process function we're going to first
+check if the player is initiating a jump
+we're going to play the jump animation
+then uh for the fall we check that the
+character body is not on the floor and
+the vertical speed is negative this
+indicates that it's in the air falling
+so we play the fall animation finally we
+need to wrap the ground animation into
+to a new branch of this condition so
+we're going to check if the character is
+on floor then we run our ground checks
+and play the move or Idol animations and
+with that the character is going to act
+as before on the ground jump and fall
+when you jump or just you know fall when
+you fall off the ledge you have a
+complete 3D character template that can
+uh build upon to create nice 3D games
+if you're an early accessor following
+one of our good 4 courses we are
+dropping new lessons regularly on GD
+school this means more interactive
+practices directly inside the good
+editor more glossery terms study guides
+quizzes cheat sheets and challenges
+coming your way so keep up the good work
+and please drop us a line about your
+progress on the Discord server
+[Music]

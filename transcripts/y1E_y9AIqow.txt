@@ -1,0 +1,776 @@
+in this hands-on tutorial we're going to
+focus on good O's UI system we're going
+to see how to create reusable UI widgets
+that work really as individual component
+you can mix and match in your games
+reuse across games so we're going to see
+a little bit of code for example how to
+automatically update the bar and a label
+based on a value change in our bar class
+and how to integrate that in your game
+and we're more importantly going to look
+at good O's layout options for UI design
+it's a workflow that was added in good
+3.0 release so this is available in text
+formats in the optional Docs
+I wrote the initial tutorial now good as
+UI system has been improved so even
+though the original version is valid
+this is an improved demo that's open
+source as well that you can explore if
+you prefer to learn hands-on with that
+when you're working on game UI you don't
+want it to be fully responsive unlike a
+webpage the game will have a base
+resolution and a base ratio that serves
+as a baseline for all devices you won't
+want to support both portrait and
+landscape orientation in general so
+that's why you don't need a UI that will
+adapt to every screen type you just want
+it to be scalable so that it adapts to
+slightly different screen ratios which
+is what you have between all the
+different computer and TV displays and
+even Android devices so roughly from 4/3
+to a two-to-one ratio something along
+those lines that's why my UI here it can
+adapt to the screen size but we only
+have the widgets in the top right corner
+that move and stick to the top right
+corner of their container the GUI
+container it's easier to understand if I
+hide the background imagine that this
+box is my games size regardless of my
+game size I have the same margins on the
+left top and right edges of the screen
+and the GUI elements are only sliding
+along with that container if I was to
+resize from the left
+you'll see it's the bars that move this
+time so the game's resolution serves as
+a baseline and the viewport will scale
+based on the devices ratio then based on
+your project settings in the display
+category and be stretch mode and aspect
+mode actually will define how the game
+viewport or the camera stretches expands
+contracts how you map your game being
+rendered to the different devices so if
+you use the expand value on the aspect
+ratio property it's going to take your
+game space resolution and a big target
+screen is a little larger on the camera
+will become a little larger and show a
+little more at the game world and then
+the UI will resize to fit that new
+screen ratio by hide the background and
+characters your camera will do this if
+the screen is narrow it will contract a
+little bit and if the screen is wider it
+will become wider as usual the project
+is on github it's open source you can
+find the start folder inside of the
+project to follow along with this video
+recreate the UI elements as I make them
+in front of you and get more insights on
+how the UI system works here is our
+start project we're going to have a
+quick look at the project's architecture
+so you only have sprites in there there
+are no scenes everything we're going to
+trade from scratch now you do have an
+interface folder that will contain the
+base assets for the bars you will find
+life bar and energy bar subfolders with
+the corresponding specific assets for
+the counter there's a background sprite
+called label BG that's going to be
+coming to the rupees and bombs
+containers and you have some reference
+sprites you can use put on the screen to
+scale your label backgrounds according
+to what the artist wanted you to do and
+we have a theme folder because we're
+going to use goats themed feature it's a
+little more advanced that just making
+the UI elements but with this we're
+going to create
+reusable themes so that all UI elements
+in our game use the same base default
+fonts and we just have to change the
+font in one place for all of our
+interface to update so themes are
+extremely powerful they power the entire
+godo editor for example next you have
+the characters and background that are
+again just sprites and with that let's
+get started creating our UI let's start
+by creating a UI base container for that
+we'll open the level mock-up you want to
+select the game node press ctrl-a to add
+a node and we'll add a control node it's
+just to indicate that this is our
+interface name itself interface put it
+around the top of the node tree then
+we'll use the layout menu to modify the
+anchors on our UI container and to
+resize it as well so that's what these
+options do in the layout menu and you
+have the anchors only sub menu if you
+only want to change relative to which
+parts of the screen your UI will resize
+and move now make sure in the View menu
+that you have the helpers visible the
+helpers will show you this little anchor
+widget the interactive version doesn't
+work too well right now but it will
+update properly when you use the layout
+menu so we're going to click and select
+full rectangle full rectangle means
+rescale and change the anchors so that
+you anchor to the corners the boundaries
+of your parent if there is no parent
+control node this parent will be the
+entire screen here as you can see it
+means that the interface will always
+scale to fit the entire game screen
+whether it gets a little wider or a
+little narrower based on the device
+we're going to save this interface as a
+separate scene straight aways for that
+you right-click on it and select save
+the branch as scene it allows you to
+separate it from the current scene and
+save it as part of your project let's go
+to the interface folder and save it
+there as interface RT SC n now you can
+click be open and editor but
+to open the scene separately from your
+main one so now we are only focusing on
+the interface we don't have to watch and
+care about our level characters and all
+that stuff in our scene tree in this
+project the scene tree is very simple
+obviously but if you're working on a
+real game this is a big advantage and if
+you're working at as part of a team it
+will be coming for you to work in
+separate scenes and then merge them
+using github or another version control
+system let's start by creating the
+simplest UI element for that we'll
+create a new scene and we're going to
+start with the base note for our
+component this will be the counter rupee
+and bomb counter we're going to use the
+background of the counter as our
+container
+all that we're going to add a nine patch
+rectangle node this one takes a texture
+as an input and it's going to keep the
+aspect of the corners of the texture
+it's going to tile the top bottom left
+and right edges horizontally and
+vertically respectively and then it will
+tell the texture in the center or
+stretch it based on the option that you
+choose let's head to the interface
+folder counter subfolder and we have our
+label background yeah that we're going
+to plug into the texture slot of our
+counter so zoom in on the texture and
+normally if I resize it you can see that
+it scales with the widget at the moment
+so we want to send the patch margin so
+that it uses the labels corners and the
+edges proprietary for the left and top
+we're going to use eight pixels right
+and bottom same thing here and now it
+should scale a little better so I'm
+really zoomed in so it's little
+pixelated and hard to see because of the
+color but now it will stretch the
+texture a bit less let's rename our
+9-patch rect as counter save the scene
+we're going to save it in the interface
+counter and save it as countered of T
+Sen any special type of counter like
+rupees or BOM counters will inherit from
+that and extend it we're going to add
+two things in our counter we need a
+label and a sprite so I'm going to drag
+and drop my bomb counter reference to
+use as a reference and I will rescale
+the base counter down a little bit so
+that it is bomb counter then I'm going
+to add my bomb icon to this and the
+label but as control notes because only
+the green nodes will scale along with
+their parent maintained margins etc you
+cannot use sprites directly instead of
+sprites you use the texture rectangle
+node this is similar but has some more
+option as it can tell and it will follow
+the anchors edges relative to its parent
+so we're going to add our bomb icon
+we'll click and drag the icon into our
+texture slot and call it icon it can be
+any icon in our case we will use the
+layout menu and anchor it in the center
+right of its parent you can see all four
+anchors snap to the middle at the right
+edge of our counter container and with
+this we can remove our bomb template I
+will also add a label in there so select
+the counter press ctrl-a label labels
+are basic notes to attacks and we're
+going to do the same thing layout but
+this time we're going to select Center
+left let's add a number as a reference
+for our text and we will also align it
+center horizontally inside its bounding
+box and the V align will Center
+vertically now we can now scale our
+label you can press the Alt key to scale
+uniformly in a given axis and you can
+scale it to the right as well to see
+your label stay centered inside its
+container if you want to align its base
+line with the bomb there are a few ways
+to do that but the simplest way is to
+add some margin at the top and you do
+that by scaling it from the top note
+that scaling for UI nodes doesn't work
+exactly like scaling sprite it's only
+going to resize the bounds
+rectangle and it's not going to scale
+the pixels directly our label has one
+problem it doesn't look really sexy does
+it so that's where we're going to add
+our UI theme we'll start defining it
+I'll expand the inspector a little bit
+we're going to go down to the theme
+section of our control well create a new
+theme inside of it now this theme by
+default is saved inside of the scene we
+don't want that and you can save any
+resource as part of your project using
+this little Save button at the top of
+the inspector while you are viewing a
+resource let's click that and select
+save as we're going to save it in our
+interface folder theme subfolder and
+we'll call it our default theme for the
+game now let's look at head works a
+little better so you can see the theme
+bottom darker opened and shows you how
+the interface will display when you plug
+this theme in to control node so the
+text is a little small and right now it
+uses the default colors from godõs
+editor the colors well not too
+interested in we only want to work on
+the label and the fonts for now so the
+theme will override the properties that
+we decide to add to it and to add
+property slots that we can override in
+the inspector click the Edit theme menu
+and you can add class items it's going
+to add the corresponding slots or
+properties for the base class or control
+node type that you select let's click
+that we're going to click the two dots
+next to the type and select the label
+class add all the properties and now
+inside of your theme in the inspector
+you can expand the label category and
+you will find all the properties for
+that so you have the font subcategory in
+which we can override the font
+specifically for all labels in our theme
+and in our game you also have a default
+fonts as the base for your theme and
+that's what we'll use so now if I modify
+the font color it won't update instantly
+in my viewport but if you look at the
+label inside the theme button panel
+pnow it's red so that's where you can
+preview all the changes you make to your
+theme resource we're going to leave that
+folded for now and we're going to define
+a default font follow theme so let's
+create a new dynamic font it's going to
+be stalled inside the theme resource
+automatically know that we can always
+save it as a separate file and that's
+what we're going to do we're going to
+save it in the font folder it will call
+it default font the point of saving it
+as part of your file system is that you
+can then access the phone directly
+anytime and modify this and it will
+update automatically inside the theme
+and on everything that has this font
+applied in your project so you can use
+it on specific nodes without having to
+plug your entire theme inside of them
+now in my dynamic fonts I want to go to
+the font category and we'll drag and
+drop the convert-a-ball font from the
+font folder you can do that you will see
+the label update so now it's quite small
+because of font size that font size to
+30 let's say and now it's a lot bigger
+already be sure to use filter as well it
+makes a small difference but you'll see
+that we'll be scaling option on your
+game based on the screen size it's going
+to look very ugly if you don't have any
+filter anter general you warm that on
+all fonts note that you can also use
+that to modify the base line of your
+font push it a bit to the top so you can
+override these settings here and make
+sure that your font is aligned however
+you want it to be inside of your widget
+right now I'm going to use a lower value
+maybe 16 pixels maybe something like
+that
+all this widget and we have our base
+counter widget it's not our bomb counter
+yet so now we're going to create that
+select scene new inherited scene and
+you're going to select a parent we're
+going to create a new scene that extends
+this parent and just changes a few
+properties specific to our bomb and
+Ruby's counter let's open this
+Sene will rename it instantly to BOMs
+counter to start with and we will save
+at this point inside the bomb subfolder
+to say that at this point we can move
+our bomb icon a little bit to Center it
+exactly how we want it to be
+note that the anchor doesn't move it's
+only the sprite that moves relative to
+it all be texture rectangle so that when
+we resize the bomb counter the icon will
+stay anchored to the right side so our
+bomb counter will not resize vertically
+although it could but the important part
+is look at how it preserves the right
+margin because of how the anchor is
+placed
+while the label stays stuck to the left
+side
+next we'll trade the rupee counter so
+seen nuna heritage scene and we're going
+to select a counter as a base again and
+this time you want to select the icon
+we're going to head to the rupee's
+folder and drag and drop our rubies
+texture on top of it note that we only
+override this property from the icon
+note that any change we make to the
+counter base scene while propagates to
+both the bone counter and the rupee
+counter let's rename the base note rupee
+counter then save the scene inside the
+rupee's subfolder as we name the note
+properly Godot gives us the right name
+in the sing tree now I can again move
+the rupee icon exactly where we want it
+to be give it be margin it should have
+relative to its anchor save and there's
+one problem with the label when we
+modified it a little bit it moved
+relative to its parent so let's head
+back to the counter base scene and we're
+going to fix that I want to reset it
+using the layout menu to anchor to the
+center left of its parent and now I need
+to modify the font again so I'm going to
+head back to my default font resource
+I'm going to double click it to open it
+in the inspector and reset the bottom
+extra spacing to zero so it's Santa's
+properly maybe I want to push it down a
+little bit so I'm going to add to the
+top value six pixels and then save now
+if we head back
+- the bomb counter and Ruby counters
+scenes you will see our label is not
+perfect just yet the reason is that as
+we modify these scenes a little bit
+Godot considers that we've modified the
+notes margins and so with overridden
+properties from the counter we want to
+reset this properties so select label
+head down to the margin section in the
+inspector and click the reset value
+button next to the margin properties
+that have been changed your labels
+bounding box will resize to fit that of
+the counter we have to do the same for
+the rupee counter although we can do it
+manually here we're going to do it
+differently select the label click the
+properties like toolbox icon in the top
+right of the inspector copy parameters
+then go to the rupee counter and paste
+the parameters we'll reset the margin to
+follow that b-bomb counter scene now you
+can save both scenes and you have your
+BOM counter and rupee counter working
+for example if I was to resize the base
+counter a lot like that you should see
+your BOM counter and rupee counter
+update instantly you will get that for
+all properties that you did not override
+from the parent scene so that's the big
+strength of working with inherited
+scenes in Godot now our resize save
+again to have a decent size and get my
+good ol rupee and BOM counters again
+let's now work on the bars and we're
+going to start with a base bar so we can
+close the counters go to scene new scene
+if I head to the final version of the
+game and open the base bar you will see
+that the top parent is an H box contain
+a node this node is going to take it
+children and it will position and resize
+them based on a few properties were
+lined them up horizontally so if I were
+to reorder the nodes as part of the
+container they swap position and the
+container will respect the minimum size
+of each of his UI elements so let's
+create our bar the first node we'll add
+will be an H box container and
+we'll rename it bar this will be ours
+bass bar scene that the other types of
+bond special ones will inherit from then
+as a child of it we're going to add a
+texture progress so this is a spatial
+node that allows us to plug in our own
+textures to create progress bars of all
+kind loading bars and also light bars
+etc whether they're horizontal vertical
+let's expand the textures category of it
+we're going to head to the bar folder
+and light bar subfolder a little project
+drag and drop the background into the
+and you will see that the node
+automatically resizes to show the entire
+texture then drag and drop the fill that
+PNG onto the progress not you're not
+going to see any change there because by
+default we head to the range section of
+our inspector the min and Max values are
+set for us but the actual value the
+current progress of the bar is set to
+zero by default can set it something
+other than zero to see your texture bill
+a little bit then we want to add
+something that resembles our counter a
+little bit it's not exactly like our
+counter scene we can still reuse the
+nodes to save time so right click on the
+bar in one way to add nodes from the
+scene and customize them is to select
+the merge from scene option and the file
+system by clicking the tudor buttons
+ahead to the interface counter and
+double-click counter the TSC n to open
+it we're going to import from the root
+node from the counter and good-oh will
+take all of its children along with it
+so click OK you will see the counter
+gets added after our bar we can place it
+before that to have it on the left now
+if we resize our counter it doesn't push
+the light bar node that's because the
+parent the container is using the
+minimum size parameter of the counter so
+let's head to the control section
+rectangle category and set the min size
+to something like 160 pixels you can see
+the size property updates along with it
+we want to swap our icon and our label
+here we want to
+plug in we label HP in there so let's go
+back up to the texture drag and
+drop the HP texture on top of it and
+we're going to use the layout menu to
+snap it to the center left of its parent
+of the counter note and you can all
+click on the vertical handles of the
+bounding box to resize the node
+uniformly and saturate vertically on its
+parent can also resize it down on the
+x-axis because the texture sets the size
+of the note now to add some margin
+between our HP elements and the left
+edge of its parent we just have to move
+it this will automatically update the
+margin of the control node you can keep
+the shift key down and press the right
+arrow to add a 10 pixels gap between the
+left edge and the HP element or we can
+press W to select the move tool then
+click and drag with the shift key down
+to constrain to the left axis and lace
+your HP label wherever you want now
+the HP is anchored on the right place
+but you can see that the label is still
+anchored to the left side of its parent
+so we're going to select it go to the
+layout menu and anchor it in the center
+right of its parent then there are two
+ways to place the text you could use the
+center property of the label so that the
+text is always centered inside the
+container and the container size defines
+where the text is going to end up or you
+can contract the text and use some
+margin on the right side of the counter
+note
+then align the text to the right on the
+horizontal axis by changing bits align
+property and make sure to expand the
+bounding box a little bit because when
+you change the text inside of it it
+pushes the bounds to the right so we
+don't want that to happen we do want to
+align our text the right side of the
+node and you can check the clip text
+appetit so that when you add too much
+text side of the label roll clip on the
+right and it won't push the boundaries
+towards the right side like that can
+show you without clip text on we are
+going to add a long string of text you
+will see that the container expands to
+the right but if you keep the clip text
+property on you can add as many
+characters as you want and it will
+prevent the box from resizing beyond the
+size of its container now we want a
+format similar to for example 12 HP out
+of 40 while we text and we're good with
+that as a template so you can save the
+bar we're going to create the life bar
+and the energy bar so go to seem new a
+heritage scene and inherit from the base
+bar 1 we're going to rename it life bar
+and you can save it inside your life bar
+folder directly we don't have anything
+to change here then for the energy bar
+do the same scene new inherited scene
+use bar the TSC n as a base we're going
+to rename it energy bar and then we have
+a few more properties to change let's
+save it inside the energy bar folder
+we're going to head to that energy bar
+folder and then we have to change the
+background and fill sprites on the
+texture progress node so let's select it
+go to top in the texture category want
+to replace the under texture and the
+progress texture as well with the fill
+bar is smaller than its container but as
+I said gouda will use the textures as a
+baseline to define minimum size of the
+gauge normally the bounding box should
+fit that of the bar it can resize it
+down to the bar no further if I were to
+change the order
+the nodes the container expands again as
+we are using a container as the parent
+the container also sets the minimum size
+of its children
+we need to resize the energy bar
+container itself instead of resizing its
+child select the energy bar node and
+contract its container as much as you
+can then select the HP label we want to
+replace it with the EP label you'll see
+that the texture on a texture rect
+gives in the top-left corner are the
+bounds by default can change that with
+the stretch mode property so click on it
+and select keep centered to Center the
+sprite inside its container then you can
+select the text because we want it to be
+a bit smaller as the label itself is a
+little smaller do that we're going to
+create a new font let's head down to our
+theme and think we can do is move it and
+add a new theme there's something a
+little simpler for the label we can
+remove a right link the custom property
+categories going to expand custom font
+this one we can head to our phone folder
+we're going to use our default fonts but
+create a new one from it so right click
+on it you can duplicate the resource and
+give it a new name you could call it
+EP able for example EP label resource we
+want to move to our energy bar folder as
+it should only be used by that bar so
+click and drag it there but these
+resources are not the fonts of our very
+lightweight based resources it's not a
+problem to have many of them in your
+project click and drag the EP lego
+resource on the custom phone slot by
+default doesn't activate the property so
+you want to click the check box to
+activate it nothing changes because for
+now it's a dublicate of our default font
+so let's go inside of it we're going to
+change the size down to something a bit
+smaller like 24 for example you can
+already see the font looks a little
+better and set the top property so that
+it aligns a little better with our
+peel a ball here with this I want to
+modify the minimum size of the counters
+I want to override that from the parent
+make it a bit smaller like 130 pixels
+may also want to resize the EP texture
+horizontally so that it respects the
+margin that we set on its parent scene
+and that it aligns with the HP bar same
+thing you can resize the label container
+here so that it's centers properly
+vertically with that our bars are done
+all right so now we have our base UI
+components we're going to head back to
+our interface scene you've closed it you
+can press control shift o and look for
+interface it's the last one interface RT
+sen and we're going to drag and drop our
+various scenes inside of it so energy
+bar as I'm in the folder here I'm going
+to head to the life bar and drag and
+drop it as well I want to get my two
+counters on top of that so BOM counters
+and rupee counters then we're going to
+use containers again to arrange these
+elements together so we need the two
+bars to stack vertically let me get the
+counters out of the way so we're going
+to use a vertical box container or VBox
+container for that this is the vertical
+equivalent and the edge box container we
+used for each of the bars so create that
+we're going to put it at the top of the
+hierarchy and call it bars and then the
+energy bar and light bar will drag and
+drop inside of it
+this uses the tree order to set the
+visual order the elements in the UI so
+you want to set the light bar to be
+above the energy bar you can use a
+shortcut for that click on the node to
+select it and control up to modify its
+position in the hierarchy then for the
+bombs and rupee counter we'll use an
+inch box container again horizontal bar
+container and put the bombs and rupee
+inside of it call it counter and while
+straights going to go to the layout menu
+and put it in the top right corner of
+our interface can already see a little
+problem the BOM counters and rupee
+counters are really collapsed here and
+that is because our cowntess
+doesn't have a minimum size so when you
+get this problem which can be common
+when you design you eyes at first it's
+because you haven't set a minimum size
+yet and then the parent container uses
+the smallest possible size all these
+widgets so let's open the bomb count to
+seen and then from it open its parent
+the count is seen and on the counter
+we'll set a minimum with the minimum
+width will be something like 120 pixels
+in the counter seen it doesn't change
+anything but if we save and go back to
+our interface you will see nothing
+changes because Godot considers that we
+have overridden a minimum size an hour
+to note so click one of the nodes head
+to the rectangle category under the
+control section and click the reset
+value next to the minimum size you want
+to do the same for the Europe econ tur
+and from there you all counters will
+still be anchored in the top right
+corner of the screen do you want to
+reuse the layout menu again because
+resizing the nodes pushed the containers
+bounding box to the right so we click
+the top right corner align and there you
+go your counters are properly placed on
+the screen so from there with one of the
+containers selected you can start to
+move them using the shift key and
+pressing the down and left arrow in this
+case to add some margin around the edges
+of the screen going to move the bar a
+few times this hwaseong used the same
+amount on the left edge and on the right
+edge of the screen 40 pixels roughly and
+now when you do that on nodes on the y
+axis in particular if you want to Center
+the two widget you will need a different
+margin on the counter container than on
+the life bars and with that our
+interface is set to anchor to the full
+rectangle of its parent and even though
+we don't have a node for it here there
+is always a viewport node at the very
+top of the hierarchy so it is always the
+parent of your interface if you don't
+have any other parent in the scene
+that's why this full rect option sets
+the node to use the entire viewport but
+if the screen was to expand with
+and simulate that by clicking and
+dragging on the handle of our interface
+you can see that the nodes still anchor
+to the right corner save here go back to
+your level mock-up and you can click and
+drag the interface scene
+on top of the game and magically it will
+place perfectly on top of your game the
+scene system in guro makes it very easy
+for members of your team to focus on a
+specific part of the game and then you
+can just click and drag the node drag a
+reference to the node inside of your
+main level scene and whenever they
+update the sauce scene will update in
+your level and the rest of your game so
+congratulations and thank you came
+before getting there in the next part
+we'll do a little bit of programming
+we'll see how to add some values at the
+top of our widgets that we can funnel
+down to multiple sub elements like our
+number label and our texture progress so
+that when we change the life of the
+player we change it in one place and it
+updates in multiple parts of our
+interface don't forget to check out the
+good course if you haven't already I'm
+working on very high quality tutorial
+it's already in early access since the
+little while that said thank you kindly
+for watching be creative have fun and
+see you in the next one bye bye

@@ -1,0 +1,947 @@
+[Music]
+Hello and welcome back. I would like to
+talk about clouds today. And seeing as
+how I've burnt out all my friends and
+family on the subject, I figured I'd
+just make a video talking about them
+since that's kind of what's been on my
+mind for the last month or two while
+I've been working on this plugin. If
+you're just here for the clouds plugin,
+it's done and good to go. You should
+find a link in the descriptions to the
+asset library for GDAU, or you can just
+find it in the editor as well, and it
+should work out of the box. I probably
+need to make an actual tutorial video on
+how to use it. This is going to be more
+over the concepts of it, not necessarily
+a tutorial. So, that will be coming in
+the next couple days or weeks. I I'm not
+entirely sure. Regardless, if you want
+to support me on the project, you can
+support me via Patreon. There's a link
+in the description for that. Thank you
+so much to all the people who have been
+extremely generous with supporting me
+via Patreon. I am very, very
+appreciative of it. Now, for everyone
+who stayed, I'm going to be spending
+about 20 or 30 minutes or just talking
+about how Volutric Clouds are made in
+AAA games and how I made mine. This is
+entirely from someone who doesn't work
+in the games industry. Mostly, I'm just
+very obsessive on the subject. If you're
+looking for a professional's opinion on
+the subject, there's an excellent
+website by Andrew Schneider who goes
+over a lot of the information I'm going
+to be going over here and probably goes
+into a lot more detail on the entire
+subject. He's kind of the gold standard
+as far as clouds go in the game
+industry. So, there's a link to his
+personal website in the description, and
+there's a couple other information
+sources that I used that I'll link in
+the description as well. Now, on to the
+clouds. For the old clouds, they did
+their job. They weren't the best. They
+were very blocky, and this was due to
+how I did them. I entirely built the old
+clouds in the old like creating a quad
+and putting it in front of the camera
+method. And this worked, but it didn't
+allow for a lot of things like
+accumulation or any real performance
+optimizations whatsoever. It had pros
+though, and that was that it was very
+easy to initially develop, and
+theoretically it was very easy to
+implement for end users. But the route I
+went just ended up having a lot of
+global shader variables, which seemed to
+throw everyone for a loop. The downsides
+to it were many, mostly surrounding
+performance. There was no accumulation,
+so it had lots of noise, and there's no
+real routes to improve performance. I
+couldn't lower the resolution of the
+clouds or anything. They just executed
+in a fragment shader. So that'd be like
+every four pixels. But regardless, I
+moved on to an entirely new system
+called Compositor, which if you hit up
+any of Ace Rollola's videos or just
+looked around the GDAU community,
+Compositor has kind of been floating
+around the last couple months or if not
+maybe a year or so now and has been
+really popular for doing some pretty
+cool effects. Basically, what it does is
+it injects code within the rendering
+pipeline. So in my case, I'm actually
+sampling between the cloud sample and
+the transparent pass for
+transparent-based objects. So I'm doing
+that before the transparency objects,
+which has its own problems, but for now
+it works just fine. So basically what
+I'm going to do is I'm going to step
+through how I construct a compute shader
+inside of GDScript. This is going to be
+extremely high level. I'm not going to
+go into a lot of detail, but I'm going
+to go through all of that and how I
+construct the buffers of data which get
+compassed the compute shader. And then
+I'm going to actually go through the
+comput shader. Now, real quick before we
+begin, compute shaders are basically
+just scripts that execute on the GPU.
+And there's a lot of work that goes into
+making them actually execute in the
+first place. But once you have them
+executing, they can do an enormous
+amount of work because they can do a lot
+of things in parallel, whereas the CPU
+kind of just does one thing at a time.
+So, dropping down into the code, if we
+go over to the script panel, we have
+this compositor effect here. I have a
+sunshine clouds driver, but all it
+really does is just take variables from
+the editor and insert them into the
+resource, and it just kind of manages
+things like time and making the clouds
+move over time. So, the compositor
+effect is where most of the work
+happens. And this is a resource object,
+which means you can actually create them
+in the file system by hitting new
+resource and selecting this type of
+compositor effect. But I would generally
+suggest creating them from the actual
+driver that I created for you. And
+there's just a little generate clouds
+resource button here. And all that does
+is it creates a new cloud's resource and
+it sees if there's a world environment
+in your scene, selects it, and adds it
+to the compositor effect. You do have to
+have a world environment for this to all
+work. Be aware, it will not function at
+all without one. Once you're in here,
+you have a whole bunch of options here
+for as far as lighting. I won't get into
+any of that too much. I'll actually get
+into that in like a tutorial video, but
+the basic gist is you throw in your
+directional lights in here, you throw in
+your point lights here, and it actually
+like composits them into the into the
+compute shader. Then you've also got
+some different controls down here for
+like controlling the overall power of
+lights as well as the point light power
+and wind controls like wind direction
+and things like that. And then you've
+got a bunch of stuff down here that you
+don't need to touch called internal use.
+Now once in the actual resource, you got
+a lot of different settings. I'm not
+going to go over all of them here. Most
+of them ideally are self-explanatory and
+I've generally grouped them into
+categories for basic settings and
+advanced settings. I wouldn't suggest
+going into the advanced settings too
+much unless you know what you're doing.
+The light travel distance in particular
+though is actually valuable. Basically,
+it's just the distance that it actually
+samples shadows on the clouds. So, the
+farther it goes, the more detail you're
+going to get, but the closer it goes,
+the softer the details will be. So, you
+can see these aren't getting shadows
+from the clouds up there, but you've got
+very nice gradients within them because
+there's more samples within that range.
+But, normally I leave it around 9 or
+10,000. That's in meters, so that'd be
+like 10 km up. Now, once in the actual
+script, we've got a whole bunch of stuff
+here you don't need to worry about, but
+there are a couple things that are
+important when we initialize. So,
+that'll be using the init function. The
+compositor handles this. And we just go
+ahead and initialize compute. Now, what
+that does is first of all, it deletes
+everything that has already been here.
+So, these rids, they're basically like
+little pointers to the GPU telling the
+GPU where things are in memory. So,
+every time we refresh this, we got to
+get rid of those and and release those.
+And what that does is it tells the GPU
+that that memory can now be used for
+other things. So anytime we change
+anything, we clear all those and then we
+rebuild from scratch. So in the in the
+initialize compute function, it actually
+goes ahead and clears those compute. It
+goes ahead and clears them before it
+does anything and then it builds
+everything required for the compute
+shader. Now the compute shader is
+actually in my case broken into three
+compute shaders. We have a prepass, a
+normal pass and a post pass. And the
+prepass all it really does is just take
+the resolution of the screen and down
+res it. if we are not re rendering in
+native. So if we go over here on the
+right hand side up above noise textures,
+we've got this little resolution scale
+thing here. If we go up to native,
+obviously our performance goes way down,
+but the quality goes way up. And if you
+were just making a game about like
+flight sim or something, maybe that's
+what you would want, but I have a lot of
+other stuff that's eating up my GPU. So
+I typically will run it around quarter.
+You can go lower, but be aware you are
+losing data. Um, you can even go down to
+16th and you're going to get some very
+blurry results. But maybe if this is on
+like a Steam Deck or something, this
+might work. For me, I typically run it
+around quarter res. Now, we have the
+base shader, and that does all of the
+basic logic on the clouds, and then we
+have a post pass that takes that output
+of the base shader, expands it up to the
+to the actual proper resolution of the
+screen, and it does atmospherics on
+terrain and the background sky. So the
+base shader pass handles atmospherics on
+the clouds and the postp pass shader
+handles atmospherics on the terrain. And
+the reason for that is if I didn't do
+that, you would end up with little
+blocky blue shapes around objects that
+were too close because if you re render
+it at a lower resolution and then try to
+upres that atmosphere, those
+atmospherics, there's no real way to
+discard the depth like I am with the
+clouds, which is still not perfect, but
+it's better than it would be with
+atmospherics. So I just do the
+atmospherics on the post pass after
+everything else. but they sample those
+atmospherics and add them before it
+actually adds the cloud layer. Finally,
+we have the render callback function,
+which is where everything actually
+happens. This gets called by the world
+environment on all of its compositor
+effects one at a time, top to bottom,
+and it does it every single frame. So,
+within here, we go ahead and we get the
+size that gets the resolution. If the
+resolution has changed, we go ahead and
+rebuild. That will initialize a compute
+that will clean everything out and
+rebuild. That's every time you change
+resolution. So, if you change
+resolution, you can see it fades out for
+a second. This is because it's actually
+rebuilding all those buffers of data.
+This is obviously not the best thing for
+performance, but there's no real other
+way because the images it's actually
+rendering to are now just a different
+size and I would have to rebuild the
+texture data directly. Now, within here,
+we have a bunch of things that happen
+and it actually constructs all of the
+samples and puts them into uniform sets.
+I'm not going to go into detail. If you
+want to know how uniform sets work in
+compute shaders, there will be
+documentation in the description. But
+needless to say, there's a lot of things
+that have to be done to make all this
+compute shaders work. But once you
+actually understand how they're working,
+it's not actually that complicated. It's
+just a lot of code. It's a lot of
+duplicate code. So this is like one for
+that texture, one for the next texture,
+and so on so forth. One for the depth
+texture, one for the color texture.
+There's a million different little
+things that have to be put in. Now, we
+do have a couple other things that are
+important here over in the update
+matrices. These are actually updating
+like the buffers. And so, the buffers
+are used to keep track of where the
+camera is and where it was last frame.
+And this is useful for something called
+temporal reprojection. Basically, when I
+turn the camera, that data isn't there.
+Like, if I turn the camera just a little
+bit, those clouds are actually shifting
+the pixels. Right now I'm I've got an
+accumulation decay of8 which means that
+80% of the data in every frame is
+previous frames and only 20% is new
+data. And the reason for this is we
+accumulate the data over time. If we set
+this to zero we end up with a very noisy
+result. And this is because it is not
+using the previous frames data to
+actually make it look softer. If we set
+this up to like 99 there's almost no new
+data and everything smears whenever you
+repro which obviously doesn't look the
+best. Normally I put it around 08. This
+gets you more or less real-time effect,
+but it also softens things up quite a
+lot. And to do that, we actually have to
+pass in the camera as well as the
+previous camera. So that's just going to
+be the last view matrix. And then down
+here, I assign those after the fact. So
+every frame, it gives you the current
+camera, the current projection matrix,
+and the previous camera projection
+matrix. Now, we also have a couple other
+things. We have a bunch of information
+as far as all of the clouds positions as
+well as if we are using a mask. Now,
+masks are a little bit different.
+Basically, they take the place of one of
+the noise textures down here,
+specifically the extra-large noise
+texture. And if we disable that, you end
+up with just these large p random
+randomized noise patterns that move over
+time, which might be exactly what you
+want for your game. But if you enable
+the mask, then the locations that the
+clouds are at are actually painted onto
+the scene. Now, there's a bunch of noise
+that moves through that those locations.
+But if we wanted to say remove the
+clouds right here, we could remove that
+density map and we can paint away where
+the clouds are or paint in where the
+clouds are. This also lets us do a
+couple other interesting things like we
+can go ahead and paint color. So, we can
+paint all these clouds over here red.
+And you'll notice I actually painted
+these clouds darker than the rest. So,
+because it looks like a volcano, I want
+it to look more like soot and ash. And
+so, as a result, it kind of fades off
+into the color. Though obviously I
+wouldn't leave this red, but you can do
+it whatever you want for your game
+projects. This means that we can
+actually have a lot more authorship as
+far as the clouds go. All that's handled
+right here. Basically, it just takes the
+position of the top left corner of this
+giant texture that's like I think yeah,
+it's it's 128x 128 pixels. So, it's
+actually very low resolution. And right
+now, I've got it set to 512 x 512 me
+kilometers. So, that'll be like a
+massive region of the world. Then it
+just censors it on 00 which I think is
+like right here
+somewhere. That's pretty much all the
+mass does. And then after that we go
+ahead and get all the different colors
+and everything like that, the
+atmospheric colors. And we also update
+all the lights. We have this in a
+separate function just in case the
+lights don't actually update. We just
+use the previous frames data. Like right
+now, no lights are moving because I have
+times paused. So as a result, the lights
+aren't even updating. There's no changes
+to the buffers just to save on
+performance a little bit. And that's
+pretty much it as far as the drivers.
+Obviously, there's a lot more data
+there, but I'm not going to go into too
+much detail on any of it because
+honestly, this is more like an overview
+than any sort of tutorial. I probably
+will do a video on just how to make the
+clouds be in the scene and like launch
+them. There's a little bit of a tutorial
+in the actual GitHub repo, but that
+doesn't exactly go over the details very
+much. So, I'll probably be making an
+actual video on that subject. But
+following all of this, I want to go
+ahead and hop over to the compute
+shaders. Now, the compute shaders are
+pretty complex. We have a prepass, the
+base pass, and a postpass. Now, the
+prepass, all it really does is just
+takes the base depth texture and it
+rescales it down to the resolution using
+the minimum of those local values. So,
+if it's rescaling four pixels into one,
+it will take the lowest value in those
+four pixels. And the reason why I do
+this is because what I want is the
+farthest value away from the screen.
+Because depth textures are inverted,
+that is the lowest value. And the reason
+why is if we're in a chunk of say 16
+pixels x 16 pixels around a leaf, I want
+the clouds to render the entire 16 pixel
+x 16 pixel chunk. And then I'm going to
+in the post pass actually fit that those
+pixels behind the actual trees. And so
+in order to do this, I sample the
+farthest away texture so that when I
+build clouds for those for that pixel in
+particular, it says, "Hey, this pixel's
+off in infinity. It's at the end of the
+world. We need to go ahead and generate
+the clouds." and it generates the clouds
+in a big old chunk that is then carved
+out for the actual end result in the
+post process. Following that, we have
+the base compute shader. And the base
+compute shader is pretty much all of the
+most important data. It samples the
+lighting, it samples the ambient
+occlusion, it samples the color, the
+atmospherics, everything like that. And
+all of that happens right here in this
+main function. So, first thing we do is
+we go ahead and get our ray origin and
+our ray direction. And this is just a
+point in the actual screen and the
+direction away from the camera at that
+point. Next up, we go ahead and get
+dither. And dither is actually sampling
+a little tiny dither noise texture. And
+all this is is something called blue
+noise, but it's in 3D. So you are able
+to sample through it over time, and it
+just modifies the starting position by a
+little bit, and that's what gets that
+noisy result. If we completely remove
+the dither, you end up with these big
+bands through the clouds like what
+you're seeing on screen. Now, following
+this, we go and set up our atmospherics.
+This isn't important till later. And we
+set up a bunch of variables here we're
+going to be using later. Not going to go
+over all of them. Obviously, they are
+important. But the more important thing
+is actually this right here. So, all of
+this commented out code is actually
+something called interlaced incremental
+rendering. And what it does is basically
+if it has like a 16 pixel x 16 pixel
+chunk, it will only rerender one pixel
+every frame. And then all the others it
+just uses the temporal reprojection. But
+because my temporal reprojection was
+never good enough to actually match
+pixel by pixel the rotation of the
+camera, like there's a slight disconnect
+between that, it always looked bad. So I
+have it commented out here. If anyone
+could ever perfect this, by all means
+try to reimplement it. You just
+uncomment this and then uncomment this
+if statement right here and this bracket
+down here. And all that will do is
+basically not do anything below there
+unless it's like the current pixels
+frame. and it's complicated, but the end
+result is it has much better performance
+if anyone could ever fix the issues with
+it. Besides that, I went ahead and
+sample all the light colors. This is
+just to build dot products to all the
+lights and dot products to the sky so
+that that way I can tell if a light is
+over the horizon or not and things like
+that. And we set up a couple more
+variables and begin the for loop. Now,
+the for loop, what it does is it steps
+out into the world at the step count.
+And the distance it travels each step is
+dependent on the density within that
+location. And so the higher density, the
+slower it steps. So that that way I get
+more detailed cloud shapes. And then low
+density, it steps really fast. Now, when
+we're sampling density, first off, we go
+ahead and get a mask sample. And this is
+just going to be that large scale mask
+or if we don't have a mask enabled,
+that's going to be that procedural noise
+that we're using as an extra-large noise
+scale. And then we're going to use that
+to modify the ceiling sample. Now what
+this does is it means that when we have
+clouds that are high density that
+ceiling sample will go up and it will
+result in higher taller clouds and when
+we have clouds at lower density it will
+be down so we'll end up with these
+shorter rounder clouds and that just
+gives you a little bit more variation so
+that way you can have some cool looking
+clouds but you can also have some little
+small clouds that float around that are
+a little bit more like little puffs more
+than anything. Now before we sample we
+go ahead and get the cur LOD. I'll
+explain it in just a second, but the
+basic gist is the lower the value, the
+lower the resolution, the lower the
+quality. So, over here in the sample
+scene function is where most of the work
+happens. Now, first off, we go ahead and
+take that extra-l large shape that was
+just generated by the mask, and we're
+going to multiply it by the gradient
+sample B. That gradient sample is this
+height gradient, and we're just using
+this to define different values at
+different heights inside of the cloud
+layer. Following that, we go ahead and
+sample the small shape first. And that's
+going to be that little tiny noise that
+we sample. And we're not actually going
+to do anything with it. We're just
+sampling it before we sample the curl
+noise. This way, the noise looks a
+little bit more cohesive while still
+having that curl noise factored in. Now,
+the curl noise, all it really does is it
+gets these little wisps down at the
+bottom by moving the sample point when
+near the bottom. And that's going to be
+controlled via that alpha right there.
+And using the curl noise, which is a
+little bit complicated, but the basic
+gist is is it's three-dimensional noise
+of instead of values like pllin, it's
+actually vectors. And I kind of
+construct it using pearl and noise, but
+I ended up doing it in actually Python
+and just saving the end result. This
+isn't actually my curl noise. I've got
+another texture in here that's my curl
+noise. This one was saved from Andrew
+Schneider's website, and it's not
+exactly curl noise, but it does actually
+result in a very good look. Flip between
+these and see what you like when you're
+doing your project. Now, curl noise only
+executes when the LOD is above a certain
+value. Reason being is curl noise is
+extremely computationally intensive to
+do. So we only want to execute it up
+close to the camera. Next we go ahead
+and sample the large noise and the
+medium shapes. Now the medium shapes we
+do a little bit of weirdness with but
+the end result is we go ahead and bring
+that in with the small shape. Now the
+small shape we multiply it by the
+gradient multiplied by the power of the
+inverse of the median shape. Now what
+that means in more English terms is that
+we can modulate the detail noise in
+between the medium noise. So basically
+what it means is is where we have medium
+noise we'll have these big bulky shapes
+and where the value is highest we don't
+want any small noise. And this means
+that we can have small noise in between
+the shapes. So it's those soft bits in
+between. This means that we can still
+have nice smooth shapes, but we can also
+have higher frequency detail in between
+those shapes. This just gets you a
+little bit more variety out of your
+noise. Now, after that, what we do is we
+take the medium shape, we carve out the
+larve of shapes, and we carve out the
+small shapes to define our shape. And
+finally, we use the edge fade. Now, the
+edge fade, all that really means is that
+it hard locks the bottom and the top of
+the cloud system to fade off at both
+ends. That way we don't have any
+weirdness if somebody puts in a gradient
+sample that's just not correct and we
+end up with noise outside of that range.
+We just want it to be clamped within the
+range of the cloud layer. And that's
+pretty much it. This one function
+handles all the sampling of noise within
+the cloud system. And you can see it's
+sampled once there for the new density.
+And then we also have another sample
+down here for the ambient which I'll go
+over in just a second. Now what LOD does
+is basically it decreases the detail of
+the clouds at farther distance. So, if I
+go ahead and manipulate the LOD bias and
+bring it down, it means that that qu
+high quality clouds are only right up at
+the camera and all the way down at zero,
+it means it's lowquality clouds
+everywhere. But if I step it out, you
+can see the clouds begin to get higher
+and higher quality farther and farther
+away. And also, the frame rate goes way
+down. Um, this really really optimizes
+the clouds. If you set it to around 0.5,
+it usually works fairly well. the clouds
+will still generally look pretty good up
+close, but at a distance they're going
+to look pretty blocky. And that's just
+calculated based off the distance
+traveled. And if the density is not
+zero, we go ahead and sample a lot of
+different things. So we sample the
+painted color, we sample the directional
+lights, we sample the point lights, and
+we sample the ambient. And that just
+gets you a little ambient occlusion. So
+that's like the little darker spots. And
+the ambient occlusion color can actually
+be modified right here. So you can
+manipulate that. You can even change its
+color if you want it to super
+noticeable. And all that really does is
+just sample right above the each
+location. There's a couple things within
+the lighting that's very interesting.
+The Harvey Greenstein is a um
+calculation, mathematical calculation. I
+won't pretend to know what it does
+exactly, but what the end result is is
+it gets those little halos around the
+clouds. So, if we manipulate the clouds
+anistropy, you can see how it's like
+softening up those edges. If we decrease
+it, that's how you get like that silver
+lighting, especially at nighttime with a
+full moon. It just looks really good.
+So, we sample the lighting that just
+gives you your actual shadows and it
+samples in the direction of each one of
+the directional lights for that. We also
+sample that for the point lights, but at
+a very low resolution. So, we only
+sample it three times regardless of what
+the quality of the lighting is. This is
+just to get basic shadows around those
+point lights, which I actually have one
+for this little uh volcano here. If we
+move things around, you can see how it
+like works its way through the clouds.
+And I I just think it looks a little bit
+better with some better shadows on it
+like that. Although obviously there's
+some performance loss there. If you
+didn't want to use the density sample
+right here, you could just use the new
+density value instead of density sample
+and it would result in a very soft
+effect, but a whole lot better
+performance. It'd be like the point
+lights were almost free. Now, besides
+this, I go ahead and do a couple other
+things. I go ahead and create the next
+step. So that's uh how far we're going
+to step at the next iteration. And we go
+ahead and set the density if the density
+is greater than the highest density. And
+all this really does is I keep track of
+the location in world space that the
+highest density clouds are. So I can use
+that for temporal reprojection as well
+as in the post-processing effect to make
+the clouds fade into objects naturally.
+And then we also do a little bit of
+cleanup here with if I equals zero. That
+just makes it so that the clouds blend
+cloer to the camera. And if we're not in
+the side of the frame of the of the
+clouds, we go ahead and cancel out if
+we're going up. And if we're going down,
+we go ahead and just set this next step
+to maximum. Following that, we're going
+to go ahead and essentially average out
+a lot of our colors. So the ambient and
+the painted light are being accumulated
+every step. What we do is we divide them
+by the lighting samples so that we get
+the average painted color and we get the
+average ambient value. And then we go
+ahead and push those colors back into
+the light color, which is going to be
+like our output color. And finally, we
+go ahead and factor in all the
+directional lights. Now, the directional
+lights, basically, it accumulates all of
+the atmospheric effect of the
+directional lights, and then we factor
+it in at the end based off of what the
+sum is essentially. Finally, we go ahead
+and create our reprojection. So,
+accumulation reprojection is a
+complicated subject, and I won't pretend
+that I even actually did it correctly. I
+am 99% sure that there is something I'm
+missing that results in the clouds not
+being perfectly aligned when you rotate
+the camera. You can actually see the
+clouds like readjusting to their
+position when you rotate the camera. It
+annoys me to no end, but I have still
+after months not been able to solve it.
+So, if you figure it out, by all means,
+send me a message. I'd love to see it.
+Regardless, we go ahead and what we're
+doing is we're basically taking the
+pixel on screen and taking the previous
+frame and moving the pixel to the where
+it was in the previous frame and seeing
+if there's any clouds there. And if
+there is, we go ahead and bring those
+over. And that's done right here. Now,
+an important note, I use using a a
+as this essentially is a boolean. And
+all it really does is flip-flop back and
+forth. So, it's a b a b so on so forth.
+And what that does is it means that the
+compute shader while it's generating a
+is not trying to sample from a, it's
+sampling from b. And that way, it
+doesn't step on its toes. If you don't
+do this, it will try to sample from
+pixels that are currently being written
+to, and you just end up with these giant
+black boxes all over the screen. It's
+terrible. So I bounce back and forth
+using A and B, but both of these if
+statements are almost identical, just
+with A and B swapped. And all it does
+within them is essentially do this big
+old if statement that tries to determine
+if the pixel is trying to sample from
+something that has moved in an improper
+way. So that's like after images of
+trees and the edges of the camera.
+Basically, anywhere that it doesn't
+actually have the data it needs, we go
+ahead and just rebuild the data from
+scratch. and that results in a pixelated
+result, but it's better than just having
+like missing clouds at the edges of the
+camera. And if not, we go ahead and just
+accumulate the data. Now, we actually
+have two accumulation textures, both A
+and B, and two output textures. One is
+the color and one's the data. So, the
+color just literally has a picture of
+what the clouds look like, along with
+the alpha being the density at that
+location. And then the actual data is
+going to be your distance traveled. It's
+the depth at that location. In the low
+res version, it's the initial distance
+that we traveled before we touched any
+clouds. And the post-processing is going
+to use all this to blend the clouds into
+the environment. Now, once we have all
+that, we go ahead and output all of our
+data. And this line is more or less
+vestigial and is old. I should probably
+remove it. Whatever. And then over in
+the post-processing, we sample that
+data. We're bringing in the input data,
+but we're also bringing in all of the
+uniforms from the base compute shader
+because we use some of these for the
+atmospherics and stuff. And there's a
+lot of different functions here for
+sampling atmospheres as well as uh
+radial blurs, but we're not going to get
+into that. First off, we just go ahead
+and construct our ray direction and
+origin. And we sample the texture data
+from the base compute shader. And this
+is going to be sampled using texture 2D
+to by cubic if the resolution is not
+one. All this really does is it means
+that instead of a billinear sampling, we
+actually get a spherical kind of
+sampling. And as a result, it means all
+of the lower res clouds are actually
+very soft. So, if I set the blur power
+to zero and I set the resolution quality
+down to a 16 and then I decrease the
+accumulation decay to zero, you can see
+even though they are glitchy, the actual
+like splotches of clouds are round.
+They're not actually they're not square
+in nature. And so, as a result, the
+clouds even at this low resolution still
+look not terrible. Now, obviously, they
+probably would look better with a little
+bit of blur, but the blur doesn't
+actually sample the c by cubic. So, I
+was just trying to show how that works.
+Now following that we go ahead and blur
+if the blur is set to anything. So
+that's blurring color and data. The data
+is just taking the maximum of all the
+values whereas the blurring the color is
+actually taking all the values and
+averaging them. And those functions can
+be found up near the top of the script.
+They're pretty simple blurring
+functions. I tried to do gshian blur but
+it never worked out. So if you you know
+that's probably an area that you could
+sample better. Also with the actual
+blurring of data I tried a lot of
+different options. Maximum is not ideal.
+It has visual errors, especially when
+you're in clouds looking at objects. If
+I move over to this mountain over here,
+don't mind the terrain. I'm still
+working on some issues with the terrain.
+But you can see the clouds look fairly
+soft, but there are visual glitches
+where around the edges of terrain, it
+starts to glitch out and lose the data
+that it's supposed to be rendering.
+Still a long ways to go on this. This is
+probably the thing I am the least
+pleased with with the entire cloud
+system is this this little artifacting.
+But following that, we can go ahead and
+do our discarding. And that's how we get
+the clouds to sit behind objects close
+to the camera better. And we go ahead
+and sample all of the directional lights
+again for the atmospherics on the
+environment. And we factor all those
+into the end result. Now, that was a
+long journey and there is still a lot to
+do. I'm not going to pretend it's
+perfect. I'm pretty pleased with the
+visuals currently, though obviously
+there are some issues. There's some
+issues with energy conservation. So, if
+I up the atmospheric density, for
+example, you'll notice it just keeps
+getting brighter and brighter. And what
+I actually want is it to get hazier and
+hazier at the atmospheric color. So,
+there's still a lot of issues to solve
+as far as that goes. There's a lot of
+things to improve that I still haven't
+even really touched. And of course,
+there's also the reprojection errors,
+which are currently a problem. But, I am
+pretty pleased with the result, and I'm
+pleased enough that I went ahead and
+made the plugin. Um, I'm going to be
+continuing work on this a little bit,
+but I'm probably going to be getting
+back to the game play after that. Um, I
+I' I've been kind of going back and
+forth on what I want to do next. Like,
+there's been a lot of things I've been
+thinking about doing as far as like um
+playing around with global illumination,
+like actually doing um like screen space
+ray tracing, global illumination, which
+is an interesting subject to me, as well
+as completely rebuilding the terrain
+from the computer shader and actually
+making a public like uh GitHub repo.
+That's something that has been floating
+around in my head. But then also, I
+really want to work on the gameplay. So,
+I honestly don't know what I'm going to
+be doing next. I'm going to discuss it
+with my wife and we're going to keep
+thinking about it and once I know what
+I'm going to do, I'll make sure to post
+a video. Regardless, thank you again to
+everyone who's been paying attention,
+who's been supporting me on Patreon. And
+even if you aren't supporting me on
+Patreon, thank you so much for watching
+my videos and just enjoying watching
+them and learning about stuff and using
+the plugins if you're using the plugins.
+Oh, and one last thing. I'm going to be
+posting a video, a tutorial on actually
+how to just enable some clouds in a
+scene um from scratch. It's actually
+incredibly simple with this version.
+It's simple enough that I just put a
+tutorial in the description of the Git
+repo. So, you can look there if you are
+don't want to wait for the video. You
+can just download the plugin and throw
+it into your scene. But, I will still do
+a video that's a breakdown of that in a
+very formal and classic tutorial style.
+and I'll post that in the actual GitHub
+repo as an explanation so people can get
+started on the clouds. There's a lot of
+different settings and I'm not going to
+go over all of them in the tutorial, but
+it's one of those things where I feel
+like people just need to play around
+with it. Have fun. Play with clouds.
+Draw some clouds. Drawing clouds is
+incredibly relaxing and I cannot
+recommend it enough. Have fun with the
+project and with the tools I've made.
+I'm I love clouds. I love clouds a lot.
+All right. All right. I've had enough.
+I'm just I'm just talking about random
+crap now. All right. Thank you all so
+much for watching. I hope you all have a
+wonderful week, month, year, however
+long it is until the next video.
+Hopefully not a year. And we'll see you
+all back here next time for whatever
+comes next.
+[Music]

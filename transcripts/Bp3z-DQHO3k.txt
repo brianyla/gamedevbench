@@ -1,0 +1,202 @@
+user interface in 3D is often used in
+games to display health bars markers and
+information in this video we will take a
+look at how you can achieve this and
+source code for this project is down in
+the description and if you find this
+helpful please subscribe so let's dive
+in so open up goo and let's start with
+making a health bar so make this a 3D
+scene and we want to add a child so hit
+the plus button and search for sprite 3D
+and add that as a sh for this and
+texture for this will be a viewport so
+we will add a
+viewport and now we can set the size for
+the view port and I'm going to just make
+this 1920 by 1080 so if we open up the
+Sprite 3D and on the texture we will
+select viewport texture select the
+viewport and press okay and now if we
+zoom out we will see the texture and
+it's basically getting the 2D viewport
+so as a sh to the viewport we will add
+they called progress bar now we have
+added a progress bar and we can see it
+here in the top left corner and we can
+see that it's pretty small so I'm going
+to go into the layout and on size and
+transform and I'm going to increase the
+size to something more reasonable let's
+say
+1,000 and maybe 100 on the thickness I'm
+going to go into the 2D view since the
+progress bar is at 2D node and in in the
+top middle here I'm going to Anchor the
+preset to the middle if we go back into
+the frey view we will now see it in the
+middle and we see this gray background
+and basically go into this sub view port
+and enable transparent background that
+will make the background transparent and
+we will only be able to see the progress
+bar I'm going to set the value to
+something like 50 on the progress bar we
+can actually see it back to free view
+and now we can see the value is set to
+50 and we can set the steps to something
+like one that's how much it will move
+each step when we change the value so
+now you it's moving in increments of one
+and if we take it back to 0.1 you will
+see it's moving in increments of 0.1 so
+I'll like one and keeping it at 50 I
+will make a simple script on the Node 3D
+and create a new script and on the
+process we will remove the pass and drag
+in the progress bar and then we select
+the progress bar and we want to get the
+value so the progress bar do value minus
+equal one so that will make it lose one
+over time so we can see it I'm going to
+run the scene and we can check it out I
+realized we don't have a camera so we
+can't actually see it so I'm going to
+close this down and add a
+camera we will add a camera and if I
+press contrl alt M while selecting the
+camera it will will snap to our view now
+if we run the scene we will see it went
+down really fast we're going to increase
+the max value to something like 1,000 so
+we can actually see what's happening and
+set the value to 1,000 as well I'm going
+to run the scene and we can now see the
+progress bar going down really fast and
+if we select the Sprite we can actually
+make it rotate to the direction we're
+looking at from the camera and that's
+called a billboard so if we select the
+Sprite 3D we can go into the flags on
+Billboard enable this you can either do
+enable and that will be in every
+direction so it's always facing you or
+you could do a y billboard and that only
+makes it face you on the Y I like the Y
+billboard more but you could use a
+regular billboard as well sometimes you
+will have objects I'm going to put in
+object here to show you what I mean
+because sometimes you have a object
+that's inside of the Sprite and that
+will make it not visible so right now we
+have Susan here and she's really pretty
+but she's blocking the view of the
+Sprite and you might want your progress
+bar or your UI to show in front of the
+models and to make sure it's showing in
+front we go into no depth test and we
+check this and it will make it render
+always in front of everything else but a
+negative with this is it will always
+render in front of everything everything
+so this is probably best if you make it
+only show the Sprite when you're close
+to it so something like Interac that it
+shows when you're focusing it or
+interacting with it but it hides when
+you're not interacting or focusing on it
+I'm going to also show this with
+something else than a progress bar for
+example a panel with some labels and a
+text so I can just either duplicate this
+Sprite 3D or I can add more nodes in
+inside of the sub view Port but for this
+example I'm just going to duplicate the
+Sprite 3D and I might have to change the
+texture to this other one so I'm going
+to make this unique because it might be
+linked to the other one and select it
+and select this new one I should
+probably rename them I'll do that later
+here we're going to remove the progress
+bar select our viewport and we can add
+for example a panel go back into the 3D
+view to see what's actually happening
+and we can see it up here in the top
+right we can change the custom minimum
+size to something bigger so let's make
+this like 500 by 500 and I'm going to
+Center this go into 3D View and I want
+it under the health bar so I'm going to
+move it down on the Y position let's
+drag it down under it now I want to add
+some text so we can add a
+label Center this onto the panel and we
+can call it
+Susan I'm going to make it not not as
+tall so I'm going to make it 100 not a
+good idea to do custom minimum size I'm
+going to just change the size because it
+doesn't let you change it as easy so 100
+on the Y and let's do 1,000 on this as
+well Center it and on the position on
+the Y move it up above the health bar so
+this will basically be the name tag of
+Susan I'm going to increase the font
+size so search for font and font size go
+into the 3D view so we can actually see
+what's happening and there we go it is
+perfect and then you could add anything
+for example you could add Sprites like
+Sprite 2D inside of this and that would
+show as well I'm going to zoom out a
+little bit select the camera and contrl
+ALT M and now if we run this we can see
+everything
+better and right now we can see Susan
+and that's probably because I need to
+add the world environment and the Sun so
+I'm going to do that as well run the
+scene again
+and now we can see our beautiful suzan
+her health bar and her name and this is
+basically how I did it in a game I'm
+working on right now Forge front and you
+can wish list it on Steam right now I
+have the no depth on but I also have
+this only visible when you're close by
+it and then I have a interactable I will
+link a video down in the description on
+how you can make a interactable and then
+on my furnace script I connected the
+focused and and unfocused and this is
+how you can do something similar to what
+I have done so add an animation player
+that place the Sprite 3D going from
+visible to Invisible and then you can
+just play it and play it backwards so
+playing it backwards will make it
+visible and playing it will make it
+invisible so when it's not focused it
+will play it making it invisible and
+when it's focused playing it backwards
+will make it visible and I'll show you
+how I made it so it's made out of a
+panel with another panel inside of it or
+actually a couple panels a couple of
+labels I think it's just one label yeah
+with all the text because it would be
+annoying to change a bunch of labels for
+the different values because this
+changes when you upgrade it then there's
+also a couple of Sprites so the coins
+and the heart and as you can see inside
+of the furnace and also rotating on the
+Y because otherwise it might look a
+little bit weird with it facing outwards
+I like the look of this a lot better
+thanks for watching if you want to
+support my work check out my Kofi in the
+description and I'll see you in the next
+one

@@ -1,0 +1,301 @@
+all right welcome back before we get
+started today if you hear any meows or
+pleats for milk or food that is the
+newest member of our family the little
+one here in this picture her name is
+Rosa and we picked her up on the side of
+the road about a week ago been dealing
+with all the medical issues with that so
+if you hear anything that's why but what
+we're going to be working on today is
+we're going to be working on blend
+shapes and calling methods we're going
+to start with calling methods it isn't
+too complicated but real quick we are
+going to have to create a couple scripts
+so I'm going to create a new folder here
+and we're just going to call this folder
+code
+and within this folder we're going to go
+ahead and create two new scripts and
+they're just going to be called test
+method one's going to be C sharp one's
+going to be Godot script
+all right I'm not going to go into a
+full breakdown on these all I'm going to
+do is just one method for each one and
+all that's going to have is visible
+equals not visible all this is going to
+do is take whatever the current
+visibility of this mesh is and then
+invert it and make that the current
+visibility of this mesh this is just
+going to toggle whether something is
+visible or not and we're going to use
+this for testing and make sure to extend
+node 3D and we're just going to go ahead
+and real quick do that on the C sharp
+side as well
+foreign
+I had to rename the name just because
+the name of the class can't be the same
+as the name of the method in in C sharp
+but regardless now we've got that we've
+got new test method and just toggles the
+visibility so if we go back over here
+we're going to real quick just make a
+little Cube we can set this as to
+whatever
+set it as a new mesh and we'll set the
+standard and we'll set emission to some
+bright color nothing too crazy okay and
+let's put this above the player so that
+that way we can just see it for testing
+purposes and we're going to disable it
+so if we go over to animation player
+we're going to set this on an animation
+that is constantly playing in the upper
+body but not in the lower body so if we
+toggle this real quick all right had a
+little hick up there I had to exit the
+scene and come back but now we've got
+the proper animation player playing if
+we go over and look around we can go
+ahead and make sure that this is looping
+and let's just add a track got a bunch
+of different options here usually if
+you're going to want to change any of
+these options it is better to go over
+here and create a key so you can create
+a new key on any sort of function or
+variable and you can change these things
+on the Fly using whatever animation
+player you have open but in this case
+for specifically calling method it is
+easier just to go ahead and hit add
+tracked and call method and then you
+still select the object that you want to
+call the method on in this case it's
+going to be the mesh instance 3D and if
+we scroll down here to the bottom we now
+have this line right here let's go ahead
+and disable the animation tree so we're
+just looking at the animation in the
+animation player so we can see right
+here as he starts to turn his head let's
+go ahead and create a new key and then
+you'll get all of these different
+options in this case our script is not
+actually applied so that is not there
+but you can see we have every function
+that is available on any object at when
+it just inherits from mesh instance 3D
+so we have things like removing child
+getting physics process all sorts of
+things but we're going to close that out
+and we're going to go ahead and
+implement the script real quick and
+we're just going to do the test method
+CS
+and if we go right here and hit insert
+key if we go up to the top you can now
+see the new test method an important
+thing to note is that calling methods
+won't typically work in the inspector we
+do actually have to hit play for this so
+we're going to make it so that when he
+turns back this way we're just going to
+call that method again and remember it
+turns it on or off each time it just
+toggles the visibility so it should talk
+go back and forth so if we hit the
+animation tree here the filters are not
+including that function so you see how
+the mesh instance 3D here is actually
+outside of the tree it is not as part of
+the skeleton but because an animation is
+referencing that for a method call we
+can now toggle whether the mask allows
+that or not so in this case we do want
+the ability for the upper body to
+control that because the animation for
+looking around is in that upper body so
+if we go ahead and toggle that and then
+we hit play what we should see is it
+turning on and off as he looks back and
+forth
+and just like that it works just fine
+so that's basically how you call method
+functions from within animation this can
+be extremely useful I use this
+personally for any time the enemy is
+attacking or the player is attacking to
+call the method to enable or disable the
+Collision you also can do it with
+footsteps just always be careful that
+you make sure your filters are set up I
+cannot tell you how much time I've spent
+trying to figure out why my upper body
+was not calling animation events when it
+was just the filter disabling it so we
+have that functional let's go ahead and
+go over blend shapes so blend shapes are
+an incredibly powerful part of animation
+and I use it to great effect in Hermit
+first we're going to have to hop over to
+blender blend shapes basically what they
+are is repositioning of the vertices in
+relative space to their original
+position real quick we're just going to
+reset the pose of the skeleton we don't
+need this to be animated for now and
+we're going to select the mesh and we're
+going to hide that skeleton to make
+things easier and if you come down here
+to the three little dots you're gonna
+see a couple options here first vertex
+groups this is how you actually bind the
+meshed to the skeleton but down below it
+you also have shape keys so the
+important thing to remember with shape
+Keys is you always have to have a basis
+so you have to create one and then
+create another one so the basis will
+never change that is like the frame of
+reference for the original so if we set
+the key one let's just call it test
+shape one a couple important things when
+do when messing with this in blender you
+do have to go ahead and set the value up
+the first time so if you set the value
+to zero when you make changes it won't
+actually reflect against the test shape
+and because you have the test shape
+selected I don't think it'll even allow
+the changes to occur but what you do is
+set the value to one and then when you
+edit it or sculpt it or what have you
+and for in this case we're just going to
+hit sculpt and we're going to use the
+inflation brush and we're just going to
+make the biceps larger give them a
+little bit of muscles so if we go back
+to object mode and we slide that value
+you now see the mesh deforms and you can
+actually do this in the other direction
+so if you put the minimum to negative
+one you can shrink it down and now he
+has deflated biceps so as a result you
+can use this to do very complex
+interactions with the character not just
+with changing the body's shape but also
+if you wanted to counteract something
+for example if the knee bends too far
+and the mesh doesn't look right you can
+then create a blend shape that occurs
+just when the knee is bending and
+accounts for that a lot of very high-end
+AAA games will do this in order to
+counteract the issues with bone-based
+animation for now we're just going to
+set this to one we're going to set the
+minimum value to zero and the maximum
+value to 1 and if we go to object mode
+make sure to set the character the
+skeleton back to pose mode re-enable its
+visibility and we're just going to
+select all this and we're going to
+export this as we normally would and
+make sure to always use your preset all
+right and we're back in Godot it should
+just import automatically there
+shouldn't be any issues but if we go
+back into animation player okay so look
+around did disable the looping sometimes
+it does this you just have to be careful
+about that so if you go down to the
+character body mesh you now see another
+tab on the character mesh before it was
+just skeleton and surface material over
+it now we have blend shapes and so we
+can manipulate this and change it to
+whatever we like now Godot does the
+default to negative one to one but if
+you are manipulating it via code you can
+actually go farther than this and maybe
+we'll go over that in another episode we
+can just leave this as is or we can also
+manipulate it via an animation player an
+interesting Quirk when I did testing for
+this video I found that the blend shape
+track just simply did not work for me in
+playing or in editing so instead I found
+a workaround if you select the mesh and
+you go up to the key option you can go
+ahead and create a new key track for
+this property so I just set it to bezier
+Curves I disable create reset tracks and
+I create a track so you can see right
+here we have the new track and we have
+it it automatically defaults to whatever
+the value currently is so we can just
+set this down to there and let's disable
+the animation tree again just to look at
+the animation and so when he looks this
+way what I'm going to do is I'm going to
+create a new key and this new key I'm
+going to set the value to 1. and if you
+go down here you can also see the curves
+mode so if you manipulate the curves you
+can also make things smoother or harsher
+of a transition but be aware when it
+comes to blend shapes the value here is
+very extreme so in this case value one
+is all we really need and you'll notice
+in the animation you see how the biceps
+expand if we set this up to something
+extremely 29 yeah that's obviously not
+what we want all right so we'll set that
+back down to one now we can go ahead
+here and create another key and we'll
+just duplicate this one and then in the
+end we'll duplicate the first one that's
+fine we're just going to set this to
+zero so if we go back watch the biceps
+as they expand and then contract back to
+the way they were and to make this a
+little bit more noticeable we can also
+set the value to negative one default on
+both ends
+so it starts out as very deflated and
+then expands and then deflates again now
+this is just for testing but you can go
+ahead and throw it into the animation
+player and watch it there as well here
+in the animation player once again it's
+not visible and that's because we also
+have to set up the filtering for that so
+you can see how the blend shaped here
+are separated out by themselves and if
+we select that right there you can
+notice now once again it is expanding
+and Contracting because remember that
+upper body animation is handling the
+look around animation
+if we hit wave it'll just blend straight
+into that and because it is Blended
+exactly like everything else in the
+transitions it blends perfectly just
+like the animation alright so that's
+going to be it it's going to be a little
+bit of a shorter video today we are
+going to go into a little bit more
+detail having to do with actually
+setting up a character controller and
+passing information to the animation
+tree via code and I think that I will go
+over how to edit blend shapes via code
+then but until then I hope you all have
+a wonderful day and we'll see you all
+back next week for a very basic
+character controller foreign

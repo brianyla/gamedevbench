@@ -1,0 +1,1564 @@
+hello and welcome to a new video it has
+been quite some time and it's always a
+lot of work making videos what happened
+since the last video I changed my job
+almost two years I was working at some
+engineering on the product called
+risotto I was also working on that using
+the Godot engine and you probably saw me
+posting videos somewhere I played in the
+background so now I'm working at bipin
+bits you may have heard of it they
+recently released domekeeper and am now
+a part of the core team it has been a
+really awesome first month super
+exciting job I am working there also
+working in gudo it's a ton of fun a
+great team I also recently released the
+demo for godo4 called desert light I was
+working on it for yeah quite some time
+about the most of the time was spent
+waiting now for music and finishing up
+the assets optimizing everything a
+little bit the first iteration that I
+was showing on social media yeah was
+very high poly and yeah not very well
+optimized but you can get it now I put a
+link in the description and you can
+check it out if you like and what I want
+to do in this video so much talking just
+for the intro but let's get to the video
+what I want to do today is to build a
+scene and go to four using the assets of
+desert light so we're going to build a
+3D scene and I'm going over some
+settings of the world environment I'm
+going to give some tips on composition
+of your scene and yeah I'm just starting
+building it usually I have a very strong
+concept for a video but this time I will
+just start out and we'll see where it
+takes us and we'll play around with some
+settings and yeah hopefully in the end
+everything will look cool and if I
+encounter something that I want to talk
+about a bit more in depth while I work I
+will just stop working godo and explain
+those Concepts and so it will be a very
+open format video I hope you will enjoy
+it and let's Jump Right In I opened the
+original demo scene to start out and
+then let's create a new scene let's call
+it demo 2 how very creative
+and first I want to start out by
+blocking out the scene so to get an idea
+of what we will be building
+um to do that I get a mesh instance
+let's put a box mesh on it
+let's make it 10 by 10 meters like this
+yeah and now the blank canvas syndrome
+maybe we can build something so I
+duplicate those and then just move them
+around
+and like this I will quickly block out
+the main scene
+maybe we can do something like a cool
+Canyon or
+something the like
+so by pressing t or pressing this button
+here you can use local space space which
+is pretty cool to move stuff around
+and I like to switch between using local
+space and
+World space quite often
+so yeah it's let's do a canyon but
+without a roof Maybe
+and then something in the center
+to make it more interesting
+if I want to change the shape of the
+mesh I will just go in here
+a grid like this but you can also just
+change the scale of the object
+and then some kind of bridge
+by using middle Mouse you can move the
+camera
+by holding shift and using middle Mouse
+you can Pan the camera
+so let's find the main perspective it
+should be something like this for the
+scene
+I think I want this side to be higher
+just to make it a bit more asymmetric
+asymmetrical and make it more
+interesting maybe we can also make it
+like this
+let's give some interesting shape and if
+we combine it with something over here
+could look really interesting
+then we could make some kind of entrance
+here for a cave or an old ruin
+all right
+so let's also add a new node 3D let's
+call this lights
+let's add a directional light
+I think I want this to come in here
+let's enable shadows and have a look how
+it works
+so right now I'm looking
+in how I want the light to look in the
+scene in a general sense like of course
+we are going to move the light around
+but the first step I want to get an
+impression how the light could be
+interacting with those different
+geometries in the map
+for example you see this part here
+will look pretty interesting and I want
+stuff to like this to happen like
+objects that catch a little bit of the
+light
+for example if I use this
+and bring it up I can create a very
+interesting shape here for a shadow
+and also create a more interesting shape
+up here where the light is catching this
+little edge of what will eventually
+later be a stone or something like that
+so let's scale this a bit
+like this
+and also this over here
+this and the ground plane
+and now we're starting to see some
+interesting shapes
+by the way with this button here we can
+disable the environment
+sometimes it's good to get a more clear
+view and
+to have everything else disabled
+but we can keep it off for now
+okay so now I have this and maybe I want
+some more rocks to come down from the
+front and have some kind of Canyon
+opening
+so again composition if I move this here
+I'm losing this interesting shape this
+interesting contrast here with this
+Stone
+so I don't want this I can of course
+tilt it a bit
+and now again I'm getting this
+interesting shape to stick out
+from the floor get it to look much more
+interesting and I can do the same thing
+here I can just tilt this
+bring it down a bit and then I will have
+a much more interesting line
+leading up here
+So eventually I won't be doing this too
+crazily but I can just leave it in for
+now and
+maybe look later how it looks how it
+works out
+but yeah we can also do something like
+this
+this looks cool I like this
+maybe a bit less
+okay so I think for the main geometry
+this looks interesting enough
+let's pull this down a bit more and here
+in the back I will do some kind of
+opening and maybe cave or
+you can also use Stones something like
+that
+I want to tilt this a bit more to
+point in this direction a bit more
+and now we could do two things we can do
+this
+and if you follow this line and this
+line it will point over here
+or we can do this
+and then the lines will point a bit more
+toward this corner here
+so if we put something here that looks
+interesting it should work out
+um ideally we want everything to point
+to the cave entrance so we can try
+rotating this
+like this
+and this
+like this
+let's check out
+we give this a more neutral Edge
+this
+I mean we could do it like this but I
+don't like it too much let's go back
+I like this much more even if it points
+up to the sky
+but um
+the overall shapes look more interesting
+but also a bit conflicting
+I'm a bit torn let's put it like this
+so now we have this line here pointing
+towards the entrance we have this line
+here pointing towards the engines we
+have this line here pointing towards the
+entrance a lot of lines that point
+towards the entrance this makes it a bit
+more Dynamic I think this will be fine
+you can of course also tilt those
+so they point a bit more towards the
+entrance of the the thing
+angle is like this
+so now everything is almost everything
+this one not
+but I like it so much so I will leave it
+in
+all right
+now we have this
+um
+eventually we should put something more
+to the top why because if we are going
+to add some volumetric fog
+and we have this directional light from
+the top right
+the directional light from the top right
+then everything will be flooded with fog
+so we have a couple of options here
+um I usually just like to put more stuff
+on top of the scene if you want to work
+with volumetric volumetric fog
+but I want to for this video
+and we put it here
+and I pull it a bit to the front like
+this it could look interesting
+so now we have more stuff that casts a
+shadow here
+and stuff that cuts the shadow is good
+because then we will have more
+interesting volumetric later
+I miss however seeing a bit of this guy
+maybe we can fix that by turning it a
+bit
+I like this and now we have a little bit
+of Sky peeking through here and here
+and like does the scene looks
+interesting enough
+let's put in a camera so we kind of save
+this viewing angle and we can come back
+to it
+so I try to align this camera with our
+view
+and if we click this button we get this
+perspective and I think it matches up
+pretty good all right let's jump out of
+this now I don't need this anymore and
+let's look at this mess from the outside
+it looks very crazy
+so what I want to do right now to fix
+this as a first step
+we take all of this and now we look for
+some
+good angle to set up our scene let's
+look from the top because if I start
+like this everything will be turned it
+makes no sense so let's just
+let's just take this and rotate it so we
+have at least
+some kind of alignment
+with the world space
+let's put it in the center like this
+and now it makes a bit more sense
+all right
+and it looks the same we moved
+everything we moved to light we move the
+camera so everything will be fine
+let's
+um
+lock the light for now and lock the
+camera so we don't accidentally move it
+and then we're going to replace what we
+just built with some assets
+and I have some assets here from the
+demo scene
+I have some meshes that we imported for
+example those those torches or those big
+rocks
+those ones
+but I already prepared scenes with them
+and this is something I would advise to
+do so you just have a couple of scenes
+um Bass scenes like for example the
+rocks
+I have this big rock it also already has
+a Collider
+so if you want to move around as the
+player later it will be much easier to
+do so
+and this is the version with the normal
+map I'm not sure if I will keep this
+somehow it doesn't look too great so
+anyway let's put in some rocks
+and now you can see
+um
+the rock is way too big
+but I know that The Rock has more or
+less the right scale so
+let's do one thing let's jump over to
+the main scene let's grab our player
+and let's put the player in the scene
+and then let's have a look on how big he
+is I scale the player that is probably
+super dumb
+yeah I think I want to make everything a
+little bit bigger the best way to do
+this is to add a new node
+let's throw everything in there
+first we need to unlock those
+two and then let's throw everything in
+here
+and now we can scale this
+so maybe something like this
+where's our player
+yeah maybe even bigger I want it to be a
+bit more
+Epic
+maybe like this
+yeah
+all right let's hop into the camera you
+see it didn't really change which is a
+good thing
+we should move the camera down more
+towards the eye level of the player
+to get a better impression of how
+everything will look
+and let's keep it there but move it down
+like this
+and now everything looks a bit bigger
+but it also changed the
+the whole composition so now we have to
+get back in and maybe change a thing or
+two
+I mean I like it but um
+it's not what I originally had in mind
+whoops
+but yeah I think it's fine if you look
+up it looks pretty epic and cool and
+that's what we want so
+but this angle here is maybe a bit too
+weak this one here
+well I guess this looks interesting
+enough it looks a bit too big but maybe
+we can break it up with some smaller
+shapes and I also want to scale down
+this rock a little bit
+but yeah let's build the scene
+so
+I have the rock here
+let's start
+putting rocks where those other things
+are
+I will make it a little bit smaller
+and now let's replace those blocks
+with proper assets
+and as this is not Unreal Engine we
+can't use
+qixel or stuff like that and I also want
+to go for a more
+um
+stylized look
+and with this um
+using those assets here makes much more
+sense
+let's also get the ground in
+I'm using the same ground sand that used
+for the other scene eventually I'm going
+to replace it
+but for now it's going to be fine
+like I said this doesn't have to be
+perfect I'm probably going in later and
+just fix everything up
+but I want to get the basic block out
+done rather quickly
+all right we finished with blocking out
+the scene
+so if we look in the camera it looks
+pretty much like what we have blocked
+out it's not so straight this one is a
+bit wobbly and this one too
+but this will be fine
+um let's see if we can put everything we
+build into another node
+and then we will compare it how it looks
+it doesn't have to be a perfect match we
+are not bound by law to make it look
+exactly like what we had played our
+planned out and laid out in the
+beginning
+but it's interesting to see if there are
+any major differences
+so
+now let's hide it
+let's go into the camera
+and let's see how it compares
+it's a bit different
+it's more organic
+um
+so what do I like what do I don't like
+let's let me do this
+and let's open it up in here
+and let's make a quick analysis of what
+we see
+it doesn't have to be perfect or
+anything I just want to go over some
+things that I like and maybe don't like
+so what I don't like
+is that this is a bit round to round for
+my tastes I would like it more if it's
+straight the same here
+I don't like it it looks like an arc and
+the same here like the slide angle
+is something I don't really like because
+this is the only place where it's where
+it's looking so organic apart from the
+ground but in the back here it looks
+very straight
+lines are connected very straight and
+something else I don't like it's this
+part here this little window
+it breaks up the shape too much
+maybe we can fix it by closing this
+triangle here
+and
+right now
+it has a bit of an off balance I mean in
+the end if we move the camera around if
+we walk around as the player of course
+we're not having this fixed perspective
+that we have right now but at the moment
+this side here
+looks much
+heavier
+than this side over here it's also
+caused by the light of course but
+um
+if we would have a rendering or a fixed
+scene I would take away some
+volume from this side
+so let's go back and godo and let's fix
+those problems
+um so first these here
+these are pretty easy to fix
+we just try to get into the right
+perspective and now maybe you can rotate
+it to get a straighter Edge
+or maybe I just need to rotate it a bit
+like this and move it upwards and now we
+have a much more straight line we still
+have the surrounding thing here which is
+probably caused by how the mesh is
+shaped
+maybe like this and this also gives us
+like a little nice opening here
+and here on the second one
+we kind of have the same issue but maybe
+we can get away with just moving this
+down a bit more and maybe we can even
+open it up eventually it would look
+interesting or it will look interesting
+let's jump into the camera
+I think I even like it more like this
+gives it a much more interesting shape
+against the sky
+and now all that's left is this corner
+up on the top here
+um what is this thing doing here
+better much better
+okay
+just triangle here I think I like it
+with the new opening
+you can leave it now in there
+we have like one small thing over here
+where the meshes
+interact in a not so nice way let's pull
+this forward a little bit
+okay now we've done this part
+let's do
+let's add some more details so now we
+have the big shapes out of the way we
+can start focusing a bit more on detail
+let's add some ground detail let's add
+the opening in the back here
+and then we can work with light a bit
+more okay to add detail of course you
+need small things I have a couple of
+rocks prepared that are smaller
+I call it debris
+you see this is some Temple debris but I
+think I also have some smaller no we
+don't want to write some smaller rocks
+that we can use for
+okay
+um we're just gonna use this debris here
+and probably just change the material
+override
+I think this looks
+neutral enough so we can use it
+let's grab this material from here
+move over here and
+let's just make it local
+maybe this is not the best way to do it
+but um
+this is the way that we are going to do
+it right now
+we don't want stuff like this to be
+floating
+so I rather check it two or three times
+and it's going to be like a little
+wasteful using those big pieces and then
+just letting them stick out of the
+ground a little bit
+but
+for this demo it should be fine
+so what I want is this
+small rocks or smaller rocks that stick
+out of the ground a bit
+I fast forwarded this part where I'm
+just putting down more detail and more
+of the temple assets from the other
+scene
+and then I start building up the
+entrance to this tunnel like thing also
+using the assets from the other scene
+and yeah wanting to add more details and
+made it integrated better to the
+environment
+and then just building this little
+tunnel and of course this is not the way
+that I would build something for like a
+proper game I would create assets that
+are really specialized for that use case
+but for that demonstration here it
+should be fine
+and I'm also placing two lights on the
+left and to the right just to make it
+look more interesting
+and then I decided to add some stairs
+leading up to some Giant mountain that
+should be visible on the horizon
+and yeah I was experimenting with how to
+play steps if I can play some steps that
+are visible in the back but I failed and
+gave up on that idea so I just placed
+some pillars on the Rock in the
+background and that should be fine for
+this demo to give some background to
+give some context by the players
+okay I think
+um this is it from
+modeling perspective we could say
+of course we could add more detail I
+could create more assets etc etc
+but for now I think it's good we should
+start looking into yeah pulling getting
+some nice lighting and
+creating some atmosphere
+like I said we could continue on this
+forever
+but
+[Music]
+that's not what this video should be
+about so let's do one quick check how
+the light looks
+I think it looks pretty cool we can get
+some really nice mood on the back Rock
+there
+with the sun going down
+and maybe we could add one more thing
+here
+imagine if the sun goes down
+and it's already at this angle I think
+it would look really cool if we add one
+Rock here and the background basically
+that is not necessarily to be seen But
+if we put it at the right position
+then we could eventually get a nice
+shadow
+on here
+now you can see the shadow range is not
+enough
+we need to go into the light
+and in the shadow
+here we can see the maximum distance if
+we turn this up we also get a shadow
+here in the back
+let's put this to 400
+and then let's do
+this so we get a nice interesting Shadow
+shape going on
+when basically the Sun is going down
+like this
+and hopefully as a player we won't see
+this
+we're down here in this
+Ellie more or less and if the sun goes
+down we will get this nice
+shadow
+eventually we will get also some
+artifacts but this is fine alright
+so far so good
+I think it looks pretty cool
+of course it's not perfect like we will
+have some bleeding going on here at this
+at the
+stairs this is far from perfect maybe we
+can just quickly add some blocker here
+I already created this thing here
+and we can just copy it and move it over
+to the stairs
+and do something like this
+to just block the light
+and also at the moments that are
+annoying
+but anyway
+like kind of like this it should work
+out to block most of the problems
+let's hop into the camera
+and let's start working with an
+environment
+so we add a world environment node
+and you can already see instantly that
+the mood of the scene changes so the
+first thing I want to do is add a new
+environment
+set the background to Sky
+now go into Sky create new Sky we create
+a procedural sky and now we have a sky
+we can set we can set the sky colors
+and this also influences how the scene
+looks
+okay
+now for the ambient light we can take it
+from the background and what ambient
+light does is it will add a light to the
+overall scene so if we turn down the
+energy here
+you can see
+that we will have much harder harder
+Shadows and if we turn off the
+directional light here
+why is it scaled
+huh all right
+if you turn off the light here you can
+already see that it changes the view of
+this overall scene or how it looks quite
+dramatically I don't know why some of
+the materials are still lit eventually
+it's
+it's because of the materials let's
+check this out real quickly Boop
+we can do it from the camera
+the material should be named Temple
+eventually it has some backlight going
+on
+no
+ah it's probably the reflection of the
+sky
+yeah okay
+all right
+that's not a big problem
+all right
+um so back into the world environment
+the sky contribution basically tests are
+seen how much
+the sky material that we just created
+here
+is influencing the overall light
+situation in this scene so if we turn
+this up to one and we go back into the
+sky
+and for example we change the energy
+here
+that will also influence how our scene
+looks
+and if we change the color here it will
+also change how our scene looks so this
+is quite important
+to create
+a first overall look of your scene if
+you don't have a sky material of course
+this will look completely different if
+you have an indoor scene or a dungeon
+where there's no Sky you will probably
+have no ambient light and you have to
+work more with placing light scenes that
+is also perfectly fine and we can later
+change the sky material so it's more
+like a night scene and then we can talk
+a bit about the differences there so for
+now let's put it in some bluish
+shoe
+here
+and yeah let's get back into the ambient
+light
+um I don't want too much Sky
+contribution I want it to be more like
+this
+yeah
+we can also disable it of course by the
+way
+all right
+so what else do we have reflected light
+in this case it's the background we can
+also disable it now you can see the
+influence that we just um played around
+with from the specular from the
+specularity it's gone now
+and maybe I even put it on disabled so
+we have more control about the overall
+look of the scene
+tone map is a quite important setting
+here you can create and control how the
+exposure of the scene Works how it's
+how it looks basically if we switch
+those modes here at the moment it's not
+going to have a dramatic influence but
+if we set up everything and the light
+sources in there I will come back to
+this
+for now I set it to filmic that's what I
+usually use
+so this screen space Reflections let's
+leave it off for now
+um this is screen space ambient
+occlusion and we can enable it and have
+a look at it what it does
+so ambient occlusion is basically
+creating
+Shadows or a dark area where two objects
+or two surfaces are close to each other
+for example if we put another mesh here
+[Applause]
+okay so if we move this closer to the
+ground you can see this dark area that
+will appear
+and that is the ambient occlusion so two
+objects are close to each other and they
+create this dark area I really like the
+effect I usually play around with the
+value a bit I usually make it a bit more
+intense so you can see now like this you
+can control the intensity
+can control how it falls off
+so you can go really crazy with those
+values the detail value it doesn't seem
+to do too much
+Horizon so how it's fading out
+sharpness
+also doesn't seem to do a lot
+anyway let's turn this down a bit again
+let's increase the radius a little bit
+not too much otherwise it starts to look
+weird so I think like this it looks okay
+let's leave this in here now so we have
+a reference
+this is indirect light and if we turn
+this on it also adds yeah kind of those
+occlusions and also Reflections all
+right let's
+um turn our light on so we get an
+impression on how the scene looks and
+you can start it slowly you can see it
+slowly starts to look more interesting
+from the light aspect
+we can also just save this here
+and let's save it into resources and
+let's call it rougher environment two
+and like this we can quickly turn it off
+and turn it on again
+all right
+so you can see if we enable and disable
+it
+you can see here how the light
+hits the ground and the yellow light
+from the ground is reflected back onto
+the surface
+this is what screen space indirect
+lighter does
+you can also change the radius
+now you see how the influence
+is scattered more
+maybe we turn it down a little bit to
+get a more intense effect
+we can also control the intensity but
+then it starts to look really weird
+and the sharpens
+but again this doesn't do too much
+so let's keep it on the normal setting
+all right scientist and field Global
+illumination this is an interesting one
+especially for outdoor scenes you can
+see if we enable it it starts to make
+look everything weird
+but yeah maybe we can play around with
+it a bit and get some more interesting
+effects so we can enable and disable
+that it reads the sky
+which is pretty cool
+we can control the bounce feedback that
+will control how much the light bounces
+around or the intensity of the bonds
+this is the energy setting
+with this you can control how much
+influence it has on the scene how much
+energy the light has that is bounced
+back we can also put this on a negative
+value
+I don't know why but yeah
+you can see the effect this has a pretty
+dramatic impact
+I'm not always sure if I like it because
+sometimes you get these weird artifacts
+like over here
+so if you want to use it I would
+recommend you putting it on a lower
+energy
+and
+um also putting it on a rather low
+distance to be honest because otherwise
+you will get these really weird effects
+in a distance
+I'm not sure if I really like this
+effect
+um
+I mean I'm sure if you can if you spend
+the time with it you can make it look
+good but sometimes I have to feel it
+introduces too many artifacts at the
+moment
+glow is something I almost always add
+I like to go in on all levels
+it's set at the normalized additive or
+screen both are pretty good but I would
+usually not pull it on soft light the
+effect is very weak
+so let's put it on like this Bloom is
+something so it will influence all of
+the scene I don't want this on for now
+fog is also always good and focus also
+relatively cheap relatively and you can
+see what kind of effect it has on the
+background this is something I really
+want to have especially to create this
+kind of atmospheric effect
+so you can see how the light influences
+it
+and the sunscatter
+this is the effect of the sun coming in
+the fog
+Sky effect
+it's also pretty important so if I put
+this on it will darken the sky
+I don't necessarily want this because
+the way that I want to use this effect
+is more to create an atmospheric
+overcast effect on the background and
+not to affect the sky itself
+on head you can also create a
+I have to turn this on so here we can
+also create some ground fog effect
+see it like this
+it's pretty interesting and if you
+turned on the density a bit not so much
+just a bit then
+it can be really nice like this
+just a bit
+aerial perspective is only important if
+you are working in a non-first person
+game for example a top-down game then
+you have to use this setting for the fog
+and density of course controls the
+density of the Fog
+and I don't want it too dense I want it
+to be more in the background
+so let's create some
+and I also want it to be more yellowish
+like a
+Sandy look
+and I think I will remove the
+the height density again so like this I
+think it works a bit better
+I would love to have control about the
+way it falls off
+right now it already influences this
+thing here in the front and I would
+prefer if it doesn't but anyway let's
+keep it in for now
+to one of my most favorite effects and
+it's called volumetric fog it can add a
+lot of atmosphere to use scene with this
+fog that is influenced by light and yeah
+let's play around with that a bit
+so let's turn up the density
+let's turn down the sky effect
+so now let's play around with those
+sliders for a bit
+um this is a nice one um this happens
+sometimes
+but the only thing that helps is to
+close the scene
+close the viewports
+and open it back up again
+unfortunately I don't know what causes
+it but sometimes the light can go a bit
+crazy and then it gets stuck in this
+weird overdrive mode
+ah now we go okay
+probably our camera is in the direct
+sunlight
+um
+let's disable it for now and look what's
+the problem here
+you can see our camera is in direct
+sunlight and that will mean
+that this fog is
+really hitting the camera So to avoid
+this let's just take one of those rocks
+let's move it over here a bit let's
+rotate it let's put it down like this
+and with this we will have a bit more
+Shadow on our camera
+and what that will do
+is to make it much easier to control the
+effect and also make it look a bit
+better in the game
+so let's turn the light again
+enable the volumetric again and now
+you can see it hits right through here
+and if you play around with these
+sliders here you can also see how it
+changes the scene and with volumetric
+fog
+you can also see that it really darkens
+the scene so we have to do something
+about that first I also want it to be
+colored a bit like sand
+let's go in and turn it down
+maybe more like this
+and with those sliders you can control
+how the looks where it's the most
+the most intense effect basically
+so I think the default setting is pretty
+good here
+if you go into your project settings you
+will find more control about this effect
+here we already have changed settings
+from my project this is not the default
+settings if you want to look into those
+you can just download my project look
+into those settings
+it's not too different from the default
+ones but you can have a look
+here the volumetric fox size I turn it
+up and as you can see it changes the
+quality and the sharpness of it
+the more we add here the sharper and the
+more detailed it's going to be
+but it's also
+much more performance hungry let's put
+it on 265 and you can see everything
+looks a bit dull
+this is where we come back to tone map
+and we can play with the exposure
+so for example if we turn up the
+exposure it will get back more contrast
+if we put up the white point or change
+the white point you can also control how
+the scene looks how you put it on Asus
+which puts back more contrast
+so this is the default setting
+this is Asus you can already see it
+brings back a lot of contrast
+and what I also want to do is to enable
+adjustments here
+and to add
+a color correction texture or gradient
+and in here I usually come in
+and I put one here and one here and the
+one on the top
+I color a bit more towards the yellow
+side or warm side
+not too much just a tiny bit
+and the one in the shadows
+I put into some cold area like bluish or
+purple
+Hue and then also increase the
+saturation a bit and you can see
+how it changes the color on the left
+now it's a bit more dramatic if I put it
+up all the way then you can see how it
+influences the colors in the scene
+and what this does and what I use it for
+is to create a certain mood in this
+scene
+usually I want the Shadows to be cool
+from the color temperature aspect and
+the lights I want to be more warm
+so I just add some yellowish Hue here
+and you can now see if I enable and
+disable it it changes the overall look
+quite dramatic
+it's not too crazy but I always like to
+do this
+to color correct the scene
+let's hype the ball it's a bit
+irritating okay
+now we're slowly getting somewhere it's
+still
+um not perfect
+so let's play around with the volumetric
+ a bit more
+and I think we need just more power in
+the directional light
+so let's go in there
+and let's change the energy here
+first we want more volumetric fog energy
+so it just looks more intense
+I also want more energy overall
+and we can put in some intense value
+because it's the Sun so it's going to be
+bright
+let's put it on 10.
+and maybe this one too
+and now if we go back into the word
+environment
+we go into the tone map and now we can
+play with the exposure
+and you can see now it has a really much
+more dramatic impact on the light
+and what we want now is some detail in
+the shadow
+and
+here indirect light usually comes in
+really handy
+if we enable the scientist and field
+Global illumination
+it will already change it quite dramatic
+so
+we can
+we can turn down the energy
+a bit like this
+what I don't like so much is that it
+turns everything so red
+that is something I'm not a fan of
+I would love to have more control here
+but all right
+that doesn't seem to do a lot
+I mean of course that makes sense if you
+think about these rocks being super red
+and light reflects back onto this then
+the rocks are going to be even more red
+makes sense but yeah it's a bit hard to
+control the effect like this
+so let's go back into the normal Fork
+and yeah what I noticed what is not so
+great about the volumetric focus that it
+influences the light
+maybe we can turn that down yeah but now
+it starts looking like really weird
+um
+let's play around with some sliders
+yeah we definitely want some Global
+illumination injection
+because if the light would hit the fog
+the fog would also
+spread the light so that makes a lot of
+sense maybe we don't overdo it but we
+can also play with the light later
+how strong it is
+okay I like this effect much more
+now maybe we should go into the sky and
+increase the energy there
+I think that makes a lot of sense
+because like this it looks like a night
+scene we want some energy in the sky
+maybe we can also make it a bit more
+blue
+would be cool to have some clouds but
+maybe we can look for material later
+I think I will disable the ambient light
+completely and I need to play around a
+bit more with the exposure not too happy
+with it and after that I still need to
+tune and find you in a bit the settings
+on the volumetric fog
+and we need to keep details spread up a
+bit otherwise it starts to introduce
+some artifacts
+all right
+maybe we should just give it a go
+I don't know what happens if we press
+play if we get into the first person
+camera or not let's see
+no we're just going to this camera here
+let's stay in this camera and just play
+around with the light a bit more
+so we could also color it a bit
+let's add some more blur to the
+directional light shadow
+and let's play around with how it looks
+I think that already works pretty well
+I'm not so sure about the fork the
+normal Fork
+let's go back to the word environment
+check out the fog a bit
+but yeah that's not a problem
+ is doing a good job
+maybe I want a bit less light energy
+it's a lot less guns Sun scatters
+crazy
+I mean it's cool but the problem is that
+it's also happening here where I don't
+want it to be happening
+you know what we can play with the
+this
+maybe we can just make an kind of like
+an inversed
+yes this works so maybe we can just keep
+the
+a bit higher
+then we don't have it in the front here
+yeah I think that works much better
+bit of sunscutter
+still a bit too intense in the front but
+maybe we can turn down the density a bit
+more like this
+and now you can see what a big
+difference the sign distance feels
+Global illumination has
+like this looks completely different
+and I'm I'm still not a fan of the
+reflection where oh
+I enabled It Again by mistake
+okay
+still don't know what this does I have
+the feeling it does nothing
+okay maybe this is what we want
+no effect of the scan of the Sun
+and this directional light
+has no effect on the indirect light at
+the moment or very little
+if we turn this up a bit
+it may just be what we want
+we put it on one it's too much
+maybe you 0.5
+this is starting to look cool
+and you can see if we turn this back on
+it's just way too intense
+all right slowly we're getting somewhere
+let's turn down the saturation a little
+bit
+and come back into the tone map and
+let's try out different looks this is
+too much contrast
+this is too boring I like filmic I
+always like filmic
+put the exposure on 0.2
+and also if we change the color for
+example we go for more
+sunset-like atmosphere
+could look really nice
+and we need also
+to um
+to change this
+something like this could look really
+cool
+maybe we do something more abstract
+and in the back here we can see that
+there is this um whoops
+this tunnel with the blue light which
+will create a nice contrast
+but it also creates some problems
+because you can see that the fork
+already starts disappearing before
+we wanted to disappear
+so if we put on more distance this is
+the distance for the
+GI we don't need that but maybe here
+let's put it on 64.
+think that gives them much nicer fade in
+yes this is looking cool
+right I'm starting to like this
+um so
+so now it's time to add back the player
+controller and yeah to set it up in a
+way so we can walk around in the scene
+look at it from first person and as I
+already did that in the original demo I
+can just reuse most of the code and
+assets there and I got the setup done in
+a couple of seconds
+we could play around with the lighter
+bit to basically get the same behavior
+that we had before in
+in the demo scene so let's add an
+animation player
+this is like the quickest way to do
+things like this and then let's get the
+light that we had and I think I want to
+add one more light
+whoops
+in this tunnel thing
+one light two
+emphasize on this um
+this blue light here a bit more
+it's either on the light
+and now we can also see that it starts
+to work it's just fading
+so
+we need to disable well the distance
+fate is already disabled then why is it
+not working
+why is it fading
+hmm
+set of volumetric fork
+I mean if we increase this this year
+we also lose detail
+so maybe you see it um
+if we set it to a lower value we'll get
+more detail in the front
+we set it to 12 for example we will have
+perfect detail but then we won't have it
+in the back
+if we set it to 128 we'll lose some
+detail in the front
+I think I think 64.
+I mean this looks really nice
+maybe something in between
+okay I like this much more
+okay so let's animate the light what we
+initially wanted to do
+um let's
+grab the rotation oops I didn't want to
+reset it I wanted to make a new track
+[Applause]
+let's key the rotation
+and I don't need to do it 20 seconds or
+something like that let's just do five
+seconds
+and we put one key in the middle
+maybe it's like this
+now it just doesn't make sense
+but somehow it's still not doing what I
+want
+okay let's
+just use this differently
+um
+you know what we're going to
+kill this track
+and completely
+change how our light will work
+so let's reset this
+ah
+here's the problem
+so we have this thing here it's called
+lights and it's down here which is fine
+let's reset everything here too
+reset the scale reset the position so
+now we have our light here let's reset
+everything
+all right
+and now let's
+put it like this
+turn it like this
+and if we know
+animate rotation of this then we can
+change
+the sky and it makes more sense for my
+brain
+maybe for yours too
+and if we put it like this
+then we can just flip this and it will
+create one
+nice motion
+but what we actually want to do
+light source where are you
+so one thing that could be really
+helpful is to
+would be to just disable the environment
+like this and now we eventually see a
+bit better what we do
+where is my light there it is
+okay let's reset the rotation again
+there's my light source I want it to be
+over there like this
+and now we can do this and this should
+look like
+some kind of
+day cycle
+and then we can just animate
+this thing here instead of the light
+directly and hopefully it will make it a
+bit easier to control
+so let's key the rotation
+let's move it over one time like this
+this is hopefully giving me the effect
+that I like
+let's go back into our camera
+and let's see how it looks from there
+so we keep the rotation but what we
+didn't key is this rotation so we can
+still change this
+and this should help us to create a more
+interesting pattern basically
+I think I like this
+alright so now next step is to animate
+the light intensity
+and also animate
+the color
+so I want this to be the color in the
+morning
+and then for noon we go more to a
+neutral color
+and in the evening it's going to build a
+bit more orange
+doesn't look too bad and now we also
+need to change the energy
+and of course we could set this to cubic
+but eventually it will create some
+problems let's see
+and what we also must change is of
+course the color of the sky
+we can also come in here
+and just change this
+or we can just change the energy we
+don't need to change the color I think
+the color was cool so let's change the
+energy
+a super simple day and night cycle
+it's not physically accurate or anything
+but it will do its job what we also have
+to take care of is the fork
+right here it starts look awkward
+so let's animate this too
+just come in here and we can keyframe
+this hopefully why can't we keyframe it
+can we key frame this
+why
+now it works okay
+so probably we need to change light
+energy
+let's
+test it out really quick yes okay
+[Applause]
+you could also change the color probably
+looking good
+all right and at night we also want to
+see something
+so what could we do about this
+earlier I told you about
+[Music]
+um
+about ambient light
+and we can just use a color for that for
+example some bluish tone
+thing like this maybe
+and then we can add some
+ambient light and I don't know why it
+doesn't work ah now it slowly starts to
+work but why it is so black is it the
+fork
+no it's not a fog
+what's going on here
+what's going on here
+what is causing this
+uh-huh
+okay well
+I have no clue what is causing this
+distance
+so something weird is going on here
+I really don't know what it is
+so maybe we just turn it off at night
+I mean of course you could also add
+another directed light and make it a bit
+um like moon light or something like
+that we could also try that I'm not a
+fan of
+of playing around here with um
+with this too much somehow it feels
+wrong
+I don't care let's add another direct
+light
+oh can we handle this in a graceful way
+it annoys me a bit that we can work
+around this but um
+yeah that's the way it is I let's accept
+this
+maybe it even looks cooler I don't know
+I'm a bit annoyed
+anyway
+the fork is having a bit too much
+influence for my tastes
+and the night sky eventually could also
+use some energy
+what could really work would be adding
+stars but let's just keep it black for
+now
+okay I think this looks good
+um
+zero really
+does this even do anything
+that's what's interesting setting it to
+zero
+give super super soft Shadows
+why I don't know
+setting it to one doesn't seem to have
+this effect but zero gives a really cool
+effect maybe I would just keep it at
+zero I mean
+this looks really cool
+does this work why is this working
+all right I'll take it
+anyway
+let's keep it at zero I mean it looks
+cool
+okay
+um
+now let's just take this animation
+player
+let's call it day and night
+cycle
+let's put it on autoplay
+looping and it has a deep loop I never
+tested it but probably not ah it kind of
+loops
+maybe we just add seven seconds that's
+it
+put on seven
+and not
+all right
+all right um all that's left to do now
+is to add some effects luckily we
+already have some
+we can take the fireflies we can take
+the sand particles
+copy those over
+let's put them in here too the same
+particles are pretty cool they also get
+hit by the Light shafts
+let's turn them up a bit more to see
+them a bit better
+but yeah let's not do the fireflies
+let's just do the same particles I don't
+want to animate any more stuff
+and let's start the scene and let's have
+a look
+oh yeah this is some crazy day night
+cycle
+uh I want this to be slower so let's go
+in and let's set this tool
+0.2 or something like this
+it's a little bit too fast
+this
+yeah I think this could work
+maybe that's a bit too much fork for the
+overcast day
+let's go in the animation player let's
+check it out here and maybe let's reduce
+the volumetric fog intensity at the
+middle of the day
+all right
+um so
+let's add some music and we're done
+let's just see where we placed um the
+wind should be here
+Second Wind can be
+here
+the music chimes in the tunnel
+at the normal music is everywhere
+so let's try it out I'm gonna shut up
+now and uh yeah we kind of look how it
+sounds and feels
+[Music]
+[Music]
+[Music]
+[Music]
+[Music]
+[Music]
+[Music]
+foreign
+[Music]
+[Music]
+[Music]
+foreign
+but I have one last thing one idea that
+I want to try out so we still have the
+blocks here and we have the scene here
+and the entrance and the outside detail
+and all kind of the these things that
+we've started to put in
+but
+just for fun I want to see how this
+blocked out scene looks and if we landed
+somewhere remotely close
+so
+let's just play the animation and have a
+look
+and you can see how even with a
+completely different geometry the
+atmosphere that we created and the light
+and Shadow and the mood still holds up
+pretty well
+I think yeah we managed to put together
+a pretty nice setup
+and having a setup like this also allows
+you to go back and check if some
+settings still make sense if they really
+look good the simpler the geometry the
+easier it is to see how the light
+interacts and how the light works
+and if it really looks good or if it's
+just for example diffused or blurred by
+the textures you use or by the effects
+you use
+having simple geometry yeah just shows
+the floss very well like for example
+here you can see those those splotches
+and those are probably introduced from
+the global illumination if we turn the
+global illumination illumination down a
+bit
+those are a little less visible we can
+also play with the settings here
+yeah
+of course you can also always go into
+the project settings and play around
+there with the values
+um if we go here to environment
+we can also
+set things there change the quality
+levels here
+and of course also depending on your
+scene
+but this is not the only way to do stuff
+you can also for example add a voxler GI
+you could bake your light if you don't
+have a dynamic light going in there you
+could just bake the light which also
+gives a really high quality light
+yeah you want to consider different
+options
+and then just slide the sliders until
+stuff looks good
+that's it for today I hope you enjoyed
+the video even if the format was a lot
+more chaotic than usually and if you
+enjoyed it follow me here on YouTube hit
+the bell and all the stuff you know the
+drill and yeah I'm mostly posting on
+Twitter so if you find it interesting
+follow me there
+I'll also upload the scene into the
+desert light repository so if you want
+to have a look on your PC you can just
+clone the repository have a look hope
+you enjoyed it see you next time bye
