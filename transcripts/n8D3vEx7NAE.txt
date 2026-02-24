@@ -1,11 +1,1200 @@
-Error: 
-Could not retrieve a transcript for the video https://www.youtube.com/watch?v=n8D3vEx7NAE! This is most likely caused by:
-
-YouTube is blocking requests from your IP. This usually is due to one of the following reasons:
-- You have done too many requests and your IP has been blocked by YouTube
-- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.
-
-Ways to work around this are explained in the "Working around IP bans" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).
-
-
-If you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!
+[0:00] hey in this video I'm going to show you
+[0:02] how to make a simple networked FPS game
+[0:04] with Godot 4 and blender 3. I'll walk
+[0:07] through it one step at a time so check
+[0:09] the timestamps in the description if
+[0:10] you're only interested in certain parts
+[0:12] this project uses something called
+[0:14] universal plug and play which should
+[0:16] work for most people out of the box but
+[0:19] you may need to check your router
+[0:20] settings at some point to make sure that
+[0:22] UPnP is enabled I'm no networking Pro
+[0:25] this was just the simplest starting
+[0:26] point to online multiplayer I could find
+[0:28] and I had a lot of fun making little
+[0:30] projects like this so if that sounds
+[0:32] interesting to you let's get started
+[0:34] okay I've got a brand new blender file
+[0:36] open here and I'm going to make an
+[0:38] environment for the game really quickly
+[0:39] so ax to delete everything then shift a
+[0:42] mesh plane s tend to scale that up tab
+[0:46] into edit mode control e extrude edges
+[0:48] right click to keep them in place and
+[0:49] then S2 to bring those out gz to just to
+[0:53] give them a little bit of height there
+[0:54] and then e right click to extrude those
+[0:57] edges in place s 1.5 to extrude those
+[0:59] out and then easy for enter just so that
+[1:03] there are some walls so the players
+[1:04] can't walk off the edge of the world
+[1:07] okay tie back into object mode then go
+[1:09] down to this menu here give it a new
+[1:10] material this is coming to play later
+[1:12] and then let's give this environment a
+[1:14] couple more objects just so that it's
+[1:15] not so boring so shift a mesh cylinder
+[1:19] then I'll go down here I'm going to give
+[1:21] it a radius of 1.5 and a depth of four
+[1:23] then gz two to bring it up to ground
+[1:27] level actually I'm going to hit shift
+[1:29] tab to turn snapping on so that
+[1:31] simplifies moving things a little bit
+[1:33] numpad 7 to go to the top view here I'm
+[1:35] going to move this one up to the the
+[1:36] middle of this corner so G and just drag
+[1:39] it right there shift d and I'm also
+[1:42] going to put one up in this corner and
+[1:43] then gz drag it up so that's actually on
+[1:46] the ground there and now we're also
+[1:48] going to add some platforms here so you
+[1:49] could maybe you know jump on this pillar
+[1:52] here so shift a mesh Cube okay gz to
+[1:57] bring that up there and then sx5 I'll go
+[2:00] to the top view again drag it over just
+[2:02] so it's perfectly in the ramp just like
+[2:04] that shift e to duplicate it are C90 G
+[2:08] then drag it over to this side okay
+[2:10] perfect now I'm going to click all of
+[2:12] these
+[2:13] and I'm going to duplicate it so that
+[2:15] it's on all edges or all of the corners
+[2:17] I should say I'll go up here select 3D
+[2:20] cursor and then shift d r z 90 and then
+[2:24] do that two more times
+[2:26] Shifty RZ 90. okay perfect
+[2:31] so now hit a to select everything and
+[2:34] then shift click make sure that this
+[2:36] plane object the the floor is the last
+[2:39] selected one the active selected object
+[2:42] then control J to join all of them
+[2:44] together tab into object mode you can
+[2:47] just press a to select everything and we
+[2:49] want to select everything except for the
+[2:51] plane vertices so I'm going to go over
+[2:53] to one of those vertices here and then
+[2:56] hit shift L to deselect all of the
+[2:58] linked geometry there and then in this
+[3:00] material tab hit this plus button to add
+[3:02] a second one new material two and then
+[3:05] hit assign so then let's just check here
+[3:08] so material one select yep it's all of
+[3:11] the ground vertices there the material
+[3:13] two select it's everything else okay
+[3:16] that's perfect that's exactly what we
+[3:17] want we're going to apply prototype
+[3:20] textures to these objects
+[3:22] in the engine and having them separated
+[3:25] in these two materials will just
+[3:26] simplify that process okay so the last
+[3:29] things that we're going to do is add
+[3:30] Dash col to this so that it
+[3:33] automatically has Collision on import to
+[3:34] the engine and then I am going to select
+[3:37] it Ctrl a apply all transforms and then
+[3:40] I'll just save this as
+[3:45] environment.blend and we are done all
+[3:48] right I've got another new blender
+[3:49] window open here we're going to model a
+[3:51] pistol for the players to use as a
+[3:52] weapon so I'll click the light shift
+[3:54] click the camera delete those we're
+[3:55] going to start with the standard Cube
+[3:57] here click the Cube S shift z.5 s 0.1 to
+[4:01] shrink that down period of the numpad to
+[4:03] zoom in tab into edit mode and we're
+[4:05] going to extrude the barrel down the
+[4:06] positive y-axis I'll press K to go to
+[4:08] the knife tool and then shift clip these
+[4:10] edges to put those vertices in the
+[4:11] middle enter three for face select click
+[4:14] the top one e point two and then I'll
+[4:17] click this bottom face here gy drag that
+[4:19] back a little bit two for Edge select
+[4:21] click the bottom edge of the barrel gz
+[4:23] drag that up a little bit tab back into
+[4:26] object mode go to the wrench add
+[4:28] modifier let's add a bevel modifier to
+[4:30] it I'm going to turn it up to like point
+[4:31] one five okay and then I'm just going to
+[4:35] apply it like that and it's a little
+[4:36] wide so SX let's scale that in a little
+[4:39] bit okay perfect tab back into edit mode
+[4:41] three for Facebook click this back face
+[4:43] I also scale it into about here two for
+[4:47] Edge select click this bottom edge of
+[4:49] the new face and then G twice to lock it
+[4:51] to the edges that it's attached to right
+[4:53] now drag it up to about there three for
+[4:55] face select click the face e extrude it
+[4:57] out to about there again Edge select
+[4:59] mode bottom Edge GG drag it up about
+[5:03] halfway and then we've got a hammer for
+[5:04] our pistol there okay and then three for
+[5:07] face select I'll click the end of the
+[5:08] barrel here shift s cursor to selected
+[5:11] and then shift a
+[5:13] cylinder and then this is way too big so
+[5:16] I'll make the radius 0.05 and the depth
+[5:18] of 0.05 as well RX 90s let's scale this
+[5:22] way down
+[5:25] okay and then it's out a little farther
+[5:28] than I'd like so s y
+[5:32] all right and then three for face select
+[5:33] click that end face of the cylinder e
+[5:36] right click to extrude in place and then
+[5:38] s let's scale that face in
+[5:40] and then X delete only faces and we've
+[5:45] got everything modeled now we just need
+[5:46] to take care of the materials and
+[5:47] because this is the starter Cube it
+[5:49] already started with one material so
+[5:51] let's just call this one uh pistol black
+[5:55] in the viewport I'll press Z and go to
+[5:58] material preview and then for the base
+[6:00] color here I'll drag this down not all
+[6:01] the way but pretty close
+[6:04] to Black and then specular I'll drag
+[6:06] down to maybe around 0.1 then I'm going
+[6:09] to add one more material here and I'll
+[6:12] call this one pistol gray and the base
+[6:16] color for this one I'm gonna
+[6:18] I'll make this like two thirds of the
+[6:20] way down like that and we're going to
+[6:22] apply the tip of the barrel and the
+[6:24] hammer to have this uh this gray so I'll
+[6:26] go into edit mode with the tab and then
+[6:29] I'll press L over that cylinder geometry
+[6:32] to select all that and then with
+[6:34] face select mode on I'll shift-click all
+[6:37] these faces and then with all that
+[6:39] selected make sure you've got pistol
+[6:40] gray selected there and then hit assign
+[6:44] and there we go
+[6:46] control a apply all transforms when
+[6:49] you're in object mode and then Ctrl s
+[6:51] and I'll save this as
+[6:53] pistol.blend and we're done all right
+[6:56] I've got a new Godot 4 project open up
+[6:59] here and we're going to start by
+[7:00] importing some assets including the
+[7:02] environment and Pistol models that we
+[7:03] just made and we're going to import them
+[7:05] as blend files but in order to do that
+[7:07] we're going to have to go up to this
+[7:09] editor menu here go to editor settings
+[7:10] and then in filter settings here you can
+[7:13] search blender go to this import Tab and
+[7:15] this blender 3 path is going to have to
+[7:17] be set to the directory where your
+[7:19] blender.exe is so here
+[7:22] you can see that this blender Foundation
+[7:24] folder is where my blender version is
+[7:27] install by default so in blender 3.3
+[7:29] this is what I'm currently using this is
+[7:31] where the blender.exe is so you're going
+[7:33] to need this directory listed here and
+[7:35] if that's giving you problems you could
+[7:37] also just export your models as gltf
+[7:40] like I do in my previous videos so if
+[7:43] this isn't working just go ahead and
+[7:44] follow that process in my previous
+[7:46] videos but I've got this set so I'll
+[7:48] continue
+[7:50] so I'm going to take these blend files
+[7:52] select them and just drag them in here
+[7:54] and then Godot is going to import them
+[7:58] okay and then I'm also going to import
+[8:00] some things from the asset Library I'm
+[8:02] going to import some textures and some
+[8:03] particles both of which
+[8:05] are made by Kenny so the Prototype
+[8:08] textures and the particle pack here so
+[8:10] I'll click the Prototype textures click
+[8:12] download and then I'll just install all
+[8:14] of it
+[8:17] okay and then I'll do the same exact
+[8:19] thing with the particle pack download
+[8:22] and I'll just install all of it
+[8:26] okay and we're good to go
+[8:28] now that we've got everything imported
+[8:30] let's go ahead and set up a basic
+[8:32] environment scene so right click
+[8:33] environment.blend new inherited scene
+[8:35] click this plain mesh instance and then
+[8:37] over here in the inspector surface
+[8:38] material override surface zero is going
+[8:41] to correspond to the floor and the walls
+[8:43] and surface one is going to correspond
+[8:45] to that second material that we made the
+[8:48] one for all of these extra objects that
+[8:49] we added so for surface material zero
+[8:52] new standard material 3D go into that
+[8:55] Albedo and then in our add-ons folder
+[8:57] any prototype textures I'm going to give
+[8:59] it a dark texture and I'll use texture
+[9:01] underscore zero nine I'll drag that into
+[9:04] the texture field there and then in uv1
+[9:06] Click try planer that just makes it so
+[9:08] that the texture is projected on and it
+[9:10] looks a lot cleaner
+[9:12] and then for one new standard material
+[9:14] 3D same exact thing go into Albedo and
+[9:17] then here I'll go with an orange one
+[9:19] instead texture underscore 10.
+[9:22] and uv1 triplaner okay
+[9:26] I'll save that environment.tscn and then
+[9:28] let's put this together in a basic World
+[9:30] scene so other node I'll just make it a
+[9:32] root a normal node call it World Ctrl
+[9:36] shift a add environment.tscn and then
+[9:39] I'll click these dots up here add
+[9:40] environment to scene add sun to scene
+[9:43] and we are looking good Ctrl s
+[9:47] to save that as world.tscn
+[9:49] now that we've got this environment set
+[9:51] up let's set up a player scene so we can
+[9:52] actually move around it so I'll hit this
+[9:54] plus button other node character body 3D
+[9:57] I'll call it player control a add a mesh
+[10:00] instance 3D and then I'm also going to
+[10:01] add a collision shape 3D for the mesh
+[10:03] instance I'll give it a capsule mesh and
+[10:06] the Collision shape I'll make a capsule
+[10:08] shape I'll shift-click both of these
+[10:10] hold Ctrl drag that up one unit just
+[10:12] that the bottom of the capsule is at the
+[10:13] root position then on the player control
+[10:15] a I'm going to add a camera 3D and then
+[10:17] I'll drag the camera up till it's right
+[10:18] about there on the capsule then I'll
+[10:21] click the player node add a script to
+[10:22] make sure you've got this template
+[10:23] checked for basic movement I'll create
+[10:25] that currently the movement is mapped to
+[10:27] the arrow keys but I want to use wasd
+[10:29] instead so I'm going to add some new
+[10:31] actions project project settings go to
+[10:33] input map add new actions up down left
+[10:36] right I'm also going to add a quit
+[10:37] action up W down s left a and then right
+[10:45] I'll map to D and quit I'm going to map
+[10:47] to escape
+[10:49] okay and then here I'm just going to
+[10:50] remove all of these UI underscores and
+[10:53] then this will be mapped to wasd instead
+[10:56] okay I'll save this scene and then I'm
+[10:58] going to go back to the world scene here
+[10:59] click the root node Ctrl shift a and
+[11:01] that player scene hit play select
+[11:04] current okay so now I can move the play
+[11:06] around but we need to lock the cursor
+[11:07] and make it so that when we move the
+[11:09] cursor the player rotates along with the
+[11:11] camera so I'm going to close this out
+[11:13] also when we lock the cursor it does
+[11:15] become a little bit of a nuisance to
+[11:16] close the game so on the world scene
+[11:19] here I'm going to add a script and then
+[11:21] I'll add a unhandled input function and
+[11:25] if input that is action just pressed
+[11:28] quit
+[11:29] get tree
+[11:31] quit so now I can just press escape and
+[11:34] quit whenever I want so I'll save that
+[11:35] go back to the player script let's lock
+[11:37] the cursor so up top here I'll add a
+[11:40] func underscore ready function
+[11:42] input.mouse mode equals input.muz mode
+[11:45] captured let's take a look
+[11:48] okay so now the mouse is captured and if
+[11:50] I hit Escape I can close out now we just
+[11:52] need to handle the rotations up top I'm
+[11:54] going to get a reference to the camera
+[11:55] at onready VAR camera equals
+[12:00] camera 3D
+[12:01] and then under this ready function I'll
+[12:03] add another
+[12:05] unhandled input function if event is
+[12:08] input event Mouse motion and when the
+[12:12] cursor moves from left to right we're
+[12:13] going to rotate the player on the y-axis
+[12:15] so rotate y negative event dot relative
+[12:20] dot X and then I'll multiply that by
+[12:23] .005 and then I'll copy this
+[12:27] and on the line below camera Dot and
+[12:30] paste that when the cursor moves up and
+[12:32] down we're going to rotate the camera on
+[12:33] the x-axis so I'll change this rotate y
+[12:36] to rotate X and then the relative X to
+[12:39] relative Y and we just need to lock this
+[12:42] number to a certain range otherwise the
+[12:44] character's camera could like somersault
+[12:46] forward infinitely so under that camera
+[12:49] dot rotation dot x equals and I'll copy
+[12:53] this
+[12:56] clamp and paste that and then comma
+[12:59] negative pi over 2 pi over 2. all right
+[13:05] so I'll save that and now
+[13:07] we can move around and the player can
+[13:09] look up and down everything works as
+[13:11] expected the movement isn't great and
+[13:13] there's a lot of things that you could
+[13:14] do to this controller to make the
+[13:16] movement better but that would be a
+[13:17] little bit out of the scope of this
+[13:18] video so we're just going to tweak a
+[13:19] couple numbers and and call it there so
+[13:21] I'll hit escape and I'm just going to
+[13:23] change the speed
+[13:25] 10
+[13:27] the jump velocity to 10 as well and then
+[13:29] I'll set the gravity to
+[13:32] 20.
+[13:34] and for our purposes this movement is
+[13:37] going to work just fine we can move
+[13:39] around a little bit more quickly and
+[13:42] jump up around the environment a little
+[13:43] bit okay so that's a wrap for the
+[13:45] character movement next up we're going
+[13:47] to give the player our pistol mesh as
+[13:48] well as some animations so I'm going to
+[13:50] go back to the 3D tab over here click
+[13:52] camera 3D Ctrl shift a give it a
+[13:54] pistol.blend as a child and then in that
+[13:57] transform position I'll set to 0.5 minus
+[14:01] 0.25 minus 0.5 I'm going to click view
+[14:04] up here at the top of the viewport
+[14:06] select two viewports alt and then I'm
+[14:08] going to open this bottom panel here as
+[14:09] well and I'll click camera 3D click
+[14:12] preview on the right and then I'm going
+[14:13] to adjust this until I can see
+[14:15] the full yellow outline here so this is
+[14:18] what the player is going to see from the
+[14:19] camera I'll click a pistol over here
+[14:22] Center in on that zoom in there and now
+[14:24] let's make some animations player
+[14:26] control a add an animation player node
+[14:29] here animation new let's make an idle
+[14:32] animation and let's make it three
+[14:34] seconds long so I'll click pistol and
+[14:37] then I'll key position create a reset
+[14:39] track same with rotation okay then I'll
+[14:41] go halfway over here and I'm going to
+[14:44] rotate it forward in the x-axis a little
+[14:46] bit and move it down on the y-axis just
+[14:49] a tad then I'll key position and
+[14:51] rotation again I'll select all of those
+[14:53] and then over here I'll right click on
+[14:55] easing and set that to ease in out click
+[14:58] this to set this to looping and I'll
+[14:59] make this autoplay as well let's see
+[15:01] what this looks like
+[15:03] all right that looks pretty good so I'll
+[15:05] stop I'll go to reset and then animation
+[15:08] new call this one move one second is
+[15:11] fine I'll set the snapping to point two
+[15:13] five and then add zero seconds here I'm
+[15:15] going to key the position no need to
+[15:18] create a reset track at 0.5 I'll do the
+[15:21] same thing and then at 0.25 I'm just
+[15:23] going to move it a little bit to the
+[15:24] left and a little up
+[15:27] I'll key that position and then 0.75 a
+[15:29] little bit to the right
+[15:31] a little up
+[15:33] and I'll key that and then so at 0 and
+[15:36] 0.5 I'll shift-click both of those I'll
+[15:38] right click and I'll ease out on both of
+[15:40] those and then the other two shift click
+[15:42] them and I'll ease in on those I'll also
+[15:45] set this to looping
+[15:47] and that looks good to me so I'll stop
+[15:50] that again go to reset animation new one
+[15:53] more animation here I'll call this one
+[15:56] let's get rid of that one not shot I
+[16:00] want to call it shoot and I'll make this
+[16:03] one 0.4 seconds and I'm going to key the
+[16:07] position
+[16:09] and rotation here at the end of the
+[16:11] animation and then I'll go to the front
+[16:14] and for this one I'm going to pull it
+[16:16] back on the x-axis a decent amount and
+[16:19] I'll pull it up a little bit and then
+[16:22] I'll key position
+[16:23] and rotation and I'll select both of
+[16:25] those
+[16:26] and I'm going to ease out
+[16:28] and this one doesn't need to Loop
+[16:32] and that looks pretty good to me so I'll
+[16:34] save that and we're done with our
+[16:36] animations so we've got our animation
+[16:38] set up now we just need to add some
+[16:39] logic in the player script so that those
+[16:41] animations play Under the right
+[16:42] circumstances I'm going to start by
+[16:44] clicking the animation player node and
+[16:46] then in playback options I'm going to
+[16:48] set the default blend time to .05 this
+[16:51] is just going to make it so that when we
+[16:52] swap between these animations they
+[16:54] automatically blend for a little bit and
+[16:55] it's going to look a little bit smoother
+[16:56] okay so now let's go into the player
+[16:58] script I'll close this panel here go up
+[17:00] top let's get a reference to the
+[17:01] animation player at on ready bar anim
+[17:04] player equals animation player so if the
+[17:08] player is moving and they're on the
+[17:10] floor we're going to play the move
+[17:12] animation otherwise let's play the idle
+[17:14] animation I'm going to put that logic
+[17:15] right here above move and slide so if
+[17:18] input dur is not equal to
+[17:23] vector2.0 and is on floor anim player
+[17:28] dot play Move whoops move
+[17:33] and then if that's not the case else
+[17:36] anim player dot play idol so let's take
+[17:40] a look at that okay so we start with
+[17:42] idle animation when we move it swaps to
+[17:44] that when we jump it goes back to idle
+[17:46] okay perfect so now we just need to add
+[17:48] shooting so we're going to start by
+[17:49] adding an action input for that so
+[17:51] project settings input map add new
+[17:53] action shoot
+[17:55] down here I'll map it to Mouse buttons
+[17:57] left Mouse button okay and let's detect
+[18:00] this input in unhandled input right here
+[18:03] so if input is action just pressed shoot
+[18:07] and we're going to use the animation
+[18:09] length of shoot as the cooldown for
+[18:11] shooting so we need to check to make
+[18:13] sure that that animation isn't already
+[18:14] playing so and nmplayer.current
+[18:19] animation is not equal to shoot and this
+[18:24] is a little bit long so I'm going to add
+[18:26] a backslash here and tab that over so
+[18:30] here it will be we'll make a function
+[18:32] called Play Shoot effects and then let's
+[18:36] make that function down here
+[18:38] so Funk Play Shoot effects
+[18:43] and then anim player dot stop whenever
+[18:47] I'm doing important animations like this
+[18:49] I typically will stop the animation
+[18:50] player first it can be a little finicky
+[18:52] sometimes so Adam player
+[18:55] dot play shoot and currently moving idle
+[19:00] will uh over override this in the
+[19:03] physics process function so we just need
+[19:04] to check to make sure that this isn't
+[19:06] playing before we swap to these so up
+[19:08] here I'm going to add if anim player dot
+[19:11] current
+[19:12] animation is equal to shoot
+[19:16] I'll pass and then I'll change this to
+[19:19] else if and so with that
+[19:22] okay we're good with idle and move and
+[19:24] then if I shoot the shoot animation
+[19:26] plays nothing's overridden by it okay
+[19:28] everything's looking good and all we
+[19:30] need to do is add a muzzle flash
+[19:32] okay so let's add that muzzle flash so
+[19:35] I'm gonna go back to the 3D view here
+[19:36] back to one viewport and close this
+[19:38] panel here I'll click pistol control a
+[19:40] at a GPU particles 3D here let's call it
+[19:45] muzzle flash and then let's have it
+[19:47] positioned right in front of the gun
+[19:50] barrel like this
+[19:52] try to center it okay then over here
+[19:55] I'll set the amount to 1 for drawing
+[19:57] make sure you've got local chords
+[19:58] checked process material new particle
+[20:01] process material and then in gravity set
+[20:04] that to zero draw passes pass one let's
+[20:07] make a new plane mesh and have it be 0.5
+[20:10] by 0.5 meters set the orientation to
+[20:13] face Z and then a new standard material
+[20:15] 3D okay and then I'm going to save this
+[20:17] currently in Godot 4 beta 12 there are
+[20:20] some known bugs with GPU particles 3D
+[20:23] and spatial materials that will cause
+[20:26] the engine to crash and I'm sure that
+[20:27] these will be fixed soon but one
+[20:29] workaround that I've found is I'm just
+[20:30] going to close the scene and then reopen
+[20:32] it and then I'll keep going here so I'll
+[20:35] go back to that material and billboard
+[20:37] I'll set the mode to particle billboard
+[20:40] and then in Albedo the texture that
+[20:43] we're going to apply here is star
+[20:45] underscore zero six from the Kenny
+[20:47] particle pack so I'll drag this in and
+[20:49] then I'll apply this yellow white color
+[20:52] to it and then transparency I'll set to
+[20:55] Alpha shading unshaded vertex color uses
+[20:58] Albedo because we're going to be using
+[21:00] the color ramp from the particles
+[21:02] material okay and then we'll go over the
+[21:04] particles material right here
+[21:07] and so color ramp right here color color
+[21:10] ramp gradient
+[21:12] let's go here I'm going to add a point
+[21:13] right here pretty close to the left side
+[21:15] and I'll set it to White and then the
+[21:17] ones on the ends I will set the alpha
+[21:19] down to zero
+[21:21] okay and then I'm also going to go into
+[21:23] angle and set the minimum to 45 degrees
+[21:26] just because I like that orientation
+[21:27] more then the last thing I'm going to go
+[21:29] to time and set the lifetime to 0.25 and
+[21:32] I'll set it to one shot
+[21:34] okay and now in the player script let's
+[21:36] just get a reference to the particles so
+[21:38] add unready VAR muzzle flash equals
+[21:43] camera yep so that node path all the way
+[21:46] to muzzle flash and then down in the
+[21:48] play Shoot effects
+[21:50] muzzleflash dot restart kind of a
+[21:53] similar thing to the animation player
+[21:54] here when I'm playing something over and
+[21:57] over again and it's a one shot I just
+[21:58] find that using restart helps to keep it
+[22:01] from stuttering and that muzzle flash
+[22:04] dot emitting equals true and let's take
+[22:09] a look
+[22:11] okay and then we've got our muzzle flash
+[22:13] effect
+[22:13] all right so it's time to start thinking
+[22:15] about some of the multiplayer aspects of
+[22:17] this project and we're going to start by
+[22:19] making a main menu so that players can
+[22:21] choose to either host or join an
+[22:22] instance of the game and then later when
+[22:24] we start wiring that up I'll explain a
+[22:26] little bit about how the logic of that
+[22:27] all works so I'm going to go back to the
+[22:30] world scene over here and I'm going to
+[22:31] start by deleting this player node here
+[22:33] that was just there for testing purposes
+[22:34] we're going to instance them in later in
+[22:36] a different way and then I'm going to go
+[22:38] to the 2D view close this panel and then
+[22:41] on the world node I'll click that and
+[22:43] Ctrl a add a canvas layer and to that
+[22:46] I'm going to add a panel container and
+[22:48] I'm going to name that main menu and
+[22:51] then I'll give that a margin container
+[22:53] and I'll give the margin container a
+[22:55] vbox container and then in there
+[22:57] everything everything else is just going
+[22:59] to be in the vbox container I'm going to
+[23:00] give it a label I'll also give it a
+[23:03] button and I'm going to call that post
+[23:05] button and then I'll duplicate that Ctrl
+[23:08] D and I'll call this next one join
+[23:10] button
+[23:11] and then last but not least Ctrl a I'm
+[23:13] going to add a line edit down there and
+[23:16] I'll call the line edit
+[23:18] address
+[23:20] entry okay and now let's add some text
+[23:22] here for the label I'll say main menu
+[23:26] and then I'm going to set both of these
+[23:28] to Center alignment host button for the
+[23:31] text I'll put host join button text is
+[23:34] going to be join and then address for
+[23:36] the placeholder text I'll put enter
+[23:38] address to join here and then I'll also
+[23:42] align that Center okay now let's go to
+[23:45] the main menu and click this and select
+[23:48] full rect for the anchors margin
+[23:50] container theme overrides constants give
+[23:52] all of these 15 so it's got some space
+[23:55] around the edges and then V box
+[23:56] container theme overrides constants give
+[23:58] it 15 separations so there's some space
+[24:00] between them and then for the main menu
+[24:02] click uh hold alt and then click one of
+[24:05] these orange buttons here on the corner
+[24:06] and then just drag it in so it's nice
+[24:07] and centered that looks good to me let's
+[24:10] make sure everything looks good yep you
+[24:12] can click these type stuff in here all
+[24:14] right uh let's wire up these buttons and
+[24:17] get some references to this so host
+[24:19] button click that and then go to the
+[24:20] Press signal here double click that
+[24:22] connect same thing with the joy button
+[24:24] with pressed connect and I'm going to
+[24:27] remove spaces here because I only put
+[24:28] one line between my functions and up
+[24:31] here I'm going to get references to main
+[24:33] menu and address entry so at onreadyvar
+[24:36] main menu equals and you can actually
+[24:38] just drag this in right over here okay
+[24:40] and at onreadyivar
+[24:43] address entry equals address entry okay
+[24:49] and we are ready to start wiring some of
+[24:52] this up then okay so let's say the
+[24:54] player clicks the host button well the
+[24:55] first thing we're going to want to do is
+[24:56] we're going to want to hide the main
+[24:58] menu with main menu dot hide and then
+[25:00] we're going to have to create a server
+[25:01] and that server is going to have to live
+[25:02] on an open port so I'm going to go const
+[25:04] Port equals
+[25:06] 9999 typically any port over 1024 should
+[25:10] be open so this will probably work fine
+[25:12] for you then I'll go VAR e net here
+[25:14] equals e net multiplayer peer dot new
+[25:17] and then I'll create the server down
+[25:19] here with
+[25:21] enetpear.create server
+[25:23] now I'll pass in that port number then
+[25:25] I'll go multiplayer dot multiplayer peer
+[25:28] equals that enet pier and so now once
+[25:31] this runs the server should be up and
+[25:33] running we just need to spawn in a
+[25:35] player for the host so let's get a
+[25:37] reference to the player scene here cons
+[25:38] Capital player equals whoops that equals
+[25:42] preload and then I'll drag in the player
+[25:44] scene here
+[25:45] okay so now let's make a function down
+[25:47] here so that we can actually spawn them
+[25:48] Funk add player here ID bar player
+[25:54] equals player dot instantiate
+[25:58] player.name equals string peer ID this
+[26:02] is going to be used for Authority
+[26:04] purposes later and then add child
+[26:08] player okay so now you just call it from
+[26:11] up here so add player and then we can
+[26:14] get the peer ID for the host by going
+[26:16] multiplayer dot get unique ID
+[26:21] okay so let's play this the the first
+[26:23] time that you run this it's probably at
+[26:26] least if you're on Windows that's what
+[26:27] it does for me it's probably going to
+[26:29] ask you if you want to give this
+[26:31] application access to your private
+[26:33] public networks and make sure that you
+[26:35] give it access to public networks if you
+[26:37] want to be able to play this online with
+[26:39] friends later but we can see that it's
+[26:40] working just fine right now so let's set
+[26:43] up the client now as well and I'm going
+[26:44] to do that by copying these three lines
+[26:46] right here
+[26:47] so I'll paste that and we're going to
+[26:49] change create server here to create
+[26:51] client and then we need to pass it an
+[26:54] address and because we're just testing
+[26:55] things locally for now we can just hard
+[26:57] code this to localhost and then we'll
+[27:00] pass in the port right there and we
+[27:03] don't want to call add player on the
+[27:05] join button we only want to spawn
+[27:07] players from the server so how do we
+[27:09] spawn a player when the client joins
+[27:11] well we can wire up a signal here on the
+[27:13] server by going
+[27:14] multiplayer.pear connected dot connect
+[27:19] and we'll connect it to add player so
+[27:22] peer connected is a signal that's going
+[27:24] to emit on the server every time a
+[27:26] client connects to it so it's going to
+[27:27] connect to adplayer it's going to pass
+[27:29] in the new peer ID and it'll spawn one
+[27:31] every single time the client connects so
+[27:32] let's go to debug run multiple instances
+[27:36] and we're going to run two instances now
+[27:39] so let's see so up here I'll host and
+[27:42] then down here I'll join and so what
+[27:44] happened here is two players spawned you
+[27:47] can kind of see the animations going
+[27:48] together but they are colliding
+[27:51] infinitely and it's propelling them
+[27:52] upwards so the way that I'm going to
+[27:54] solve this is I'm just going to make it
+[27:55] so that players don't Collide and I'm
+[27:57] going to change the player layer here to
+[27:59] 2 then I'll remove the one and let's try
+[28:02] this again
+[28:04] so host
+[28:06] and I'll actually move over here and
+[28:08] then join and there we go so two are
+[28:11] connected however the host the server is
+[28:14] controlling both of them right now so
+[28:15] we're going to have to fix that okay so
+[28:18] a second player connects when the client
+[28:20] joins the server but currently they only
+[28:22] spawn in the server and they're both
+[28:24] being controlled by the server so
+[28:26] there's a couple things we have to
+[28:27] change here but the first thing that I'm
+[28:28] going to fix is I'm going to spawn the
+[28:30] players in both instances so I'm going
+[28:32] to go to the world scene I'll click
+[28:34] World control a and I'll add a
+[28:36] multiplayer spawner node then I'll go to
+[28:38] spawn path and we're instancing the
+[28:40] players as a child of this world node
+[28:43] here so I'm going to select this as the
+[28:44] spawn path then I'll go to auto spawn
+[28:46] list add element click this folder icon
+[28:49] then I'll select player.tscn because
+[28:51] this is what we're spawning and this is
+[28:52] what we need spawned in all the clients
+[28:54] so I'll open that there save and then
+[28:57] let's try this again
+[28:59] so I'll host here and I'll move over
+[29:01] here then I'll join and then we can see
+[29:04] that the client connects as well and you
+[29:06] can't see it because you can only see
+[29:08] one player but they're actually both
+[29:10] spawned here they're just both in the
+[29:12] same exact spot because the authority
+[29:14] hasn't been set yet so currently we're
+[29:16] just controlling both players and it's
+[29:18] still the same thing in this instance as
+[29:20] well so the next thing we'll do is we'll
+[29:21] fix that
+[29:23] in order to make it so that the server
+[29:24] and the client can only control their
+[29:26] corresponding players we need to set up
+[29:28] the authority and connect it to their
+[29:30] corresponding peer IDs and since we set
+[29:32] the player name to the peer IDs this is
+[29:34] going to be pretty easy I'll go back
+[29:35] into the player script over here and
+[29:37] then I'll make a function above ready
+[29:38] called func underscore enter tree and
+[29:41] then here I'll go set multiplayer
+[29:44] Authority string name to end because
+[29:48] this has to be an integer and name
+[29:49] actually isn't stored as a string
+[29:52] and then we're going to have to check
+[29:54] for this Authority in ready unhandled
+[29:56] input and physics process so starting
+[29:58] with ready we'll do if not is
+[30:01] multiplayer Authority so if it's not the
+[30:03] authority return don't execute this code
+[30:06] so we're going to add one more line here
+[30:08] and that is we want to make sure that
+[30:09] the camera is current for the correct
+[30:12] player character so here we're going to
+[30:14] say camera dot current equals true so
+[30:18] that will make that the case and then
+[30:20] we'll just copy this line and we'll just
+[30:22] drop it in the first line of unhandled
+[30:24] input and physics process as well and
+[30:27] then I'll save and then let's take a
+[30:29] look so over here I'll host okay and
+[30:33] then I'll join here and there we go I'm
+[30:36] only controlling one character over here
+[30:37] and then on the server it's the same
+[30:40] case but they're not synchronized and
+[30:42] that's the next thing that we have to
+[30:43] fix
+[30:44] so just like with the world scene and
+[30:46] the multiplayer spawner node godot4
+[30:48] introduces a really simple way to
+[30:51] synchronize things between scenes and
+[30:52] I'll add it here I'll click player
+[30:54] control a and it's going to be the
+[30:55] multiplayer synchronizer node so all we
+[30:57] have to do is add the properties that we
+[30:59] want to sync in here so the ones that
+[31:00] I'm going to sync are player position
+[31:04] oops player
+[31:07] rotation
+[31:09] and Camera rotation just so we can see
+[31:11] that pistol move up and down
+[31:13] okay and that's it it should work just
+[31:16] like that
+[31:17] so I'll host here again and I'll join a
+[31:20] client here and boom up and down left
+[31:24] right see moving let's check the other
+[31:26] one yeah it works
+[31:28] Cure Magic all right so we've got some
+[31:31] stuff synchronized now but one thing
+[31:32] that we don't is actually the shooting
+[31:33] animation you'll see I'm shooting in one
+[31:35] game instance and the corresponding
+[31:37] player isn't shooting in the other and
+[31:39] that's just because the play Shoot
+[31:40] effects function is only being called
+[31:42] locally so how do we call it in the
+[31:44] remote instance well what we have to do
+[31:46] is we have to add this annotation here
+[31:47] called RPC but if we call this as an RPC
+[31:51] function it's only going to be called on
+[31:53] the remote instance so we also need to
+[31:54] add something here called call local so
+[31:57] that it's called in both and then in
+[31:59] order to call this as an RPC function
+[32:01] instead of calling the function like
+[32:03] this we call it by writing the function
+[32:05] name and then writing RPC just like that
+[32:08] so now if I start this up
+[32:13] I am shooting in both and you can see
+[32:16] that in the remote version of the player
+[32:18] the animation the idle animation doesn't
+[32:21] start up afterwards so how do we do that
+[32:23] well what we're going to do is we're
+[32:24] going to set up a signal from the
+[32:26] animation player so I'll go to animation
+[32:29] finished connect that up to the player
+[32:31] and then here I'll just check if random
+[32:35] name equals shoot so after the shoot
+[32:37] animation finishes anim player dot play
+[32:42] title and let's just take a look at that
+[32:51] okay and you can see the idle animation
+[32:52] resumes on the remote player as well
+[32:55] Okay so we've got the necessary pistol
+[32:57] animation set up now but we don't have
+[32:59] any shooting taking place in the sense
+[33:01] that we're damaging any players or
+[33:03] anything like that so let's set that up
+[33:05] now and the first thing I'm going to do
+[33:06] is I'm going to give the player an
+[33:07] Aiming indicator with clicking the
+[33:09] camera and Ctrl a at a text direct down
+[33:12] here I'm going to search for a circle
+[33:13] I'm going to use Circle 5 from the Kenny
+[33:15] particle pack I'll drag that into the
+[33:16] texture field over here I'll click the
+[33:18] anchor presets here go to full rect
+[33:20] stretch mode I'll use keep aspect
+[33:22] centered layout transform right click
+[33:25] size copy value pivot offset I'll paste
+[33:27] that value and then I'll divide both of
+[33:29] those values by two and then for the
+[33:32] scale I'll set this to 0.03 and then
+[33:34] this is going to work just fine as our
+[33:35] aiming indicator so now let's give the
+[33:38] player a raycast so they can detect
+[33:40] enemy players when they shoot so I'll
+[33:41] click camera 3D control a raycast 3D
+[33:44] over here set the Collision mask to two
+[33:46] because this is the layer that we set
+[33:47] the players to and then Target position
+[33:49] I'll set y to zero and Z2 minus 50 so it
+[33:53] goes nice and far in front of the player
+[33:55] and then I'll go go into the player
+[33:56] script
+[33:57] and let's get a reference to the raycast
+[34:00] here at onreadybar gray cast equals then
+[34:04] I'll just drag it in right here and
+[34:06] let's set up a health variable as well
+[34:07] our health equals three so I'll say that
+[34:10] after the player gets hit three times
+[34:12] let's respawn them so here when we're
+[34:14] shooting
+[34:16] let's check to see if we're hitting a
+[34:18] player so if raycast that is colliding
+[34:21] then let's get a reference to the hit
+[34:23] player VAR hit player equals raycast dot
+[34:28] get
+[34:29] Collider okay and now what you might
+[34:32] think to do is hit player DOT health
+[34:34] minus equals one but this won't work
+[34:36] because this is lowering the health of
+[34:39] the local Adobe Player and what we want
+[34:41] to do is we want to lower the health of
+[34:43] the remote enemy player the one that has
+[34:44] the authority for it so we're going to
+[34:46] make an RPC function for it down here so
+[34:48] down here Funk receive damage
+[34:53] I'll say health it's minus equal 1 at if
+[34:57] health is less than or equal to zero
+[35:00] we'll just do a very simple sort of
+[35:01] respawn here by setting the health back
+[35:04] to three and the position equal to
+[35:06] Vector 3 dot zero so because we're going
+[35:10] to be using this as an RPC function we
+[35:13] have to put the RPC right here and we're
+[35:16] going to have to put another thing in
+[35:18] here and that is any peer because we are
+[35:21] calling received damage from the player
+[35:24] that is dealing the damage and that
+[35:25] would mean that we're calling it from
+[35:27] the player that doesn't have the
+[35:28] authority so here you'll notice that
+[35:31] play Shoot effects play Shoot effects
+[35:33] you're calling it on the player that you
+[35:35] have the authority over but here you're
+[35:37] calling it on a player that you don't so
+[35:38] we need to add this otherwise you
+[35:41] wouldn't be able to call it on enemy
+[35:42] players so up here I'll replace this
+[35:46] with hitplayer DOT receive damage and
+[35:52] we're not actually going to use our PC
+[35:54] here we're going to use RPC ID instead
+[35:57] because let's say that we had four
+[35:59] players playing together our PC would
+[36:01] call it on all three of the remote
+[36:03] players and we only want to call it on
+[36:04] the one that has the authority so we'll
+[36:06] say RPC ID and then we'll pass in here
+[36:09] hit player dot get
+[36:11] multiplayer
+[36:13] Authority and then let's take a look
+[36:18] so host and I'll move forward a little
+[36:19] bit join then if I hit them three times
+[36:22] two three they are respond
+[36:26] okay so the players have a health value
+[36:28] but we don't actually have a way of
+[36:29] telling what our current health is so
+[36:31] what we're going to do is we're going to
+[36:32] add a health bar and we're also going to
+[36:34] move the aim indicator here to a
+[36:36] heads-up display in the world scene so
+[36:38] I'm going to right click this text
+[36:39] direct I'll cut and I'll save the scene
+[36:41] then I'll go back to the world scene
+[36:43] canvaslayer control a at a control node
+[36:46] and I'll call it HUD and then I'll go
+[36:48] over here full rect go to Mouse change
+[36:51] the filter to ignore then I'll right
+[36:52] click HUD and I'll paste our text direct
+[36:54] there and I'm also going to go Ctrl a
+[36:57] add a progress bar I'll call it health
+[37:00] bar I'll make this full rect as well
+[37:02] then I'll hold alt and drag one of these
+[37:05] Corners in to make it a thin rectangle
+[37:07] drag and hold shift bring it up there
+[37:10] uncheck show percentage max value all
+[37:12] set to three same thing with value also
+[37:15] set to three
+[37:16] okay and then I'm going to go down to
+[37:18] theme overrides Styles fill style box
+[37:21] flat I'll change this to a bright green
+[37:24] color
+[37:25] and for the background style box flat
+[37:28] I'll change it to a bright red color
+[37:31] okay now let's get reference to some of
+[37:33] these in the world script so at on ready
+[37:36] VAR HUD equals and I'll drag the HUD
+[37:39] path in here and at on ready bar health
+[37:43] bar equals and I'll trade the health bar
+[37:45] in and we're going to take the HUD here
+[37:48] and we're going to close this eye here
+[37:49] we're going to make it Invisible by
+[37:50] default and then we're going to show it
+[37:51] when the player joins so in both of
+[37:54] these we'll just go hud.show right after
+[37:56] we hide the main menu
+[37:58] hot nutshell okay and so for updating
+[38:00] the health bar we're gonna have to emit
+[38:02] a signal from the player so I'll go back
+[38:03] to the player script over here and then
+[38:05] up top I'll Define the signal so all the
+[38:08] way up here signal Health changed then
+[38:12] we'll pass in a health value there and
+[38:14] we'll admit this every time the player
+[38:15] receives damage so
+[38:17] healthchange dot Emit and we'll just
+[38:20] pass in the health value there
+[38:22] and for connecting it we'll go back to
+[38:24] the world script here for the server
+[38:27] we'll connect it in the add player
+[38:29] function here so if player dot is
+[38:33] multiplayer Authority
+[38:35] then we'll say player.health changed dot
+[38:40] connect and we'll connect it to a
+[38:41] function that we haven't made yet but
+[38:42] we're going to call this function update
+[38:45] health
+[38:47] bar all right so I'll copy that let's
+[38:49] make that function quick so func update
+[38:52] health bar it'll receive a health value
+[38:55] parameter and then we'll just go
+[38:58] healthbar.value equals
+[39:00] health value and that's all we need to
+[39:02] do and for connecting the players in the
+[39:04] clients we're actually going to use the
+[39:06] signal from the multiplayer spawner so
+[39:07] I'll go to multiplayer spawner node and
+[39:10] then connect this spawn signal to world
+[39:12] and then I'll copy this logic right here
+[39:15] that we just made for the server paste
+[39:17] it in here and then I'll just change
+[39:20] player to node and we don't even need to
+[39:22] check to see if it's a player because
+[39:23] the player seems the only thing we're
+[39:24] using the multiplayer spawner for
+[39:26] so it should work so let's take a look
+[39:31] host and that'll join here and it's
+[39:35] updating just fine okay what about for
+[39:37] the client
+[39:39] all right it works for both we could
+[39:42] keep adding features and fixes to this
+[39:43] all day but the only other thing that
+[39:45] I'm going to address right now is that
+[39:46] when a client disconnects you can see
+[39:48] that they still stay spawned on the
+[39:50] server and they would stay spawned on
+[39:51] other clients as well so how do we take
+[39:53] care of that well it's pretty simple I'm
+[39:54] just going to go back to the world scene
+[39:55] and we're going to handle it to a
+[39:56] similar way in this host button pressed
+[39:59] function here with this peer connected
+[40:01] signal well guess what there is a
+[40:03] multiplayer dot peer disconnected signal
+[40:06] so we're going to connect that to a
+[40:08] function called remove player so I'll
+[40:11] copy this and then I'll go under the add
+[40:13] player function here
+[40:15] Funk remove player this one also passes
+[40:18] in a peer ID so I'll say VAR player
+[40:21] equals get node or null string up here
+[40:26] ID because the players are named after
+[40:28] their corresponding peer IDs and then
+[40:30] I'll check if player so if this is not
+[40:34] null then player Dot Q free
+[40:40] and this should just work
+[40:44] yep you can see it's cleared on the
+[40:46] server and the multiplayer spawner I
+[40:48] believe handles just clearing that on
+[40:50] the clients as well all right so how do
+[40:52] we actually connect with our friends
+[40:54] over the Internet to play this game
+[40:55] together well at the bottom of the world
+[40:57] script I'm gonna make some room here and
+[40:59] I'm going to make a function Funk UPnP
+[41:02] setup by our UPnP equals
+[41:07] upnp.new and first we're going to
+[41:09] discover our UPnP device so I'll make
+[41:13] this here your UPnP device should be
+[41:15] your router with UPnP enabled it's a
+[41:18] setting in your router settings and for
+[41:20] me it was disabled by default I think
+[41:22] it's enabled by default on most but it's
+[41:24] probably something that you want to
+[41:25] double check either way and we're going
+[41:27] to be throwing some errors in this
+[41:28] function here if anything goes wrong so
+[41:31] the first thing that we're going to
+[41:32] check is make sure that this discovery
+[41:33] is successful if not we're going to
+[41:35] print an error code and I'll show an
+[41:37] example of this failing later and what
+[41:39] you might do there anyway moving on
+[41:42] we're going to check next that it's a
+[41:44] valid Gateway using these functions here
+[41:46] and if it's invalid then we'll just
+[41:47] print an error that it's an invalid
+[41:49] Gateway and then after that assuming
+[41:51] this stuff all works we need to create
+[41:53] the port mapping that does the automatic
+[41:56] port forwarding this is the nice thing
+[41:57] about UPnP and if that Port mapping
+[42:01] doesn't work we want to make sure that
+[42:03] we print an error here as well but if
+[42:06] this all works this means that UPnP
+[42:08] should be set up and people should be
+[42:10] able to connect to the host so if that
+[42:13] does work then we're just going to print
+[42:14] a success message here
+[42:16] and this is going to also print the
+[42:19] external facing IP that people should be
+[42:21] able to type in in that join address
+[42:23] field
+[42:24] and then join the game so let's take a
+[42:27] look at this well first we actually need
+[42:28] to set this function up in the host
+[42:32] button pressed so after the players
+[42:34] added I'll do UPnP setup right here
+[42:37] okay so let's start this up and then
+[42:39] I'll click host and this probably takes
+[42:41] a second to set up
+[42:44] okay so it actually failed so I don't
+[42:47] have UPnP enabled on my router right now
+[42:49] and you can see here that Discovery
+[42:51] failed error 27 and so if I go over to
+[42:54] the Godot documentation I can go to the
+[42:57] UPnP page here and then I can go down
+[42:59] and I can see all of these error codes
+[43:01] down here so if I go down to 27 this one
+[43:04] says UPnP result no devices so it wasn't
+[43:07] able to find my device and so for me
+[43:09] that's because the settings not enabled
+[43:11] but let me enable it and then let's see
+[43:13] what happens
+[43:14] okay so now I've got UPnP enabled on my
+[43:17] router so let's try hosting this again
+[43:18] should go a little bit quicker this time
+[43:21] and there you go you can see that it
+[43:24] actually joined properly this time and I
+[43:26] didn't actually print my full address
+[43:27] I'm just printing a random digit because
+[43:29] I don't want to display my external
+[43:31] facing IP address to the internet but
+[43:33] this is this is working so if you
+[43:35] removed this it would print the entire
+[43:37] join address and then you could hand
+[43:38] that off to your friends and speaking of
+[43:40] which we are just going to go back up
+[43:43] here to this uh create client up here
+[43:45] and we're going to now remove the
+[43:46] hard-coded localhost here and we're
+[43:48] going to change this to address entry
+[43:51] dot text so that now people will enter
+[43:54] the IP address here click join and
+[43:57] they'll actually be able to join it over
+[43:58] the Internet so now we just have to
+[44:00] export this okay so now we need to
+[44:02] export the project so I'll come up here
+[44:04] to project export and I'll add and I'm
+[44:08] on windows so I'm going to export to
+[44:09] Windows desktop if you don't have any
+[44:12] export templates downloaded yet this
+[44:14] menu should greet you with a message
+[44:16] that you don't have any and it should
+[44:18] lead you right to a place where you can
+[44:19] easily download them but anyway I
+[44:21] already got mine downloaded so here I'm
+[44:24] going to go here and I'll set the export
+[44:25] path to I'm going to create a folder
+[44:28] called
+[44:29] exports I'll save that and here I'm
+[44:33] going to export debug only export
+[44:35] project then I'll call it
+[44:37] FPS
+[44:40] prototype.exe export with debug checked
+[44:42] we want to make sure that we're
+[44:43] exporting with debug here because
+[44:45] currently the the console log is
+[44:48] important the host receives error
+[44:50] messages and their external facing
+[44:53] address through the console so we want
+[44:55] to export with debug so I'll save that
+[44:56] and it exported okay so I've got my
+[45:00] export directory here and I'll typically
+[45:02] just highlight everything here and send
+[45:05] it to a compressed folder just like that
+[45:06] and then I'll share this folder with my
+[45:08] friends and then whoever's hosting
+[45:10] you're probably going to want to open it
+[45:11] with this console here so that this way
+[45:13] your external address will get printed
+[45:15] here when you set up the host or it'll
+[45:17] print an error if something goes wrong
+[45:19] but otherwise you just need to afford
+[45:21] that address along to anybody who wants
+[45:23] to join they can paste it right in here
+[45:24] click join and you're good to go
+[45:27] thanks for watching and hopefully you
+[45:29] learned something if you enjoyed the
+[45:30] video feel free to subscribe to the
+[45:32] channel or follow me on Twitter it's
+[45:34] always appreciated thanks again and more
+[45:36] big tutorials to come in the future

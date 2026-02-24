@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Download YouTube transcripts for the provided video URLs.
+Download YouTube transcripts using yt-dlp.
 """
 
-from youtube_transcript_api import YouTubeTranscriptApi
+import yt_dlp
 import re
 from pathlib import Path
 import ssl
+import certifi
+import time
 
 # Fix SSL certificate verification on macOS
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -26,7 +28,6 @@ VIDEOS = [
     # "https://www.youtube.com/watch?v=Bp3z-DQHO3k",
     # "https://www.youtube.com/watch?v=3EMG2jGKkdw",
 ]
-
 
 GAME_DEV_BENCH_VIDEOS = [
     "https://www.youtube.com/watch?v=9tu-Q-T--mY",
@@ -104,22 +105,79 @@ def format_timestamp(seconds):
         return f"{minutes}:{secs:02d}"
 
 
-def download_transcript(video_id):
-    """Download transcript for a video ID."""
+def download_transcript(video_id, use_browser_cookies=False):
+    """Download transcript for a video ID using yt-dlp."""
     try:
-        # Get transcript using youtube-transcript-api (new API)
-        ytt_api = YouTubeTranscriptApi()
-        fetched_transcript = ytt_api.fetch(video_id)
-        raw_data = fetched_transcript.to_raw_data()
+        import tempfile
+        import os
+        import json
+        import subprocess
 
-        # Format with timestamps
-        lines = []
-        for entry in raw_data:
-            timestamp = format_timestamp(entry['start'])
-            text = entry['text'].strip()
-            lines.append(f"[{timestamp}] {text}")
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Build yt-dlp command
+            cmd = [
+                'yt-dlp',
+                '--skip-download',
+                '--write-auto-subs',
+                '--write-subs',
+                '--sub-lang', 'en',
+                '--sub-format', 'json3',
+                '--ignore-errors',
+                '--extractor-args', 'youtube:skip=dash,hls',
+                '--output', os.path.join(temp_dir, f'{video_id}.%(ext)s'),
+            ]
 
-        return "\n".join(lines)
+            # Don't use cookies - they might be causing format detection issues
+            # if use_browser_cookies:
+            #     cmd.extend(['--cookies-from-browser', 'chrome'])
+
+            cmd.append(f"https://www.youtube.com/watch?v={video_id}")
+
+            # Run yt-dlp command
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+
+            # Debug: print output and files
+            print(f"\nyt-dlp stdout: {result.stdout}")
+            print(f"yt-dlp stderr: {result.stderr}")
+            print(f"Return code: {result.returncode}")
+            print(f"Files in temp dir: {os.listdir(temp_dir)}")
+
+            # Find the downloaded subtitle file
+            subtitle_file = None
+            for filename in os.listdir(temp_dir):
+                if filename.endswith('.json3'):
+                    subtitle_file = os.path.join(temp_dir, filename)
+                    break
+
+            if not subtitle_file:
+                return f"Error: No English subtitles available. yt-dlp output: {result.stderr}"
+
+            # Parse the JSON3 subtitle file
+            with open(subtitle_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            # Format transcript with timestamps
+            lines = []
+            for event in data.get('events', []):
+                if 'segs' not in event:
+                    continue
+
+                start_time = event.get('tStartMs', 0) / 1000
+                text = ''.join(seg.get('utf8', '') for seg in event['segs']).strip()
+
+                if text:
+                    timestamp = format_timestamp(start_time)
+                    lines.append(f"[{timestamp}] {text}")
+
+            return "\n".join(lines) if lines else "Error: No transcript content found"
+
+    except subprocess.TimeoutExpired:
+        return "Error: Download timeout"
     except Exception as e:
         return f"Error: {e}"
 
@@ -128,6 +186,8 @@ def main():
     output_dir = Path("transcripts")
     output_dir.mkdir(exist_ok=True)
 
+    # Use cookies from Chrome browser
+    print("Using cookies from Chrome browser")
     print(f"Downloading transcripts for {len(VIDEOS)} videos...")
     print(f"Output directory: {output_dir}\n")
 
@@ -139,7 +199,10 @@ def main():
 
         print(f"[{i}/{len(VIDEOS)}] Downloading {video_id}...", end=" ")
 
-        transcript = download_transcript(video_id)
+        transcript = download_transcript(
+            video_id,
+            use_browser_cookies=True
+        )
 
         # Save to file
         output_file = output_dir / f"{video_id}.txt"
