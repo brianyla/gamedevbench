@@ -13,8 +13,8 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 # List of video URLs
 VIDEOS = [
-    "https://www.youtube.com/watch?v=n8D3vEx7NAE",
-    # "https://www.youtube.com/watch?v=tWLZNCJISYU",
+    # "https://www.youtube.com/watch?v=n8D3vEx7NAE",
+    "https://www.youtube.com/watch?v=tWLZNCJISYU",
     # "https://www.youtube.com/watch?v=CI-cVKuSD1s&list=PLda3VoSoc_TTp8Ng3C57spnNkOw3Hm_35",
     # "https://www.youtube.com/watch?v=qkAVTikDAss&list=PLWI8H56cvVoKfe6Rj3aVUGA2NPGkSOJZ_",
     # "https://www.youtube.com/watch?v=hqhWR0CxZHA",
@@ -40,7 +40,6 @@ GAME_DEV_BENCH_VIDEOS = [
     "https://www.youtube.com/watch?v=fXHJLNAY0NU",
     "https://www.youtube.com/watch?v=obEgPSnPqUs",
     "https://www.youtube.com/watch?v=Oh70eo4pep8",
-    "https://www.youtube.com/watch?v=unknown",
     "https://www.youtube.com/watch?v=uQl0HC-2FNk",
     "https://www.youtube.com/watch?v=XLjCmdy8jdw",
     "https://www.youtube.com/watch?v=JnubpEa-Inw",
@@ -81,13 +80,13 @@ GAME_DEV_BENCH_VIDEOS = [
     "https://www.youtube.com/watch?v=Lrs-TEucq3w",
     "https://www.youtube.com/watch?v=e3Luf7dXSEY",
     "https://www.youtube.com/watch?v=Z9FHL_GnYJo",
-    "https://www.youtube.com/watch?v=4Vdfg9KI4Xw"
+    "https://www.youtube.com/watch?v=4Vdfg9KI4Xw",
 ]
 
 
 def extract_video_id(url):
     """Extract video ID from YouTube URL."""
-    pattern = r'(?:v=|/)([0-9A-Za-z_-]{11}).*'
+    pattern = r"(?:v=|/)([0-9A-Za-z_-]{11}).*"
     match = re.search(pattern, url)
     return match.group(1) if match else None
 
@@ -115,8 +114,8 @@ def download_transcript(video_id):
         # Format with timestamps
         lines = []
         for entry in raw_data:
-            timestamp = format_timestamp(entry['start'])
-            text = entry['text'].strip()
+            timestamp = format_timestamp(entry["start"])
+            text = entry["text"].strip()
             lines.append(f"[{timestamp}] {text}")
 
         return "\n".join(lines)
@@ -125,7 +124,9 @@ def download_transcript(video_id):
 
 
 def main():
-    output_dir = Path("transcripts")
+    # Get the directory where this script is located
+    script_dir = Path(__file__).parent
+    output_dir = script_dir / "transcripts"
     output_dir.mkdir(exist_ok=True)
 
     print(f"Downloading transcripts for {len(VIDEOS)} videos...")

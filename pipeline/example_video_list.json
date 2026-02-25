@@ -1,0 +1,20 @@
+[
+  {
+    "video_id": "9tu-Q-T--mY",
+    "title": "Godot Quest System Tutorial",
+    "url": "https://youtube.com/watch?v=9tu-Q-T--mY",
+    "repo": "QuestManager"
+  },
+  {
+    "video_id": "n8D3vEx7NAE",
+    "title": "Character Movement in Godot",
+    "url": "https://youtube.com/watch?v=n8D3vEx7NAE",
+    "repo": "GodotMovement"
+  },
+  {
+    "video_id": "abc123def45",
+    "title": "Building UI in Godot 4",
+    "url": "https://youtube.com/watch?v=abc123def45",
+    "repo": "UITutorial"
+  }
+]

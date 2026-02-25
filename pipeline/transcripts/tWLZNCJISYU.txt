@@ -1,0 +1,3102 @@
+[0:00] The complexities that you'll run into
+[0:01] when building a multiplayer game can
+[0:03] vary greatly depending on your end
+[0:05] goals. Are you creating a simple 2v2
+[0:07] matchbased game using Steam? Or are you
+[0:09] embarking on building out the next big
+[0:11] MMO that demands scaling to support
+[0:13] hundreds if not thousands of players?
+[0:15] Either way, if you have no multiplayer
+[0:17] experience, you have to start somewhere.
+[0:20] That's the goal of this video, to be the
+[0:22] primer into the world of GDO multiplayer
+[0:24] development. This tutorial is split up
+[0:26] into six major sections. Each one builds
+[0:28] upon the previous section for a complete
+[0:30] walkthrough towards a finished game.
+[0:32] I'll put some chapter markers below. If
+[0:35] you want to build along with the video,
+[0:36] pull down the project link below, open
+[0:38] it up, and if you poke around for a
+[0:40] minute, you'll notice I've got a few
+[0:41] things started like the main menu and
+[0:43] game scene. Hopefully, that'll save us
+[0:45] some time. However, I will say it may be
+[0:47] a good idea to just watch the video once
+[0:49] through before following along. I'm also
+[0:51] assuming you have at least some basic
+[0:53] god
+[0:55] experience. And in order to stay focused
+[0:57] on the multiplayer side of things, I'll
+[0:59] likely breeze through some of the more
+[1:00] trivial parts. And of course, you'll
+[1:02] have access to the finished project for
+[1:04] future reference. Let's get started.
+[1:13] So, what do we want to build? I'm
+[1:15] thinking a basic 1v one multiplayer
+[1:17] battle where each player controls a ship
+[1:20] that can fly around the level. For
+[1:22] combat, let's have the ships be able to
+[1:24] shoot missiles and take damage when hit,
+[1:26] which means we also need a health bar. I
+[1:29] think I'll just keep it under the ship.
+[1:31] And finally, I think we'll tally each
+[1:33] time a player gets a kill, and the first
+[1:35] one to five is the winner of that match.
+[1:37] When you're starting out, the two big
+[1:39] things you need to think about are how
+[1:41] do we establish a connection to enable
+[1:43] multiplayer and how do I send and
+[1:45] receive data to bring the multiplayer
+[1:47] world to life. The first point,
+[1:49] establishing a connection is fairly
+[1:51] straightforward for this demo. But as
+[1:52] your game's feature set expands, this
+[1:54] becomes more complicated. Think lobby
+[1:56] systems, matchmaking, hosting services,
+[1:58] etc. But don't worry about that today.
+[2:01] And to the second point, there are many
+[2:02] ways to tackle this, and it's an ongoing
+[2:04] process throughout the development of
+[2:06] your multiplayer game. But for this
+[2:07] project, we'll be using GDO's highle
+[2:09] multiplayer APIs. That means leveraging
+[2:12] tools such as multiplayer spawner,
+[2:14] multiplayer synchronizer, and RPCs to
+[2:17] bring the game into action. Let's get
+[2:18] started with establishing a connection
+[2:20] and sending some data. Create a new
+[2:22] branch, and we'll commit our changes at
+[2:23] the end of each section. Let's begin by
+[2:25] creating a new folder under scripts
+[2:27] called network.
+[2:31] It would be helpful to have a network
+[2:33] manager that is an autoload. So to
+[2:35] create one of those, go to project
+[2:39] project settings
+[2:42] globals
+[2:44] and then enter the name network manager.
+[2:47] Change the save path to the network
+[2:49] folder you just created.
+[2:53] Then hit create and close. Let's go
+[2:56] ahead and open that up.
+[2:59] An autoload is GDO's version of a
+[3:02] singleton. These do not get destroyed
+[3:04] when changing scenes. That feature will
+[3:06] come in handy since we'll need to access
+[3:08] networking code throughout the life of
+[3:09] the game. So, it's a good idea to use an
+[3:11] autoload to organize this functionality.
+[3:14] Fundamentally, all multiplayer begins
+[3:15] with establishing some type of
+[3:17] connection over which we can share data.
+[3:20] Generally, a multiplayer connection
+[3:22] consists of a server pier where other
+[3:24] client peers can connect to. Maybe
+[3:26] you've even heard of this. Ever hear
+[3:28] someone say join a server, host a game
+[3:30] or game server? That's likely the same
+[3:32] idea. For this project, we're going to
+[3:35] create a server that acts as the host of
+[3:37] the game, which also has an accompanying
+[3:39] player. This is a common setup for
+[3:41] multiplayer games, and recently my good
+[3:43] friend over at Ponderoft just released
+[3:45] his first game, Bubble Battle, on Steam
+[3:48] using this approach.
+[3:50] So, let's start by creating a new
+[3:52] function called create server. For this
+[3:54] project, we're going to use ENET,
+[3:56] specifically ENET multiplayer pier, as a
+[3:58] means to create our server, but also as
+[4:00] a way to connect to it from another
+[4:02] client. In order to establish a
+[4:05] connection, we first need to create a
+[4:07] server that listens for incoming
+[4:09] requests on a specific port. In this
+[4:11] case, I'm going to default our server
+[4:13] port to run on AD80, as you can see here
+[4:16] by this constant. And to enable that
+[4:18] server, we have to set it to the
+[4:19] multiplayer APIs multiplayer pier, which
+[4:23] we've done right here. You can also
+[4:25] access the multiplayer pier reference
+[4:27] through just typing out multiplayer, but
+[4:29] I prefer the git tree getit multiplayer
+[4:31] pier route as it's worked out better for
+[4:33] me in my testing. So, what we did here
+[4:35] is create a new en multiplayer pier and
+[4:38] ran the function create server with a
+[4:39] default port of 8080. And to enable that
+[4:42] server, we have to set it to the
+[4:44] multiplayer APIs multiplayer pier.
+[4:48] So now that we have the ability to
+[4:49] create a server, let's create a client
+[4:51] so that we can connect to that server.
+[5:01] We set up the client using the same enet
+[5:04] multiplayer pier, but instead of create
+[5:06] server, we use create client. and we
+[5:08] pass in the IP and port where the client
+[5:11] should be connected to. However, I want
+[5:12] to be a little bit more dynamic with
+[5:14] this function. So, let's pass in the IP
+[5:16] and port as a function parameter. And
+[5:18] we'll default the host IP to localhost
+[5:20] so you can test easily on your computer.
+[5:22] Local host is just an alias for our
+[5:24] computer. Since we're running both
+[5:26] client and server on the same machine,
+[5:28] we tell the client to look for the
+[5:29] server running on localhost.
+[5:33] and we'll default the host port to the
+[5:35] server port which we know our server
+[5:37] will be running on.
+[5:40] We'll access the multiplayer APIs and
+[5:42] set the pier the same way we did for the
+[5:44] server.
+[5:47] Now, if we run the create server
+[5:48] function, we'll be able to receive data
+[5:50] from other game clients that have access
+[5:52] to this server. That could be any other
+[5:55] computer on my local network, but for
+[5:56] now, I'll just run the clients on the
+[5:58] same machine. So, this is the most
+[5:59] fundamental multiplayer setup that you
+[6:01] would need. We have the ability to
+[6:03] create a server and ability to create a
+[6:04] client that connects back to that
+[6:06] server. Let's create a test function to
+[6:08] see it in action. Go back over to the
+[6:10] main menu script.
+[6:12] Make sure the main menu scene is open.
+[6:14] And let's add another button called send
+[6:16] test message.
+[6:18] I'm going to duplicate the existing
+[6:19] button and label it send test message.
+[6:24] Open the main menu script and let's wire
+[6:27] up these buttons.
+[6:33] So to test out sending a message, I want
+[6:35] to be able to send a message between the
+[6:37] server and client and vice versa. But
+[6:39] first, we need to wire up calls to
+[6:41] create server and create client
+[6:42] respectively from the main menu. So
+[6:45] under onhost game pressed, make a call
+[6:47] to create server.
+[6:50] And then under the onjoin game pressed,
+[6:52] make a call to create client in the
+[6:54] network manager. We don't have to
+[6:56] specify any parameters under create
+[6:58] client because the default local host
+[6:59] and port will work just fine. And then
+[7:01] from the on send test message pressed
+[7:03] function, let's call to another one that
+[7:05] actually sends a message. And we'll add
+[7:08] a parameter that accepts a passed in
+[7:09] message.
+[7:11] So what we're going to do is print out
+[7:12] the message that we received, the peer
+[7:15] ID that the message received on, and
+[7:17] then the peer ID that the message was
+[7:19] sent from. So this call to get unique ID
+[7:22] is going to print out the network ID of
+[7:24] the peer that received the message. Get
+[7:26] remote sender is the peer that sent the
+[7:29] message. So that gives us a quick look
+[7:30] at the tools that the multiplayer APIs
+[7:33] provide.
+[7:34] Back under the message press function,
+[7:36] let's make a call to send test message
+[7:38] and just put in any message that you'd
+[7:40] like. Now to enable this test message
+[7:42] function to be called across connected
+[7:44] peers, we need to add some annotation to
+[7:47] it. We're going to turn it into
+[7:49] something called an RPC, which is a
+[7:51] remote procedure call. So add the
+[7:53] annotation at RPC.
+[7:56] And then we're going to add the any pier
+[7:58] parameter
+[8:01] and then the call remote parameter.
+[8:05] If you hover over the RPC annotation,
+[8:07] you'll see some documentation that
+[8:09] describes what the different parameters
+[8:10] mean.
+[8:13] The first parameter is the mode, which
+[8:15] indicates who can make calls to this
+[8:17] RPC. And we're going to set it to any
+[8:19] pier because we want any peer connected
+[8:20] to this server to be able to call to it.
+[8:23] The second one is the sync parameter,
+[8:24] and we're going to set it to call
+[8:26] remote. And what that's going to do is
+[8:28] it's going to make sure it doesn't run
+[8:29] locally. So, if I make a call to that
+[8:31] function from my computer or my game
+[8:33] client, it's not going to also run
+[8:35] locally. It's going to only run on the
+[8:36] remote connected peers.
+[8:40] Now, let's test it out to see it in
+[8:41] action. But first, we need to enable a
+[8:43] second game client window. So, under the
+[8:45] debug menu,
+[8:48] select customize run instances.
+[8:51] Hit the check box for enable multiple
+[8:53] instances and hit this up arrow to give
+[8:56] us another game client. Hit okay. Hit
+[8:59] play to run the main scene.
+[9:04] First, let's create a server by clicking
+[9:05] host game. And that will call to the
+[9:07] network manager. And we can tell that
+[9:08] that worked because it printed out
+[9:10] server created. On the second client,
+[9:11] let's hit join game to connect to that
+[9:13] server.
+[9:16] And you can see we printed out client
+[9:17] pier created. So we know we're connected
+[9:19] to the server.
+[9:21] So on the host client, let's hit send
+[9:22] test message.
+[9:25] And you'll notice it says received on
+[9:27] pier 1, which was where we got the
+[9:29] message from pier zero. Now you might be
+[9:32] thinking, well, that sounds like a
+[9:34] problem to me. What is pier zero? Well,
+[9:36] that actually is a problem because what
+[9:38] we did is we didn't enable the RPC call.
+[9:40] So, go back to the code
+[9:43] and in order to make an RPC call, you
+[9:46] have to add RPC and with that RPC, it
+[9:50] enables the networking capabilities of
+[9:51] this function.
+[9:53] So, run it again. Hit host game.
+[9:57] Hit join game. Now, hit send test
+[9:59] message on the host.
+[10:02] And look at that. And you can see we got
+[10:03] our message hello there and received on
+[10:05] pier with this network ID from pier 1.
+[10:09] So just a quick note here pier 1 is
+[10:11] going to be the network ID always
+[10:12] assigned to the server or host pier. All
+[10:16] other connected peers will have some
+[10:17] network ID that looks like this.
+[10:20] So basically what this is saying is we
+[10:22] received a message hello there on pier
+[10:25] with this network ID from the host
+[10:28] server pier. So this game client is
+[10:32] represented by this network ID and it
+[10:34] received a message from this game client
+[10:37] which is our host or server client. So
+[10:39] what does sending a hello message
+[10:41] accomplish? Well, this demonstrates that
+[10:44] we were successful in establishing a
+[10:46] connection between two peers where we
+[10:48] were able to send data between them.
+[10:50] This is what's at the core of all
+[10:52] multiplayer games. Since we've confirmed
+[10:54] the ability to create a connection and
+[10:57] communicate data between the peers, now
+[10:59] we can build on top of that in a
+[11:00] meaningful way to bring our game to
+[11:02] life. The way in which we send or
+[11:04] receive this data generally conforms to
+[11:07] some communication protocol. Basically,
+[11:09] a set of rules that computers abide by
+[11:11] to talk to each other. In this case,
+[11:13] we're using ENET, which is built on top
+[11:14] of UDP, a communication protocol suited
+[11:17] for time-sensitive applications like
+[11:19] video games. With a connection now
+[11:21] established, we can use RPCs or remote
+[11:24] procedure calls to send data between
+[11:26] connected peers. Generally, RPCs are
+[11:28] useful for sending data like user input
+[11:31] or signal events in the game. The
+[11:34] various parameters for mode, sync, and
+[11:36] transfer mode are used to modify who can
+[11:39] use the RPC and how it behaves. I've
+[11:42] touched on the basics in this project,
+[11:43] but I'll save a deep dive for a later
+[11:45] video. I'll put some links down below
+[11:47] and I'd recommend checking them out if
+[11:48] you're interested in learning more. So,
+[11:50] now that we've created a basic server
+[11:52] and been able to connect to it with a
+[11:54] client, I want to take care of some
+[11:55] housekeeping before we move on. Head
+[11:57] over to the network manager script. So,
+[12:00] I want to be able to clean up the
+[12:01] network connection in the event that a
+[12:03] server or host goes down while it has a
+[12:06] client connected to it. And to do that,
+[12:08] we need to be able to detect when the
+[12:10] server is disconnected or the server
+[12:11] goes down. So, let's create a new
+[12:13] function called setup client connection
+[12:14] signals.
+[12:16] Let's get access to the multiplayer APIs
+[12:18] and look for the server disconnected
+[12:20] signal and let's wire up a function.
+[12:24] We'll call it server disconnected. Go
+[12:26] ahead and create that function and we'll
+[12:28] add a little debug statement there to
+[12:29] know when it happens. Now, because the
+[12:31] signal is only emitted on clients, as
+[12:34] you can see here from the docs, we only
+[12:36] need to set it up from our create client
+[12:37] call.
+[12:40] So when you create a client, it'll
+[12:41] automatically wire up the server
+[12:43] disconnected signal. So we can turn that
+[12:45] into some actionable cleanup. And the
+[12:47] best way to clean up our multiplayer
+[12:48] pier is to just set it to null. And that
+[12:51] will clean up our client connection in
+[12:53] the event the server goes down. So let's
+[12:55] test it out. So we host the game and
+[12:58] then hit join game.
+[13:00] And then let's just close the host
+[13:01] window.
+[13:03] You can see there it printed out server
+[13:05] disconnected. So our client got the
+[13:07] notification that the server went down.
+[13:10] Let's run one more test. But in this
+[13:11] one, let's create three debug client
+[13:13] windows.
+[13:15] So we'll use this window for our host
+[13:18] and then we'll join with both clients.
+[13:21] Now let's see what happens when we close
+[13:22] the host.
+[13:24] Great. You can see both clients receive
+[13:26] the server disconnected signal and reset
+[13:28] the multiplayer pier. Now to take that
+[13:31] one step further, we can actually now
+[13:33] create a host out of this client. So,
+[13:35] I'll hit host game
+[13:37] and then hit join game again.
+[13:41] And you can see it created a server and
+[13:43] the client pier was created. But wait,
+[13:44] there's an error in the debugger window.
+[13:46] So, let's open that up. So, it says the
+[13:48] server disconnected signal is already
+[13:51] connected to the network manager server
+[13:53] disconnected. So what that is saying is
+[13:57] because we didn't restart our session
+[13:58] when we created a host and then joined
+[14:00] again.
+[14:02] It ran through the create client when we
+[14:04] tried to join the second host. So that
+[14:06] means it tried to connect the same
+[14:08] function again to the server
+[14:09] disconnected signal. But we don't need
+[14:11] to do that. So let's prevent that from
+[14:13] happening.
+[14:19] So, all I'm doing here is I'm getting
+[14:20] access to the multiplayer API and I'm
+[14:23] asking the server disconnected signal,
+[14:25] do you already have a connection to the
+[14:27] server disconnect function? And if it
+[14:29] doesn't, it'll go ahead and create it.
+[14:31] But if it does, it'll just ignore that.
+[14:33] So, let's run the test again. So, we
+[14:35] create a host. Join game. Join game.
+[14:39] Great. So, we have two clients connected
+[14:40] to a host. Let's kill the host. Great.
+[14:43] Both clients disconnected. Now let's
+[14:45] start a new host and let's try to
+[14:48] connect this client to it. And you can
+[14:51] see there it successfully created the
+[14:53] connection to that host pier and did not
+[14:55] air out with that message. And let's
+[14:57] take that one step further and send a
+[14:59] test message from our host. You can see
+[15:02] there a message hello there was received
+[15:04] on pier with this network ID from the
+[15:07] new host which is this guy network ID of
+[15:10] one. And let's send a message back from
+[15:12] our client.
+[15:14] And you can see there we got a message
+[15:15] on our host pier from the pier with this
+[15:17] network ID which is this one.
+[15:20] Great. So I think that's working just
+[15:22] fine. And as a quick side note, if you
+[15:24] notice I put an underscore in front of
+[15:25] the setup client connection signals
+[15:27] function. Well that's to indicate that
+[15:28] it's a private function and shouldn't be
+[15:31] called outside of this script. You can't
+[15:33] actually enforce that. So you can
+[15:36] technically call anywhere. But according
+[15:37] to the GDAU style documentation, it's a
+[15:39] good way to indicate a function is
+[15:41] private. Okay. So, if you are following
+[15:43] along, take a pause. If you don't have
+[15:45] these changes on a new branch, create a
+[15:47] new branch and commit what you've got
+[15:49] working so far.
+[15:54] So, for this demo, I think this is a
+[15:56] good place to put some functionality to
+[15:58] load the game scene.
+[16:01] And we're going to pass in the preloaded
+[16:03] game scene. But first, we actually need
+[16:05] to create a reference to it at the top.
+[16:09] So, back in our main menu script,
+[16:12] I want to load the game scene when a
+[16:14] user creates a server or creates a
+[16:15] client. So, that way we create the
+[16:17] server and immediately push them into
+[16:19] the game scene. And for the client, I'm
+[16:21] going to load the game scene first and
+[16:23] then create the client. And I'll touch
+[16:24] on more about why I did that in a few
+[16:26] minutes. So, let's do a quick demo, but
+[16:28] first, let's lower the debug instances
+[16:30] back down to two.
+[16:32] So, if we click host game, it kicks us
+[16:34] right into the game scene.
+[16:37] And then same thing with join client. So
+[16:40] great, we have both peers connected and
+[16:41] into the game scene. And on the topic of
+[16:44] loading in the game scene, let's get our
+[16:47] main menu button working. So first,
+[16:49] let's create a game script.
+[16:52] Let's put it under the scripts folder.
+[16:56] Now we can wire up the button press
+[16:58] signals.
+[17:00] Going to remove these for now. So if
+[17:02] we're in the actual game scene, we're
+[17:04] assuming we have an active network
+[17:06] connection. So if we go back to the main
+[17:07] menu, we need to make sure that
+[17:09] connection is severed or cleaned up. So
+[17:11] let's create a function to do that for
+[17:12] us. Back in the network manager, let's
+[17:14] create a function called terminate
+[17:16] connection and load main menu.
+[17:20] When developing out some functionality,
+[17:21] I always like to put print statements in
+[17:23] to help with debugging. So the first
+[17:25] thing we want to do is load our main
+[17:27] menu, clean up the network connection,
+[17:29] and clean up the disconnection signals
+[17:30] we've got wired up to our client. So,
+[17:33] let's create a load main menu function
+[17:34] and load the main menu scene. Got to
+[17:36] create a reference to the main menu
+[17:38] scene at the top.
+[17:40] Extra parenthesy.
+[17:43] So, let's add a call to load main menu.
+[17:46] Next, we want to clean up our network.
+[17:48] Let's create another function called
+[17:49] terminate connection.
+[17:52] And for this, we're actually going to
+[17:53] use the code that we've wired up to our
+[17:56] server disconnection function.
+[17:58] So, grab that line and copy paste it
+[18:00] down and terminate connection.
+[18:04] And since we just did that, we kind of
+[18:06] have some redundancy here. When a server
+[18:08] disconnects and you're playing the game
+[18:09] as a client, I think we should just kick
+[18:11] them back out to the main menu scene.
+[18:13] So, let's go ahead and make a call to
+[18:14] terminate connection and load main menu
+[18:16] because I think it's handling the same
+[18:18] functionality.
+[18:21] Okay, let's add a call back up in our
+[18:23] terminate connection and load main menu.
+[18:27] The last thing we need to do is clean up
+[18:29] our client disconnect signal. create a
+[18:31] function called disconnect client
+[18:32] connection signals. And it's basically
+[18:34] the opposite of the setup client
+[18:36] connection signals. I'm actually going
+[18:38] to grab this conditional and the
+[18:40] subsequent connection and copy paste it
+[18:43] down below.
+[18:45] We need to change a couple things. So
+[18:47] I'm going to remove the knot. So if our
+[18:49] server disconnected,
+[18:51] let's change it to has connections.
+[18:56] We'll go ahead and say server
+[18:58] disconnected. signal disconnect
+[19:02] and we'll disconnect the function we use
+[19:04] on server disconnect. And then don't
+[19:06] forget to add the call under the
+[19:07] terminate connection and load main menu.
+[19:12] Back in the game script, let's make a
+[19:14] call back to that function we just
+[19:15] created
+[19:18] and let's run the game to test it out.
+[19:20] Create a host. Now we're in the game
+[19:21] scene. If I hit main menu, returns me
+[19:24] back to the game scene. And if we check
+[19:26] the logs, it says it's terminating
+[19:27] connection and loading the main menu.
+[19:29] And then we can see the print statement
+[19:30] there. Terminate connection. And we know
+[19:32] we're back in the main menu because we
+[19:34] can see it. So let's start a host again
+[19:36] and connect our client here. Now we're
+[19:39] both in the game scene. And if I leave
+[19:40] the main menu on our client, kicks us
+[19:43] back out to the main menu. And you can
+[19:45] see the connections terminated. Let's
+[19:47] see if we can join again.
+[19:49] Yep, we've been able to join again. No
+[19:51] problem. Now let's kill the host and see
+[19:53] what happens. So look at that. You'll
+[19:54] notice both clients were kicked back out
+[19:56] to the main menu, which is exactly what
+[19:58] we expected. And you can see that
+[20:00] reflected in the logs with the two print
+[20:01] statements to terminate connection and
+[20:03] load main menu.
+[20:06] And as an extra test, try to start the
+[20:08] other window as a host and see if you
+[20:10] can join game
+[20:12] and then close the new host. And great,
+[20:15] now we have a full end to-end test and
+[20:16] we got everything working as expected. I
+[20:18] think it's really good to get this
+[20:20] networking life cycle stuff at a good
+[20:22] place before you start developing your
+[20:24] game because then you know you've built
+[20:26] everything on a solid foundation. And
+[20:28] head back over to the network manager
+[20:30] and let's add one more thing at the top
+[20:32] here. I just want to create a variable
+[20:34] that indicates whether or not we are a
+[20:36] host.
+[20:40] And let's default it to false. And then
+[20:42] when a server is created, let's set it
+[20:45] to true. And when creating a client,
+[20:48] let's set it to false because at that
+[20:49] point, we are not a host. We'll see why
+[20:51] we need this in just a moment. And I
+[20:52] believe this is the last change we'll
+[20:54] need to make to network manager for the
+[20:56] entirety of this video. So, great job.
+[20:58] You have a solid network foundation
+[20:59] setup for this game. Make sure to commit
+[21:02] what you've got working so far.
+[21:07] Okay, let's dig into the game scene.
+[21:10] When the player hits host game, we start
+[21:12] the server and move them into the game
+[21:14] scene. But there's no player there yet.
+[21:16] So, we need to set up our player spawn
+[21:18] functionality down in the scripts
+[21:19] folder. Let's create another one called
+[21:21] multiplayer.
+[21:25] This is the way I just organized it.
+[21:27] You're welcome to organize it any way
+[21:28] that makes sense to you.
+[21:31] Create a new script in that folder
+[21:32] called spawn manager.
+[21:36] Go ahead and open it up.
+[21:38] Do a bit of cleanup there and give it a
+[21:40] class name of spawn manager.
+[21:43] Create another folder called multiplayer
+[21:45] under the scenes folder.
+[21:48] Create a new scene and we'll call it
+[21:49] spawn manager.
+[21:52] And you can actually select the node
+[21:54] that points to the script we just
+[21:55] created.
+[21:57] Hit okay. Great. And you can actually
+[21:59] close that scene. We won't need to
+[22:00] operate on it. So go back into the game
+[22:02] scene and add back the ready function.
+[22:05] And here I want to load in the spawn
+[22:06] manager manually to the game, but I only
+[22:09] want to do it if we're the host. So
+[22:10] that's what we're going to do with the
+[22:12] ish hosting game property.
+[22:16] Make sure you load the scene and not the
+[22:18] script as indicated by TSCN.
+[22:23] Let's instantiate that scene. And then
+[22:25] we're going to add the spawn manager
+[22:27] scene to the game scene. So you may be
+[22:29] wondering why do we only add the spawn
+[22:31] manager on the host pier, but let's hold
+[22:34] off on that. We'll come back to it in a
+[22:35] minute. Let's demo the game again and
+[22:37] make sure that it gets added to the
+[22:38] scene. And to do that, after you've ran
+[22:40] the game session, go under the remote
+[22:42] tab, and you can see it says main menu,
+[22:45] but we're not actually on the main menu.
+[22:46] So that must mean we're under the wrong
+[22:48] game session. So click around till you
+[22:50] see the one that says game.
+[22:53] And you can see there the spawn manager
+[22:54] has loaded. Now, let's make sure it
+[22:56] doesn't load on the non-host client
+[22:58] pier. Select the other session. You can
+[23:01] see it's in game now, and there's no
+[23:04] spawn manager present. Great. So that's
+[23:05] working as expected. So, if you remember
+[23:07] back when I touched on connection
+[23:09] signals at the beginning of this video,
+[23:11] I want to use them to spawn our players
+[23:14] into the game. So, when a player
+[23:15] connects to the server, I want to
+[23:17] leverage the multiplayer API's peer
+[23:19] connected signal to know when to add
+[23:21] them. And we're going to take care of
+[23:24] that in the spawn manager script. So,
+[23:26] let's connect a function to our peer
+[23:28] connected signal. We're going to select
+[23:29] the peer connected signal from our
+[23:31] multiplayer APIs. And let's connect that
+[23:34] signal to a new function called peer
+[23:36] connected.
+[23:38] In the peer connected signal, we'll pass
+[23:40] in the network ID of the pier that just
+[23:42] connected. And we can print that out in
+[23:44] a debug statement. And since we have a
+[23:46] peer connected signal, we also want a
+[23:48] peer disconnected signal as well. So I'm
+[23:50] going to copy paste that line and add
+[23:52] disconnected
+[23:55] and a subsequent disconnect function as
+[23:56] well.
+[23:59] So let's test it out real quick. Hit
+[24:00] host game and then hit join game. You
+[24:03] can see pier connected with the ID 5280.
+[24:06] You get the idea. Great. Since we know
+[24:08] another player has connected to our
+[24:10] server, we can spawn their player into
+[24:12] the game. But you might be thinking,
+[24:14] well, there wasn't a peer connected
+[24:15] signal when the server joined the game.
+[24:17] Well, that's correct because it doesn't
+[24:18] actually fire because they are already
+[24:20] there. So, there is no peer connected
+[24:22] signal for the server. So, we're going
+[24:23] to have to manually add the host player
+[24:25] to the game. So, let's add a function
+[24:27] called add player to game. and we're
+[24:29] going to take in the network ID of the
+[24:31] pier. Now, before we can add the player
+[24:33] to the game, we need a reference to the
+[24:35] player scene. So, let's create a
+[24:36] reference variable at the top called
+[24:38] player scene. And this is going to be a
+[24:40] packed scene. This is a way to give us
+[24:42] access to a scene to load from file. How
+[24:45] is that player scene going to be set?
+[24:47] Well, if we go back to the game script,
+[24:49] let's set it during the creation of the
+[24:50] spawn manager.
+[24:53] And we don't have a reference to player
+[24:54] scene in the game script yet. So, let's
+[24:56] create one. We're going to export that
+[24:58] variable and it's going to be a pack
+[24:59] scene as well. And select the top level
+[25:01] game node. And you can see there's a
+[25:03] player scene exported here. Go ahead and
+[25:06] select it and hit quickload.
+[25:08] And then click on the player scene. And
+[25:10] you can kind of see the ship there in
+[25:12] the scene. So you know you've got the
+[25:13] right one selected. So now that we have
+[25:15] the player scene set in the spawn
+[25:17] manager, we can start adding the player
+[25:18] to the game. The first thing we want to
+[25:21] do is instantiate the player scene.
+[25:25] I like to set the player's name to the
+[25:28] network ID. This is actually a common
+[25:30] practice. You don't have to do it, but
+[25:32] it makes managing the player and
+[25:33] performing checks against which peer or
+[25:36] player you're working with much easier.
+[25:40] I want to also make sure that we have
+[25:42] the player authority set to the host or
+[25:44] server pier. And I'll touch on the
+[25:46] authority stuff in a minute. So, now
+[25:48] that we have the player ready, we need
+[25:50] to add them to the game scene. So, in
+[25:52] order to do that, we have to have a node
+[25:54] where the player actually gets added to.
+[25:56] So, let's create a new node 2D and call
+[25:58] it spawn path and mark the node as a
+[26:01] unique name.
+[26:03] That way, once the spawn manager loads
+[26:05] into the game, we can easily access it.
+[26:15] We access unique nodes by putting a
+[26:16] percent sign in front of the name. and I
+[26:19] misspelled it. So, make sure that the
+[26:20] name is also correct. So, let's add the
+[26:22] player to the spawn path.
+[26:25] And as a quick side note, this is a 2D
+[26:28] game, but if you are working in a 3D
+[26:30] game, the setup would be identical to
+[26:31] this, except you'd be working with node
+[26:33] 3Ds over here and also in the game tree.
+[26:37] Since the spawn manager loads as part of
+[26:39] the game scene, we can add the host
+[26:41] player as part of the ready function.
+[26:45] So make a call to add player to game.
+[26:47] And the network ID of the server or host
+[26:49] player will be one.
+[26:52] So let's give it a quick demo. Click
+[26:54] host game. And there's our ship. And it
+[26:56] just fell through the earth. Okay. So in
+[26:59] order to use the ship, let's uh go over
+[27:01] to the player script really quick. We
+[27:03] can clean up the default character
+[27:04] movements by removing the jump and
+[27:06] gravity because we're going to be in
+[27:08] space. We don't need those things.
+[27:11] and UI left and right means the arrow
+[27:13] keys. So, let's do another demo really
+[27:15] quick. You can kind of see the ship just
+[27:16] spawns at the default 00 or wherever
+[27:19] that is. And you can move left or right
+[27:22] and see the ship move on your screen.
+[27:24] Okay, so we've made some progress there,
+[27:26] but we can't do much else. So, if we hit
+[27:27] main menu, it goes back to the main menu
+[27:29] scene. And I think while we're here,
+[27:30] this is probably a good idea to actually
+[27:32] add the more advanced controls. So,
+[27:35] let's go under project settings,
+[27:38] input map, and let's add key bindings
+[27:40] for the WD keys. I'm going to call them
+[27:42] up, down, left, and right.
+[27:48] So, for up W,
+[27:52] down, S, left is A, and right is of
+[27:55] course D. W A SD. Okay. So, close that.
+[27:59] And then we're going to change these to
+[28:01] left, right, up, then down.
+[28:06] And since we are working in two
+[28:08] dimensions now, we need to add another
+[28:10] line here for the y direction.
+[28:14] Direction also has another dimension. So
+[28:16] let's do dox
+[28:18] and then doy.
+[28:20] And then also copy this line below and
+[28:23] change x to y in both places. And now we
+[28:27] should be able to move around on the
+[28:28] screen. And I also know we're going to
+[28:30] be going a bit slow, so let's speed it
+[28:32] up to 600. Post game. And now WD should
+[28:35] be able to move your ship around in all
+[28:38] the places that you can imagine. So if
+[28:40] we join game on the other client, you'll
+[28:42] notice that nothing happens. So let's
+[28:44] get the other player loaded into the
+[28:46] game. Head back over to the spawn
+[28:47] manager. And since we wired up this peer
+[28:50] connected signal to call the peer
+[28:51] connected function when another client
+[28:54] connects to the server, I think that's a
+[28:56] good time to add that player to the
+[28:57] game. So let's make a call to add player
+[29:00] and then pass in their network ID. Okay,
+[29:03] so we should have our second player into
+[29:04] the game, right? Let's give it a test.
+[29:06] Nothing's happened. I don't see any of
+[29:08] the players. Let's check our remote tab
+[29:10] to see what's going on.
+[29:14] There's nothing in our spawn path. Well,
+[29:15] that's weird. Are we under the wrong
+[29:17] session?
+[29:20] Well, this spawn path. Yeah. So, here is
+[29:22] the host server because we can see the
+[29:24] spawn manager is there. So, if we look
+[29:27] at the spawn path, you'll see the host
+[29:29] indicated by player one and then the
+[29:31] connected client indicated with their
+[29:32] network ID. So, there are two players in
+[29:34] the game. Where are they? Oh, they are
+[29:38] really far out of space. Okay. So, I
+[29:40] think what we need to do is fix our
+[29:42] spawn locations for the player. Okay.
+[29:44] Okay, so in the spawn manager, right
+[29:46] before we add the player to the spawn
+[29:48] path, let's set a spawn location for the
+[29:50] player based on the network ID.
+[29:54] And forgive me for just copy pasting
+[29:56] this code in, but you can have a look
+[29:57] for just a second. What I'm doing is
+[29:59] checking if the network ID is equal to
+[30:01] the host. And if it is, spawn it on the
+[30:03] left side of the screen. And I have some
+[30:05] minor randomization of where exactly
+[30:07] it's going to spawn over there. And I'm
+[30:09] setting it to the global transform of
+[30:11] the player we're about to add. So, if
+[30:13] you're not the host player, then we just
+[30:15] spawn them on the right side of the
+[30:16] screen based on these random ranges I
+[30:18] calculated earlier. You can adjust the
+[30:20] player's global transform or position if
+[30:23] you prefer to spawn them in a different
+[30:24] location. So, let's try it out. So,
+[30:27] host, you can see they're spawn on the
+[30:28] left side of the screen.
+[30:31] And for the client here, they are
+[30:32] spawned on the right. Great. But wait,
+[30:35] they're not on the other client. And
+[30:37] they're both moving when I use the input
+[30:39] controls on the keyboard. So, what's
+[30:40] going on there? Well, several things.
+[30:43] So, close that out. So, the spawn
+[30:45] manager is what adds them to the actual
+[30:48] spawn paths and readies the player for
+[30:50] the game play, but it doesn't actually
+[30:52] spawn the player and synchronize them
+[30:55] across the connected peers. So, that's
+[30:57] where a multiplayer spawner comes in.
+[30:59] So, go into the game scene and add a new
+[31:01] multiplayer spawner.
+[31:04] I like to move it to the top of the
+[31:06] scene. The multiplayer spawner is a
+[31:08] built-in node that GDAU provides that
+[31:10] can be used to spawn in nodes or scenes
+[31:12] into the game. For single player games,
+[31:14] when you want to add the player or an
+[31:16] enemy mob or anything you want to show
+[31:18] up during gameplay, you instantiate some
+[31:20] scene and add it to a node path in the
+[31:22] game tree. The multiplayer spawner
+[31:24] builds on this functionality, but it is
+[31:26] supercharged for multiplayer
+[31:28] compatibility as it will automatically
+[31:30] synchronize those added scenes across
+[31:32] all connected clients. So you'll see
+[31:35] right off the bat we have a couple
+[31:36] parameters. Spawn path limit and auto
+[31:38] spawn list. For the spawn path, well
+[31:40] that makes sense to use the spawn path
+[31:42] we already created. So drag that over.
+[31:44] And spawn limit sets the number of nodes
+[31:46] that are allowed to be spawned by this
+[31:47] spawner. If you leave it to zero,
+[31:49] there's no limit. So we're just going to
+[31:50] leave it to zero for now. Then the auto
+[31:52] spawn list, but we're going to want to
+[31:54] add the player to this. Select add
+[31:56] element, hit this load icon, and select
+[31:59] our player scene. Let's look at what the
+[32:01] multiplayer spawner is doing. we set the
+[32:04] player to auto spawn. What that's saying
+[32:07] is when this player scene gets added to
+[32:09] the spawn path, this spawn path right
+[32:12] here, the spawner will know to
+[32:14] automatically spawn that player and
+[32:16] synchronize it between the connected
+[32:17] clients. You can do this with other
+[32:20] things other than players, but for now,
+[32:22] we're going to use it just to
+[32:23] synchronize the player across the
+[32:24] connected clients. Let's do another
+[32:27] quick demo. You can see that the players
+[32:29] are there on the host, but they shot off
+[32:31] into space on the client. I don't know
+[32:32] if you saw that, but let's check the
+[32:34] remote tab to see if they're actually
+[32:35] spawned in the game.
+[32:39] So, we know we're on the server pier
+[32:41] because we can see the spawn manager has
+[32:43] spawned in, and we can see both players
+[32:45] are in the game. But what about the
+[32:47] other session for the client pier?
+[32:53] Great. You can see that it actually
+[32:55] spawned both players there, but they
+[32:57] shot off into space somewhere, as you
+[32:58] can see by the position. So, we're going
+[33:00] to have to fix that. go ahead and close
+[33:02] out this session. What we'll need to do
+[33:04] is synchronize their position so that
+[33:07] once they spawn into the game, the
+[33:09] position of them on the host pier will
+[33:11] be replicated to the client pier that's
+[33:13] connected. So, we need to synchronize
+[33:16] the location of our player. So, I'll go
+[33:18] over to the player scene. And in order
+[33:20] to do that, I want to use a multiplayer
+[33:22] synchronizer. Like the spawner, the
+[33:24] multiplayer synchronizer is another
+[33:27] built-in tool that GDAU offers to
+[33:28] simplify some common multiplayer
+[33:31] functionality. In this case, by default,
+[33:33] it synchronizes configured properties
+[33:35] from the authority to all connected
+[33:37] peers. This is helpful if you know you
+[33:39] have some properties that you want to
+[33:41] synchronize, but aren't necessarily
+[33:43] event-based, like syncing a player or
+[33:45] enemy mob's position, maybe their
+[33:47] health, some debuff or status on the
+[33:50] player or powerup. It has a few settings
+[33:51] you can adjust like sync on spawn and
+[33:53] how often the property should be
+[33:55] replicated. So add one to the top of the
+[33:57] player scene.
+[34:00] Make sure the room path is set to player
+[34:03] and you can leave the public visibility
+[34:05] selected. With the multiplayer
+[34:07] synchronizer selected, you should see a
+[34:09] new replication tab show up at the
+[34:11] bottom. The easiest way to sync a
+[34:13] player's position is with its position
+[34:15] property. Hit add property to sync.
+[34:19] Select the player. Hit okay. Look for
+[34:21] position.
+[34:23] Select it and hit open. And now you can
+[34:25] see that we are synchronizing the
+[34:27] players position property. So that's a
+[34:29] property that's underlying or built in
+[34:31] to the character body 3D. And you'll
+[34:34] notice there's two headings, spawn and
+[34:36] replicate. Spawn is for do we want to
+[34:38] synchronize the player's position on
+[34:40] spawn? And yeah, we do because we want
+[34:42] them to spawn in a specific location
+[34:44] across connected clients. And then when
+[34:47] do we want to replicate them? Well,
+[34:48] because we're going to be moving around,
+[34:50] let's leave replicate set to always. If
+[34:52] I use the input controls on the host,
+[34:54] it's actually applying that motion to
+[34:56] both ships across the connected peers,
+[34:58] and that's not what we want. And if you
+[35:01] try to use the input controls on the
+[35:02] connected pier, you'll see the ships are
+[35:04] just shaking around a bunch, and you
+[35:06] can't really move them. Let's do a quick
+[35:08] check over in the remote tab,
+[35:11] and I select the host player. You'll
+[35:13] notice that the node is assigned
+[35:14] multiplayer authority one. Well, what
+[35:17] about the other player? It's also
+[35:19] assigned authority to one. Oh, am I in
+[35:22] the wrong session? Let's check the other
+[35:23] session.
+[35:25] So, this is actually the host. So, what
+[35:28] does it say? Multiplayer authority 1.
+[35:31] Multiplayer authority 1. So, if we go
+[35:33] back to the other client,
+[35:35] which is the player two that's
+[35:37] connected, both of its authorities are
+[35:39] assigned to one. So, why can't you move?
+[35:42] Well, it's because the multiplayer
+[35:43] authority is set to one. That's why you
+[35:46] can't move your player on your client.
+[35:49] Okay, that's great. But what does the
+[35:50] server having authority over everything
+[35:52] have to do with why I can't move my
+[35:54] player? Well, for our current setup,
+[35:56] when we gather inputs for our player
+[35:58] under the physics process function
+[36:00] inside the player script, this chunk of
+[36:02] code runs as part of every instance of
+[36:05] your player. That means on your game
+[36:07] client and on the host client.
+[36:09] Specifically, this input.get get vector
+[36:11] is gathering inputs from the host and
+[36:14] your local game client. But since the
+[36:16] host client has authority, the inputs
+[36:18] that it gathers, including no input at
+[36:21] all, overrides any keyboard inputs you
+[36:23] would make. In multiplayer games, there
+[36:25] will always be this concept of
+[36:27] authority. I like to think of it as who
+[36:29] can make the changes or who has
+[36:31] ownership. Okay, make changes to what?
+[36:33] Ownership of what? Well, anything in the
+[36:35] game. This applies to the game world,
+[36:37] objects, players, and even actions taken
+[36:39] in the game. It's about who can
+[36:41] manipulate or change properties. For
+[36:43] competitive games, we may have a server
+[36:46] build somewhere or in our case where we
+[36:48] have someone acting as the host for the
+[36:49] game that will be assigned authority. By
+[36:52] default, everything on the server pier,
+[36:54] you know, the game instance that runs
+[36:55] the create server function will be given
+[36:58] authority. We call it server
+[36:59] authoritative. In GDAU, that pier will
+[37:02] be assigned a network ID of one. It also
+[37:04] means anything spawned in the game,
+[37:06] regardless of peer, will have server
+[37:08] authority by default. Any client that
+[37:11] connects and joins the game will have
+[37:12] the entire game world, including the
+[37:14] player, assigned to that default
+[37:16] authority. This points back to the
+[37:18] reason why you cannot move your player.
+[37:19] It is completely owned by the authority.
+[37:22] If our client tries to spawn something,
+[37:23] it still has server authority. You
+[37:26] cannot change it unless we assign
+[37:27] authority over the object to that
+[37:29] client. Having a single peer hold
+[37:31] authority of where everything should be
+[37:33] in the game ensures consistent gameplay
+[37:35] for all players and helps reduce
+[37:37] cheating. It's responsible for
+[37:38] reconciling behavior in the world from
+[37:40] the interactions of many players. I'm
+[37:43] already in the weeds on this, but I'll
+[37:45] put some more links in the description
+[37:46] so you can learn more about this
+[37:48] fundamental concept. So sorry for the
+[37:50] lengthy detour, but if we head back to
+[37:52] the player script, this physics process
+[37:54] is ran on your pier, your local game
+[37:57] client, but it's also executed on the
+[38:00] other peers instance of the game. In
+[38:02] this case, that's the server
+[38:03] authoritative pier or the host. Since
+[38:06] the server pier has authority, any
+[38:08] movements that you try to apply will be
+[38:10] overwritten by the server's version of
+[38:12] your player's position. So that's why
+[38:14] you're seeing jitters or shaking when
+[38:16] you're trying to move the player on the
+[38:18] client pier. You're basically fighting
+[38:20] where the authority pier says your ship
+[38:22] has to be. So it's snapping it back into
+[38:24] place every time you try to move it. So
+[38:26] how do we fix that problem? Well, we
+[38:28] need a way for the other connected
+[38:30] players to tell the server where it
+[38:32] wants to move. So the first thing I want
+[38:34] to do is under the player scene, let's
+[38:36] create another node and call it player
+[38:38] input and also add a new script to it.
+[38:42] Change the class name to player input
+[38:45] and add a process physics function. Add
+[38:47] a variable at the top for input
+[38:49] direction and that's going to be type
+[38:50] vector 2. So we'll set the input
+[38:53] direction to the input.get vector that
+[38:56] we set up earlier in the player script.
+[38:58] So you can basically just copy paste
+[39:00] that over into the player input. So we
+[39:03] need to add a reference to this player
+[39:04] input to the player script. Create a new
+[39:06] export variable at the top.
+[39:09] Select the player in the tree.
+[39:12] and drag over the player input node and
+[39:14] then update the physics process to
+[39:16] retrieve the input direction from the
+[39:18] new player input node.
+[39:21] So, we haven't really changed anything.
+[39:22] We just moved the logic over into
+[39:24] another node. So, why are we going to do
+[39:26] that? Well, it's because we need a way
+[39:28] for the player to inform the server
+[39:30] where it wants to move. Meaning, we want
+[39:32] to give the player authority over their
+[39:34] own inputs. So instead of the server
+[39:37] telling us where we are, we're going to
+[39:39] tell the server where we want to go by
+[39:41] sending it our inputs. So we need to add
+[39:44] another function called enter tree. So
+[39:46] this is called very early on when a node
+[39:48] is added to the tree. So we need to
+[39:50] change the authority over the player
+[39:52] inputs to that local player client. So
+[39:54] we're going to do that by calling set
+[39:56] multiplayer authority
+[40:00] and we're going to set the authority to
+[40:01] the name which we gave to the player.
+[40:04] And if you remember back when we spawned
+[40:06] the player into the game, we set the
+[40:08] player's name equal to the network ID.
+[40:12] And that's exactly how you set the
+[40:14] multiplayer authority. It's always
+[40:16] assigned based on the network ID. Let's
+[40:19] jump back over to the player input
+[40:20] really quick. And if you remember, this
+[40:22] is going to be running on every instance
+[40:24] of the player. So wherever this player
+[40:26] exists or is running around in the game,
+[40:28] this will also be running. But we only
+[40:31] want to collect the inputs from the
+[40:33] local player or local client controlling
+[40:36] this player. So we need to wrap this
+[40:38] with an authority check.
+[40:41] However, in this case, we won't be
+[40:43] checking if this is the server or host
+[40:45] authority. We'll be checking that this
+[40:48] is running only on the client pier,
+[40:50] which now has authority over the player
+[40:52] input object because we just set it
+[40:54] right here with this line. So the player
+[40:57] itself will have server authority, but
+[40:59] the player input node will be assigned
+[41:02] authority which has this attached script
+[41:05] to it, which means if we wrap it with
+[41:07] this multiplayer authority check, it's
+[41:09] only going to gather this input
+[41:11] direction on that local client's pier.
+[41:15] I hope that makes sense. However, we
+[41:18] still haven't told our server, right?
+[41:21] because we're gathering this on the
+[41:22] local client, we still need to tell the
+[41:24] server what this input direction is. So,
+[41:27] in order to do that, we're going to need
+[41:29] another multiplayer synchronizer.
+[41:32] So, under the player input node, add
+[41:35] another multiplayer synchronizer. Call
+[41:36] it input synchronizer. Change the root
+[41:39] path to player.
+[41:42] And for now, we'll leave public
+[41:43] visibility on, but I think we're going
+[41:45] to change that in a minute. In the
+[41:46] replication tab,
+[41:48] type out player input because this path
+[41:52] is based on the root. And since the
+[41:54] player is the root, the path is going to
+[41:56] be player input and then input direction
+[41:58] because that's a property inside player
+[42:00] input script. And we'll go ahead and
+[42:03] start synchronizing that on spawn. And
+[42:05] we're going to always replicate that. So
+[42:07] anybody that has access to this
+[42:09] synchronizer will be getting or
+[42:12] receiving the input direction property.
+[42:15] Hence the public visibility checkbox. So
+[42:18] what this is doing is now when we use
+[42:20] our keyboard inputs, the input direction
+[42:23] property is synchronized to all
+[42:25] connected peers. So now when the server
+[42:28] runs the physics process for the player,
+[42:32] the input direction is now sourced from
+[42:34] what the client's inputs synchronized to
+[42:36] it. which is why we wrap the player
+[42:39] input code in an authority check because
+[42:42] we don't want the server pier to
+[42:43] overwrite the input direction,
+[42:45] especially when you're testing two
+[42:47] different peers on the same machine.
+[42:49] That said, this physics process is still
+[42:52] being executed on all instances of the
+[42:54] player. But since this is server
+[42:57] authoritative, we really don't need to
+[42:59] be setting direction on our local pier.
+[43:02] We only really tell the server our
+[43:04] inputs and then let the server make
+[43:06] those calculations of where the player
+[43:08] should be moving to and then the server
+[43:10] synchronizes that position back to our
+[43:13] clients.
+[43:14] Because of that, it still may cause some
+[43:17] shaking when you try to move the
+[43:18] players. If you do a quick demo at this
+[43:21] point, you can see that I can control
+[43:23] the host independently from the client.
+[43:27] I don't see too much shaking going on.
+[43:29] Maybe a little bit. It's not really
+[43:31] apparent in the recording, but I'm
+[43:33] suspicious that that may cause issues in
+[43:35] the future. So, let's go back to the
+[43:36] code
+[43:38] and let's wrap all of this movement with
+[43:41] an authority check.
+[43:44] So, now where does this code get
+[43:46] executed? I'll let you think about it
+[43:48] for a second.
+[43:51] If you said on the server or host, you'd
+[43:53] be correct. This is multiplayer
+[43:55] authority check only applies to the
+[43:57] player which is still owned by the host
+[44:00] or server peer. Remember we only change
+[44:03] the multiplayer authority over the
+[44:05] player's inputs not the actual player
+[44:07] itself. So the servers instance of this
+[44:10] player will get the updates from what
+[44:12] the player's pushing on the keyboard.
+[44:14] Right? So, their player inputs, it
+[44:16] applies, now that we're on the server,
+[44:18] on the server instance, it will apply
+[44:20] those inputs that it got from the client
+[44:22] pier to the player's velocity.
+[44:26] Move the player and then because we're
+[44:28] synchronizing the position, the server
+[44:31] now synchronizes the position of that
+[44:33] player back to the connected peers.
+[44:36] And then you'll see it move on the
+[44:37] screen. If you are thinking, well, isn't
+[44:39] that going to cause lag? you're doing a
+[44:41] whole round trip before you move the
+[44:43] player. Yes, it absolutely will cause
+[44:46] lag. The second you get off your local
+[44:48] computer, maybe even move this to
+[44:50] another computer on your local network.
+[44:52] You are very likely to see some lag show
+[44:54] up. Once you are ready, we'll introduce
+[44:56] lag compensation to help with this
+[44:58] problem. If you are feeling ambitious, I
+[45:01] already have a few videos on that that
+[45:03] you can check out after this one. If
+[45:05] you'd like me to continue with this
+[45:06] series, let me know down below and I can
+[45:09] show you how to add lag compensation to
+[45:11] this example. Run a quick demo of the
+[45:13] game. And let's have a look at the
+[45:15] remote tab.
+[45:19] So, right now, we know we're on the
+[45:20] client because we don't see the spawn
+[45:22] manager. So, let's go down to the
+[45:24] debugger tab and change session.
+[45:28] And let's click on the host player,
+[45:30] which is the little player character
+[45:32] with the name of one.
+[45:34] And notice the multiplayer authority is
+[45:36] one
+[45:38] and they have a player input object. So
+[45:40] let's look at that. The player input
+[45:43] owned by the host server is one. That's
+[45:46] what we expect. But if we look at the
+[45:48] other players pier,
+[45:52] the multiplayer authority is now set to
+[45:55] the peer ID of the client that's
+[45:57] connected to it. So we know that even
+[45:59] though the player has a multiplayer
+[46:02] authority of one, the input is now
+[46:04] updated to whatever the network ID is of
+[46:06] this pier. That's exactly what we want.
+[46:09] So anything under this node, including
+[46:11] this synchronizer, will also contain
+[46:13] that same authority.
+[46:16] So because of that,
+[46:18] we can now move around on the connected
+[46:21] client and use our keyboard inputs that
+[46:24] will synchronize to the host pier.
+[46:28] And you'll see that ship move around.
+[46:31] Even though this does a round trip, it,
+[46:32] you know, you can't really see any lag
+[46:34] because it's on one computer, there is
+[46:36] definitely a round trip there. And if we
+[46:38] look on our host here, we try to move
+[46:41] the player around. It is also correctly
+[46:43] synced because well, it's the authority
+[46:44] and it has the authority to do that. And
+[46:47] that said, we take a peek back at our
+[46:50] code. I did wrap all that movement code
+[46:53] with an is authority check. So none of
+[46:56] this code is running on the client
+[46:59] connected pier. It is only running on
+[47:01] the host pier. So that really hammers
+[47:04] home the fact that we're moving the
+[47:06] player on the host and then
+[47:08] synchronizing their position back to
+[47:10] this. So you're not actually moving the
+[47:12] ship when you press your keyboard.
+[47:14] You're just telling the server host,
+[47:15] hey, this is where the player wants to
+[47:17] go. The server applies the input that it
+[47:20] received from you and then moves the
+[47:22] player and then synchronizes that motion
+[47:24] back to the other peers.
+[47:26] You may be wondering, why don't you just
+[47:28] give authority over the whole player?
+[47:30] Why just the inputs? Well, you can if
+[47:32] that's appropriate for your game type.
+[47:34] Okay, but what do I mean by that? Well,
+[47:36] some games have a different network
+[47:37] topology or network model where it is
+[47:40] suitable to have that full client
+[47:42] authority setup. We generally refer to
+[47:44] that as P2P or distributed authority.
+[47:46] There is a time and place for that
+[47:48] model. Co-op games is one example. Or
+[47:50] maybe you just don't care about cheating
+[47:52] and you want a free-for-all. Distributed
+[47:54] programming comes with additional
+[47:55] complexities, so you'll have to keep all
+[47:57] that in mind. I'll link to a good
+[47:59] article by Moss Bandwidth that you can
+[48:01] check out for further details. I also
+[48:03] think it's important to at least mention
+[48:05] what network topology we are
+[48:06] constructing here. Network topologies
+[48:08] are like P2P, dedicated server, or relay
+[48:11] to name a few highle categories. There
+[48:14] are many variations of granularity for
+[48:16] each of these, but that's way out of
+[48:18] scope for this video. This demo where
+[48:20] one player access the host and authority
+[48:22] and all other peers basically render the
+[48:24] visual components simulated from the
+[48:26] server is considered client server with
+[48:29] an authoritative client host. That's a
+[48:32] mouthful. Sometimes I refer to this as
+[48:34] P2P client host as technically you are
+[48:37] connecting to another player along with
+[48:39] all the other players in the game. I
+[48:41] would say this is a fairly common setup
+[48:43] and works well when you want to use
+[48:45] Steam plus you can rely on their free
+[48:47] network. But again, this decision relies
+[48:49] heavily on your game type. I know that's
+[48:51] a lot to take in, but the more you do
+[48:53] this and the more you practice and
+[48:54] struggle with it, the more it will make
+[48:56] sense. And let's go one step further.
+[48:58] Let's select the input synchronizer for
+[49:00] the player inputs and uncheck public
+[49:03] visibility. And if we look at the docs,
+[49:05] it says synchronization should be
+[49:06] visible to all peers by default. So
+[49:09] there are ways using set visibility for
+[49:11] or add visibility filter to configure
+[49:13] fine grain visibility options. So, what
+[49:15] I'd like to do is limit the public
+[49:18] visibility to only broadcast my player
+[49:21] inputs to the server. We don't really
+[49:24] need to do this for this game because
+[49:25] it's only a two-person game, but if you
+[49:27] were working on a more than twoperson
+[49:29] game, you may not want to broadcast the
+[49:31] inputs to all players. So, to change
+[49:33] that, let's get a reference to the input
+[49:35] synchronizer.
+[49:37] Oh, and by the way, we need to add a
+[49:39] class name to player up here. So, now
+[49:42] that we've created an export for the
+[49:43] input synchronizer, select the player
+[49:45] object and connect that input field.
+[49:48] Perfect. And let's create a new ready
+[49:51] function. And we're going to use the set
+[49:53] visibility for function to only send
+[49:56] data to peer number one. And then, of
+[49:58] course, we have to say whether or not
+[50:00] that data is going to be visible or not.
+[50:01] So, let's just say true. So, we're
+[50:03] setting the visibility of the input
+[50:05] synchronizer to only go to this pier,
+[50:09] and we're going to set it to true, which
+[50:10] means yes, it's going to be I guess you
+[50:11] can just toggle off the visibility if
+[50:13] you needed to do that. So, let's just do
+[50:14] a quick demo of that. But I want to
+[50:16] launch three windows. So, we'll host
+[50:18] game and join as a client and then join
+[50:21] as another client. You can see that all
+[50:24] three can move independently depending
+[50:26] on which window you have selected will
+[50:28] be synchronized as expected. And that's
+[50:30] exactly what you want to see. And we did
+[50:32] that with only setting the visibility to
+[50:35] the host pier. Okay. But why did you
+[50:38] show us that? What's the significance?
+[50:40] Well, I want to highlight the visibility
+[50:42] setting on the synchronizer as it can be
+[50:44] useful to limit which peers or players
+[50:47] in the game receive that data. That can
+[50:49] be important. Say in the case where
+[50:51] maybe a player is stealth and you don't
+[50:53] want to share that data with other
+[50:54] players, game clients, or maybe the
+[50:57] player's too far away or has some hidden
+[50:59] powerup. Regardless of the numerous
+[51:01] scenarios this can pertain to, I just
+[51:04] want you to be aware that there are
+[51:05] tools like set visibility for and
+[51:08] replication mode that can be used on the
+[51:10] multiplayer synchronizers to solve some
+[51:12] of the problems you may run into. This
+[51:14] example demonstrates how to limit
+[51:16] sending your input data to only the
+[51:18] host. But you can imagine if we didn't
+[51:20] limit it to just the host, there's a
+[51:22] potential exploit here where you may
+[51:24] know what the other player is doing
+[51:25] before it's rendered on the screen. And
+[51:27] while you commit this latest round of
+[51:29] changes, I want to wrap up this section
+[51:30] with a quick comment on the multiplayer
+[51:33] spawner. If you have an ongoing game and
+[51:35] there are mobs or something that have
+[51:36] already been spawned in with a
+[51:38] multiplayer spawner, by default, they
+[51:40] will automatically show up for the other
+[51:42] players when they join in. So, out of
+[51:44] the box, the multiplayer spawner will
+[51:46] synchronize whatever objects it's
+[51:48] responsible for to those late joining
+[51:50] clients.
+[51:55] Let's select a different ship for player
+[51:57] two. So, if we look at the animated
+[52:00] sprite that I've already pre-loaded, we
+[52:01] have two animations. Default, which is
+[52:04] the player one ship, and ship two, which
+[52:07] is going to be for any connected pier
+[52:09] other than the host.
+[52:11] So, let's create a constant that maps to
+[52:13] those
+[52:17] and another export for the selected
+[52:18] ship. And we'll default it to the
+[52:21] default ship type.
+[52:23] We select our player. You can see that
+[52:25] it's been set to default. We're going to
+[52:28] export a variable to the player sprite,
+[52:30] which is the animated sprite 2D that
+[52:32] we've got there. If we select our player
+[52:34] object, drag over the animated sprite
+[52:37] 2D, and then down in our ready function,
+[52:40] let's kick off the animation to the
+[52:42] default selected ship. Since the
+[52:44] selected ship defaults to the player one
+[52:46] animation, we need to add something over
+[52:48] in the spawn manager that will set the
+[52:50] selected ship to the player two ship in
+[52:53] the add player to game function. I'm
+[52:55] going to piggyback on this network check
+[52:56] conditional here. Meaning if it comes to
+[52:59] the else statement, we know it's the
+[53:00] player two instance. So let's set the
+[53:03] selected ship for player two here.
+[53:07] And we're going to set the selected ship
+[53:08] to the first index of ship types, which
+[53:11] back in the player script maps to ship
+[53:13] 2. And if we look at the animated sprite
+[53:16] 2D, ship 2 is this animation here. So
+[53:19] let's run a quick demo. And you can see
+[53:22] it didn't work. Close out that session.
+[53:24] So why isn't this working? So even
+[53:26] though the selected ship is set on the
+[53:28] player, the other connected peers have
+[53:30] no idea what it was selected to. So we
+[53:32] need to be able to synchronize this
+[53:34] selected ship property. So to do that
+[53:36] over in the player scene, select
+[53:39] multiplayer synchronizer and paste in
+[53:41] selected ship. You do not want to type
+[53:43] out player colon selected ship. That
+[53:46] will cause an error. Just type in
+[53:48] selected ship because the root of this
+[53:50] node is set to player. It should
+[53:52] automatically pick it up and give you
+[53:53] player colon selected ship. Also, we
+[53:56] only want to synchronize on spawn
+[53:58] because for this demo, we're not going
+[53:59] to change the ship in the middle of the
+[54:01] game. So that means we can change this
+[54:03] replicate property to never. And you can
+[54:06] see now we have the ship for the
+[54:07] connected pier or player two that is
+[54:09] different from the host pier. Great. So
+[54:12] now we have player one and player two
+[54:14] moving around in the scene with their
+[54:16] different respective ship animations.
+[54:17] And to test something out really quick
+[54:19] while we're here, hit the main menu
+[54:20] button on your client and then hit join
+[54:23] game again. You'll notice that we have a
+[54:26] leftover ship kind of floating in space
+[54:28] there. It's kind of neat. it will
+[54:29] actually get attached to the collision
+[54:32] shape and kind of stop you from moving.
+[54:34] So, we need to have a way to clean up
+[54:35] that extra ship in case you leave the
+[54:37] game and come back in. We don't want to
+[54:39] see any extraneous ships floating around
+[54:41] there. So, back in the spawn manager,
+[54:43] when a pier disconnects, let's remove
+[54:44] them from the game.
+[54:47] We're going to leverage the spawn path
+[54:49] of where they were added. Find them by
+[54:51] network ID.
+[54:53] And in this case, we need to set this
+[54:55] owned to false as it's defaulting to
+[54:58] true. Otherwise, we won't be able to
+[55:00] find the player correctly.
+[55:02] So, if we find a player to remove, let's
+[55:04] delete them from the game. And we can do
+[55:06] that with a call to Q free. So, let's
+[55:08] make sure that's working. Can move both
+[55:10] players around. Go back to the main menu
+[55:12] on our client. Join game again. And as
+[55:15] you can see, there's no longer an extra
+[55:16] player there. And to double triple
+[55:18] check, go under the remote tab.
+[55:22] You can see there's no spawn manager.
+[55:24] So, we know we're on the client pier.
+[55:26] this one. You can see there's only two
+[55:28] players there. Now, let's double check
+[55:30] the debug tab. Oh, we have some errors.
+[55:32] We'll come back to in a second. Go to
+[55:34] the other session, which in this case is
+[55:36] the host session because we see our
+[55:38] spawn manager and there's only two
+[55:39] connected peers, which is what we
+[55:41] expect. Great. So, let's have a look at
+[55:43] what our errors are. No multiplayer peer
+[55:45] is assigned, unable to get unique ID.
+[55:48] Okay. So what'll happen sometimes is
+[55:51] when your player script is running,
+[55:53] there's multiple instances of it, right?
+[55:56] It's on your local machine on other
+[55:58] connected peers machines as well. If the
+[56:00] network connection is severed and this
+[56:02] authority check is still being ran by
+[56:04] one of the instances of that, it will
+[56:07] actually throw an exception and say we
+[56:09] can't actually check for authority
+[56:10] because we don't have a multiplayer peer
+[56:12] established right now. So, there's a
+[56:15] quick workar around to fix that, and
+[56:16] that is to add a check for
+[56:20] do we have a multiplayer pier. So, I'm
+[56:23] just going to add that there. And you
+[56:24] may notice this pop up in a couple other
+[56:26] places. Let's see if it is actually
+[56:28] already doing that. Yeah, right here
+[56:29] under this physics process. So, let's go
+[56:30] ahead and add that check here as well
+[56:32] underneath the player input script.
+[56:35] And if we run through the act of
+[56:37] quitting and joining back to the game,
+[56:41] you can see there's no more errors down
+[56:43] below.
+[56:45] So now let's shoot some stuff. Head back
+[56:47] over to the player script. And let's
+[56:49] create a new script called weapon.
+[56:57] And we're going to attach that script to
+[56:58] a new node in our player scene. It's
+[57:01] going to be type node 2D.
+[57:04] and just name it weapon.
+[57:08] Attach the script you just created.
+[57:11] Great. Next, let's create a scene.
+[57:15] Set its type to area 2D.
+[57:19] We'll name it projectile.
+[57:22] Let's attach a new script to it with the
+[57:24] same name.
+[57:29] And we'll come back to that in a second.
+[57:30] Head back to the weapon script and let's
+[57:32] export some references to a few things.
+[57:44] So, this weapon is going to need access
+[57:45] to the player inputs, the projectile
+[57:48] scene we just created, and then a spawn
+[57:50] path for that projectile. But first,
+[57:51] let's head back over to the player input
+[57:53] script. Add a signal for weapon fired.
+[57:56] Then in our physics process, we need to
+[57:59] check to see if the fire input was
+[58:00] pressed. Use the is action just pressed.
+[58:04] We'll call that fire. And then we'll
+[58:06] emit the signal that we just created.
+[58:10] But wait, we don't have a fire action
+[58:12] yet. So let's go create one. Project
+[58:13] settings input map. New action called
+[58:16] fire. I'm going to map it to spacebar.
+[58:19] You can map it to left click on a mouse
+[58:22] or whatever button you'd like. Head back
+[58:24] to our weapon script and the player
+[58:26] scene. And let's wire up the player
+[58:29] input and select the projectile scene.
+[58:34] We need a projectile spawn path. So,
+[58:36] let's go ahead and add that. It's going
+[58:39] to be another node 2D. Name it
+[58:40] projectiles. There are a few ways to
+[58:43] approach how we can go about spawning
+[58:44] and synchronizing projectiles. For this
+[58:47] specific demo, I'm going to stick with
+[58:49] using GDO's highle multiplayer spawner
+[58:51] and synchronizer. But once you get the
+[58:54] hang of the basics, you'll likely need
+[58:55] to upgrade to something that's a little
+[58:57] bit more latency friendly. And don't
+[58:59] forget to drag over the projectiles node
+[59:01] over to the projectile spawn path.
+[59:05] In the ready function, connect the
+[59:07] weapon fire signal to a new function
+[59:09] called weapon fired. Let's call to a new
+[59:12] function called spawn projectile.
+[59:16] So basically what we're going to do is
+[59:18] when I hit the space bar
+[59:21] that emits this weapon fire signal, our
+[59:23] weapon is going to listen for if that
+[59:25] signal is emitted through this
+[59:26] connection here. And when it is, it
+[59:29] calls to this weapon fire function,
+[59:30] which will spawn our projectile. First,
+[59:33] we need to instantiate the projectile
+[59:35] scene.
+[59:36] And let's spawn the projectile at the
+[59:38] same location as the ship that's firing
+[59:40] it.
+[59:43] First, we need a reference to the parent
+[59:45] player,
+[59:47] which we can get once the player scene
+[59:49] loads with this call to get parent.
+[59:51] Since we want to spawn this projectile,
+[59:53] we need to add it somewhere to the game.
+[59:55] Unfortunately, we already created that
+[59:56] with this projectile spawn path. So,
+[59:58] grab a reference to that
+[1:00:01] and add the projectile as a child.
+[1:00:04] We've got a good start on the weapon
+[1:00:06] scene, but let's dig in over to the
+[1:00:08] projectile script for a minute. Let's
+[1:00:10] add a animated sprite 2D.
+[1:00:13] Select the sprite frames quickload. And
+[1:00:16] I already have a projectile sprite
+[1:00:17] frames resource added. So just select
+[1:00:19] that. If you take a look at it, it just
+[1:00:21] looks like a little missile. Oh, and
+[1:00:23] while we're in here, make sure the
+[1:00:24] autoplay unload is set for the default
+[1:00:27] animation. Perfect. Oh, and here's the
+[1:00:29] explode animation. We'll get to that in
+[1:00:31] a second. And because this is pointing
+[1:00:32] in one direction, we'll need to be able
+[1:00:34] to change it based on which player
+[1:00:36] shoots it. So, we need to grab a
+[1:00:37] reference to that animated sprite.
+[1:00:41] Let's drag that reference over. When the
+[1:00:43] projectile is spawned, we need to figure
+[1:00:44] out which direction to spawn it so that
+[1:00:46] the animation plays correctly. So, let's
+[1:00:48] create a variable to track that. I'm
+[1:00:50] going to create something called flip
+[1:00:51] projectile.
+[1:00:55] And if it's true, we'll flip it. But I'm
+[1:00:58] not exactly sure which direction it
+[1:00:59] spawns to begin with. So, let's just
+[1:01:00] check and see first. So, it's spawning
+[1:01:02] in the wrong direction by default or on
+[1:01:04] the host pier. So, let's flip it the
+[1:01:06] other way when it's the host, which
+[1:01:08] means I'm going to set this to true by
+[1:01:10] default.
+[1:01:12] Great. Now, it's the correct direction.
+[1:01:13] Now, we need to change this to false if
+[1:01:15] it's the client pier that joins. So,
+[1:01:17] back in our weapon script, let's add a
+[1:01:19] check to see which player it is.
+[1:01:22] So, if it's not the host, let's not flip
+[1:01:25] the projectile. This is getting a little
+[1:01:26] confusing.
+[1:01:28] Maybe I should just flip the projectile
+[1:01:30] in the sprite frames by default, but you
+[1:01:33] get the idea. I'll let you sort that out
+[1:01:35] if you need to. So, let's run a test.
+[1:01:39] And it looks like we're not going to be
+[1:01:40] able to test that yet because we haven't
+[1:01:42] finished spawning our projectile. So,
+[1:01:44] let's go back to the player scene. And
+[1:01:47] we need to add a multiplayer spawner to
+[1:01:49] the weapons so we can get the
+[1:01:50] projectiles to synchronize across the
+[1:01:51] clients.
+[1:01:55] and let's set the spawn path to
+[1:01:57] projectiles.
+[1:01:58] And then our auto spawn list, let's
+[1:02:01] select the projectile scene.
+[1:02:05] This is very similar to what we did with
+[1:02:06] the player. So, if we do a quick demo,
+[1:02:10] it's spawning on the host and it's also
+[1:02:12] moving around with the movement of the
+[1:02:14] ship, which we got to fix. But on the
+[1:02:16] client, it's not spawning at all. So,
+[1:02:18] what's going on there? Well, if you
+[1:02:20] think back to that whole authority
+[1:02:22] thing, this weapon fire is called from
+[1:02:25] the local client. So, the connected pier
+[1:02:28] because if we look back at player input,
+[1:02:30] remember this whole is authority check.
+[1:02:33] This is only admitted on the local
+[1:02:35] client.
+[1:02:37] H well, that's going to cause a problem
+[1:02:39] because if it's only admitted on the
+[1:02:40] local client,
+[1:02:42] this weapon signal will only fire and
+[1:02:44] the server has no idea that you want to
+[1:02:46] actually spawn the projectile. So, what
+[1:02:49] does this sound like? a good use case
+[1:02:50] for. If you said RPC, you'd be correct.
+[1:02:53] So, let's turn this spawn projectile
+[1:02:55] function into an RPC so that our players
+[1:02:58] can communicate to the server that they
+[1:03:00] want to fire a weapon.
+[1:03:02] For this setup, we want any connected
+[1:03:04] pier to be able to call to it, which is
+[1:03:07] good because that allows us to tell the
+[1:03:08] server what actions we want to perform.
+[1:03:10] And we're also going to call local so
+[1:03:12] that when the host player wants to spawn
+[1:03:14] a projectile, it also runs as well.
+[1:03:17] However, the call local also means that
+[1:03:19] on the connected client, it will also
+[1:03:22] run locally and on the host authority.
+[1:03:24] And we really don't want it to do that.
+[1:03:27] We don't need to be adding extraneous
+[1:03:29] childs on the local client because we're
+[1:03:31] spawning it with a multiplayer spawner.
+[1:03:33] That's going to cause some problems. So,
+[1:03:35] let's wrap this spawn projectile with a
+[1:03:38] is multiplayer authority conditional.
+[1:03:41] And in this case, the authority is the
+[1:03:44] host or server. So even though it will
+[1:03:46] be called locally on the client pier,
+[1:03:50] it's just going to be ignored because
+[1:03:51] the client pier is not the authority to
+[1:03:53] spawn projectiles.
+[1:03:57] So remember, we need to come up to this
+[1:03:58] spawn projectile function and make it an
+[1:04:01] RPC call. And now that I said all that,
+[1:04:04] we're going to make one more change that
+[1:04:05] will make this conditional call to is
+[1:04:07] multiplayer authority kind of
+[1:04:09] irrelevant. So what I mean by that is
+[1:04:11] with this RPC function, we can actually
+[1:04:13] call to specific peers. So if we know we
+[1:04:17] only want to contact the host or
+[1:04:19] authority in this case, let's just put
+[1:04:21] the host authorities network ID here. So
+[1:04:24] that this will only be called on the
+[1:04:26] host. It can be called from any other
+[1:04:28] connected pier, but it's only going to
+[1:04:30] execute on the host itself. And because
+[1:04:33] we have call local here, when the host
+[1:04:35] calls it, it will also be called on its
+[1:04:37] own pier so that it will correctly spawn
+[1:04:40] the projectile. So technically, we don't
+[1:04:43] really need this is authority check
+[1:04:44] here, but I'm going to leave it just for
+[1:04:46] illustrative purposes. You can see it's
+[1:04:48] spawned the projectile on both machines.
+[1:04:50] It's it's actually spawning on top of
+[1:04:52] them because we're not actually
+[1:04:53] synchronizing the property of position
+[1:04:54] yet, but we'll get to that in a minute.
+[1:04:56] But if we go on the client side, we hit
+[1:04:59] spacebar, it spawns on the client, but
+[1:05:01] it's nowhere to be found on the host
+[1:05:04] machine, and it's also facing the wrong
+[1:05:06] direction. If we actually check the
+[1:05:08] remote tab for the host server under the
+[1:05:11] client pier projectiles node, you'll
+[1:05:14] notice that there actually is a spawn
+[1:05:15] projectile, even though we don't see it.
+[1:05:17] And if you look at the position, it
+[1:05:19] looks like it's spawning off screen. So,
+[1:05:21] I think I know how to fix that. So, if
+[1:05:23] we go back to the projectile scene,
+[1:05:26] let's synchronize the projectile by
+[1:05:28] adding a multiplayer synchronizer.
+[1:05:32] Make sure the root path is set to
+[1:05:34] projectile. And down in the replication
+[1:05:36] tab, we want to synchronize the
+[1:05:38] position.
+[1:05:42] And we should synchronize that position
+[1:05:43] on spawned and always replicate its
+[1:05:46] position because it's going to be moving
+[1:05:47] through space. Well, we haven't added
+[1:05:49] that yet, but we will in a second. And
+[1:05:50] it looks like we're getting some errors
+[1:05:52] when trying to auto spawn that
+[1:05:54] projectile. Something about unable to
+[1:05:56] spawn with a reserve name. Make sure to
+[1:05:59] add child with the second parameter set
+[1:06:01] to true. So right here under add child,
+[1:06:05] we can do comma true.
+[1:06:07] Let's try it again. Great. You can see
+[1:06:10] that it spawned the projectile correctly
+[1:06:12] on both machines. Perfect. Now let's try
+[1:06:15] the client pier. So, you notice it's
+[1:06:17] still not spawning correctly on the
+[1:06:19] client pier. Well, it technically is.
+[1:06:23] It's just somewhere else. So, why is
+[1:06:26] that happening? Why is this so wonky?
+[1:06:28] You'll notice that it's moving as part
+[1:06:30] of the ship. And I don't think that's
+[1:06:32] how a missile is supposed to move. So,
+[1:06:35] let's try to fix that. Over in our
+[1:06:37] player scene, select the projectiles
+[1:06:39] node. And under visibility, I want you
+[1:06:41] to select top level. So, what that means
+[1:06:44] is when the projectile spawns, it's not
+[1:06:46] going to inherit the transforms from the
+[1:06:48] player when you move around on screen.
+[1:06:50] It's going to be floating there as if
+[1:06:52] it's its own thing. And it only looks
+[1:06:54] like it cares about the transform of the
+[1:06:56] player ship because we set the global
+[1:06:59] transform of the projectile equal to the
+[1:07:02] transform of the player parent. So, now
+[1:07:04] with that set, let's test it again. See,
+[1:07:07] it's spawning, but doesn't care about
+[1:07:08] where you're moving. And let's try it on
+[1:07:10] the connected pier. Same thing. Perfect.
+[1:07:15] So, let's fix the orientation of the
+[1:07:17] missile for the player two ship. So,
+[1:07:19] we're already setting the flip
+[1:07:21] projectile, but why isn't it applied to
+[1:07:23] the client pier? Well, if you said
+[1:07:26] because it's not replicated, you would
+[1:07:27] be correct. It has no way to know that
+[1:07:30] we've actually flipped the projectile
+[1:07:32] because we did that action on the
+[1:07:33] authority and that isn't translated over
+[1:07:36] the network to the connected peers. So,
+[1:07:39] I need to do that. So, in the projectile
+[1:07:41] scene, select the projectile
+[1:07:42] synchronizer. And actually, we need to
+[1:07:44] go into the projectile script. And let's
+[1:07:46] copy the flip projectile property and
+[1:07:49] add it to the replication tab.
+[1:07:52] And since we only care about this on
+[1:07:54] spawn, we can set when to replicate to
+[1:07:56] never.
+[1:07:58] So, let's double check that it's
+[1:07:59] working. And you can see now it's
+[1:08:01] spawning in the correct orientation. So,
+[1:08:03] let's get this missile to shoot across
+[1:08:05] the screen. Instead of a process, we're
+[1:08:07] going to use physics process.
+[1:08:10] We need to create a speed variable.
+[1:08:13] Let's default it to 600. And then let's
+[1:08:15] just move the projectile across the
+[1:08:17] screen with this translate function.
+[1:08:19] We're only going to apply the
+[1:08:20] translation to the Xaxis. So we're not
+[1:08:23] going to have anything in the Y. So it's
+[1:08:25] just going to move from left to right
+[1:08:26] horizontally. All right. Look at that.
+[1:08:29] Can shoot missiles now. Now let's test
+[1:08:31] it out in the clamp here. Oh wait, they
+[1:08:34] are going the wrong direction. Okay, so
+[1:08:36] let's go back to our projectile code. We
+[1:08:38] have this flip projectile property that
+[1:08:39] is a boolean. I think we should change
+[1:08:41] this to the integer so that we can flip
+[1:08:44] the direction down here as needed. Let's
+[1:08:46] change this variable to flip direction.
+[1:08:48] Make it an int and default it to one.
+[1:08:52] Then change the conditional to use flip
+[1:08:53] direction and only flip it if it's
+[1:08:55] greater than zero. Which means if we're
+[1:08:57] on the host, flip the ship sprite the
+[1:09:00] other way. If you're thinking this seems
+[1:09:02] a little wonky, you'd be correct. I
+[1:09:04] recorded this thinking the orientation
+[1:09:06] was the other way around. But since this
+[1:09:08] is a trivial matter and is used for the
+[1:09:10] rest of the video, I just rolled with
+[1:09:12] it. Next, go to the weapon script and
+[1:09:14] where we instantiate the projectile,
+[1:09:16] change flip projectile to flip
+[1:09:18] direction. And if it's not the hose, set
+[1:09:20] the flip direction to negative one. Then
+[1:09:22] back to the projectile, let's multiply
+[1:09:25] our disc variable by the flip direction,
+[1:09:27] which literally flips the direction of
+[1:09:29] travel. We also need to update our
+[1:09:31] projectile synchronizer. remove flip
+[1:09:33] projectile and add in flip direction.
+[1:09:36] And we only need that synced on spawn.
+[1:09:38] So set replicate to never as we'll keep
+[1:09:41] our players on the same side throughout
+[1:09:42] the game session. Let's run a test.
+[1:09:45] Player one looks good and let's test
+[1:09:47] player two. And good, our projectiles
+[1:09:49] are moving in the correct direction. But
+[1:09:51] let's take a quick look at the remote
+[1:09:53] tab.
+[1:09:57] And you'll see that we have all these
+[1:09:58] projectiles that have been fired for
+[1:10:00] each player. uh we need to clean those
+[1:10:03] up once they leave the screen. So at the
+[1:10:05] top let's add a on ready variable for
+[1:10:09] the visible onscreen notifier.
+[1:10:13] Make sure you select the notifier 2D.
+[1:10:16] And over in the projectile scene, we
+[1:10:18] need to add a visible on-creen notifier
+[1:10:20] node. Make sure you get the notifier and
+[1:10:23] not the enabler. Drag over a reference
+[1:10:25] to that.
+[1:10:27] And I'm going to mark this as a private
+[1:10:28] variable. And down in the ready
+[1:10:30] function,
+[1:10:32] let's wire up the screen exited signal
+[1:10:35] to Q free when it leaves the screen. But
+[1:10:39] we actually only need this to happen on
+[1:10:41] the authority or the host. So let's wrap
+[1:10:43] this in an authority check. So when Qree
+[1:10:46] is called on the host, it will
+[1:10:48] automatically despawn on the client as
+[1:10:50] well. Okay. So let's check to make sure
+[1:10:52] that our projectiles are cleaned up when
+[1:10:53] they leave the screen. So, I have the
+[1:10:55] projectiles node selected under the
+[1:10:57] remote tab for the host player. You can
+[1:11:00] see there's several of them in there.
+[1:11:03] You could Oh, and look at that. They're
+[1:11:04] all gone.
+[1:11:11] Perfect. Now, let's check to make sure
+[1:11:13] it happens for the clamp here.
+[1:11:25] And you can see they're getting cleaned
+[1:11:26] up successfully. Excellent. So the next
+[1:11:29] thing I want to do is let's detect if
+[1:11:31] the projectile collides with something
+[1:11:33] like another ship. So let's add a
+[1:11:34] collision shape 2D.
+[1:11:40] Create a new capsule shape.
+[1:11:43] Need to turn it on its side.
+[1:11:46] And that looks about right to me.
+[1:11:49] Select the projectile base object and
+[1:11:51] then the node tab and then double click
+[1:11:53] on the body entered signal. And in here
+[1:11:56] we want to detect whether or not we've
+[1:11:57] collided with another ship. But we don't
+[1:11:59] want to collide with our self. I know
+[1:12:00] that's going to be a problem. So we need
+[1:12:02] to add a fired by property.
+[1:12:05] And jumping back over to the weapon
+[1:12:06] script, let's go ahead and set that.
+[1:12:11] And we'll set the name to the parent.
+[1:12:13] Back in the projectile script,
+[1:12:15] we'll just add this conditional here
+[1:12:17] that says if we've collided by ourself,
+[1:12:19] just go ahead and return. And we do that
+[1:12:22] by checking if what we collided with is
+[1:12:24] equal to the same thing that fired the
+[1:12:26] projectile, then just go ahead and
+[1:12:27] return that or ignore that collision.
+[1:12:30] Otherwise, if the body is another
+[1:12:32] player, let's go ahead and show the
+[1:12:35] explode animation.
+[1:12:36] Test it out. You'll notice there's some
+[1:12:38] issues. It's automatically exploding as
+[1:12:41] soon as it comes out of the ship on the
+[1:12:43] client pier. And it also keeps going
+[1:12:45] after it makes a collision. So, we need
+[1:12:47] to make a couple adjustments. First
+[1:12:49] thing we need to do is set the speed to
+[1:12:51] zero when it collides with something. We
+[1:12:53] don't want it to keep going. The second
+[1:12:56] thing is we need to stop looping the
+[1:12:58] explode animation once it kicks off.
+[1:13:00] Select the animated sprite and the
+[1:13:02] explode animation and turn off this
+[1:13:04] little looping animation option. Let's
+[1:13:06] try it again. So, it's still exploding
+[1:13:08] as soon as it comes out of the host ship
+[1:13:10] on the client pier. And then it's still
+[1:13:12] stuck on the screen. So, we need to do
+[1:13:14] something to fix that. Well, the first
+[1:13:16] thing we can do is just actually remove
+[1:13:18] the projectile once it makes a
+[1:13:19] collision. So, that's easy enough.
+[1:13:23] We can do that by calling Q free on the
+[1:13:26] projectile sprite when the explosion
+[1:13:28] animation finishes. The other problem is
+[1:13:31] this fired by name isn't actually
+[1:13:33] getting detected or set on the client
+[1:13:35] connected pier. So we need to also
+[1:13:37] synchronize that. That's why you see the
+[1:13:40] explosion happening as soon as it comes
+[1:13:42] out of the ship on the connected client.
+[1:13:47] So paste in fire by name. And we only
+[1:13:50] need to replicate that on spawn.
+[1:13:56] Perfect. Everything looks great.
+[1:14:00] Projectile gets shot by either client
+[1:14:02] and will explode. And as soon as the
+[1:14:05] explosion animation is finished, it's
+[1:14:06] removed from the screen. This is exactly
+[1:14:08] what we want.
+[1:14:14] So, I noticed there's an error down in
+[1:14:15] the debugger tab. So, let's take a look
+[1:14:17] at that. On despawn received H returning
+[1:14:21] unauthorized. So, that sounds like an
+[1:14:23] authority issue. Do you have any idea
+[1:14:25] what that could be? Let's take a look at
+[1:14:27] the projectile script. So I'm going to
+[1:14:30] go out on a limb and just guess that
+[1:14:32] this Qfree is running on both the server
+[1:14:34] or the host and the connected client
+[1:14:37] because onbody entered exists for both
+[1:14:41] contexts. So I think we can wrap this Q
+[1:14:44] free call here with a authority check.
+[1:14:55] So it looks like we solved one error but
+[1:14:57] got another one. It says that the signal
+[1:14:59] animation finished is already connected
+[1:15:01] to the given callable area 2D projectile
+[1:15:04] Q free. So what I think is happening is
+[1:15:06] the onbody entered signal is being fired
+[1:15:09] multiple times on the authority in this
+[1:15:11] case. So it's actually trying to connect
+[1:15:13] this animation finished multiple times.
+[1:15:15] So let's just make sure we don't already
+[1:15:17] have a connection if this happens to get
+[1:15:19] called multiple times. So we can do that
+[1:15:21] by checking if the animation finished
+[1:15:23] signal does not have any connections.
+[1:15:27] Let's try running it again. So, I'm
+[1:15:29] testing this as hard as I can to try to
+[1:15:30] break it, but it looks like we've got it
+[1:15:32] fixed. I'm going to call this one
+[1:15:34] resolved and move on. And the next thing
+[1:15:35] I want to do before we move on is let's
+[1:15:38] wrap the physics process in an authority
+[1:15:40] check. Just like we did with the player
+[1:15:41] where the process physics should only be
+[1:15:43] executed on the host. The same thing
+[1:15:46] applies to the projectile.
+[1:15:51] And I'm not sure if you noticed it, but
+[1:15:53] it seems like the projectile is less
+[1:15:54] jittery when it's moving across the
+[1:15:56] screen. So, I think we've got this part
+[1:15:58] wrapped up. At this point, I would
+[1:16:00] recommend committing your working
+[1:16:01] changes.
+[1:16:05] We can move around and fire missiles,
+[1:16:07] but let's have our ships take damage
+[1:16:09] when hit. That means our projectiles
+[1:16:11] have to give damage and our players have
+[1:16:13] to have some health. I'd like to
+[1:16:15] implement this part with some
+[1:16:16] composition principles where we use
+[1:16:18] components to piece together the
+[1:16:19] functionality. Components can help with
+[1:16:22] the encapsulation of functionality for
+[1:16:24] improved maintainability when building
+[1:16:26] out your game. I leveraged some
+[1:16:28] component tutorials by Heartbeast and I
+[1:16:30] found them very helpful when putting
+[1:16:31] this together. I'll put some links below
+[1:16:33] if you're interested in learning more.
+[1:16:35] It's pretty common to use an area 2D to
+[1:16:37] detect when something has impacted an
+[1:16:39] object during gameplay. But instead of
+[1:16:41] writing this logic over and over for
+[1:16:43] each projectile, player, or enemy in
+[1:16:45] your game, we can create a single
+[1:16:47] reusable component that just attaches to
+[1:16:49] those objects to easily enable that
+[1:16:52] common functionality. And for this part
+[1:16:54] of the video, that's exactly what we're
+[1:16:56] going to do. So create a new folder
+[1:16:58] under scripts called components. I want
+[1:17:01] to create something that captures the
+[1:17:03] logic of causing damage. In other words,
+[1:17:05] hitting something. So let's create a new
+[1:17:08] script and call it hitbox component.
+[1:17:10] Open it and give it a class name hitbox
+[1:17:12] component. Let's change the type to area
+[1:17:15] 2D. This provides us a way to register a
+[1:17:18] hit when things come into this node's
+[1:17:19] area. Since this will be causing damage,
+[1:17:22] let's export a new damage variable. Now,
+[1:17:24] on the other side of things, let's make
+[1:17:27] another component called hurtbox. Create
+[1:17:29] a new script. Name it hurtbox component.
+[1:17:32] Update its class name. And the way we'll
+[1:17:35] set this up is that hitboxes will only
+[1:17:37] register a hit if it comes into contact
+[1:17:40] with a hurt box. That means our hitbox
+[1:17:42] component can be attached on objects and
+[1:17:44] ignore other things that we don't want
+[1:17:45] it to register a hit with. But then when
+[1:17:47] it comes in contact with another object,
+[1:17:49] say like a player that has a hurtbox
+[1:17:52] component attached to it, then the hit
+[1:17:53] will be registered and we can apply the
+[1:17:55] damage. So let's reflect that setup in
+[1:17:57] our hitbox component.
+[1:18:03] We're going to connect the area entered
+[1:18:05] signal provided by area 2D into a new
+[1:18:07] function called on her box entered.
+[1:18:10] And like I said before, since we only
+[1:18:12] want to register hits with her boxes,
+[1:18:14] that's what we can expect to enter the
+[1:18:16] area of this hitbox.
+[1:18:20] You may be thinking, why didn't we pass
+[1:18:22] in the herbox component here? Well,
+[1:18:24] remember we're still connecting a signal
+[1:18:26] that's provided by area 2D and that
+[1:18:28] signal does expect an area 2D to be
+[1:18:30] passed in, which works out for us
+[1:18:32] because the herbox component will also
+[1:18:34] be in area 2D. So, let's go ahead and
+[1:18:36] update that now. So, let's assume our
+[1:18:38] hit component runs into something.
+[1:18:40] What's the first couple things that we
+[1:18:42] want to do? Well, we want to make sure
+[1:18:44] that we don't hit ourselves. So, let's
+[1:18:45] first add that check to ignore any
+[1:18:47] contact that may be with our own player
+[1:18:50] in the game.
+[1:18:52] So, we're checking that the fire by name
+[1:18:54] provided by the projectile script that
+[1:18:56] this hitbox will be attached to does not
+[1:18:58] match the hurtbox components parent
+[1:19:00] name, which is going to be the player's
+[1:19:03] name of the hurt box that it's attached
+[1:19:05] to. So, this is a quick way to make sure
+[1:19:07] the player doesn't get hit by its own
+[1:19:08] projectiles. The next thing I want to
+[1:19:10] make sure is that the components that
+[1:19:12] this does come in contact with are
+[1:19:14] actually hurt box components.
+[1:19:16] You may want to adjust this if your game
+[1:19:18] is going to be colliding with other
+[1:19:20] things, but for this demo, I think it'll
+[1:19:21] work out fine.
+[1:19:24] So, now that we are ignoring any
+[1:19:25] collisions that we don't care about, we
+[1:19:28] need a reusable manner in which our
+[1:19:30] projectile can act when it comes into
+[1:19:32] contact with something. So, we're going
+[1:19:34] to use a signal to accomplish that.
+[1:19:38] So, this hitbox will be attached to our
+[1:19:39] projectile. And when it comes into
+[1:19:41] contact with a hurt box, we want to emit
+[1:19:43] this hit hurtbox signal.
+[1:19:46] And then we'll pass in the hurt box that
+[1:19:48] we just collided with. Again, hurt box
+[1:19:51] component will be attached to the
+[1:19:52] player. Before we go any further, let's
+[1:19:54] take a look at how this is going to
+[1:19:56] work. Go over to the projectile script.
+[1:19:59] Currently, our projectile script uses
+[1:20:01] this onbody entered signal to register
+[1:20:04] when it impacts with something. So,
+[1:20:05] we're going to replace the use of this
+[1:20:07] signal with the hitbox component. So,
+[1:20:09] the first thing we need to do is
+[1:20:11] register a hitbox component with this
+[1:20:13] projectile. So over in the projectile
+[1:20:15] scene, add a child node. Search for
+[1:20:17] hitbox component. Perfect. We do have a
+[1:20:20] warning here for not having a collision
+[1:20:22] shape, but I'll come back to that in a
+[1:20:23] minute. So now that we have a hitbox
+[1:20:25] component, let's create a variable to
+[1:20:26] reference that.
+[1:20:31] And since the projectile needs to know
+[1:20:32] when it hits something, let's connect to
+[1:20:34] that hit hurtbox signal that we just
+[1:20:36] created.
+[1:20:38] And we can just replace the use of this
+[1:20:40] onbody entered function with that. Make
+[1:20:42] sure you update the parameters to a
+[1:20:44] hurtbox component.
+[1:20:46] And since we're already making sure the
+[1:20:48] player doesn't hit itself with its own
+[1:20:49] projectile, we can actually remove this
+[1:20:51] check. We also don't need to check for
+[1:20:54] if we're colliding with a player anymore
+[1:20:55] because back in our hit component, we
+[1:20:57] actually make sure that it collides with
+[1:20:59] a hurt box. So, we're not going to rely
+[1:21:01] on hard- coding player references inside
+[1:21:03] this anymore.
+[1:21:06] So, let's clean up this function.
+[1:21:09] Okay, looks good. and go over to the
+[1:21:11] projectile scene in the scene tree. And
+[1:21:13] let's disconnect that on body entered
+[1:21:15] registration.
+[1:21:21] And I think I'm going to mark this
+[1:21:22] hitbox component as private.
+[1:21:26] Okay, let's go back to the hitbox
+[1:21:27] component. So the last thing we want to
+[1:21:29] do is tell the hurt box, so the thing
+[1:21:32] that's attached to the player, that we
+[1:21:33] actually hit it. So, in other words,
+[1:21:35] when the projectile collides with the
+[1:21:37] other player's ship, we tell that ship,
+[1:21:39] "Hey, you've been hit by some
+[1:21:40] projectile."
+[1:21:45] And the way we're going to do that here
+[1:21:46] is to create a new herz signal over in
+[1:21:49] the component. We'll do that in a
+[1:21:51] second. And we'll emit that signal with
+[1:21:52] a reference to the projectile itself.
+[1:21:55] So, let's go over to the herbox
+[1:21:56] component and finish that hurt signal.
+[1:22:01] And as you can see, our hurt signal over
+[1:22:03] in the hurtbox component receives a
+[1:22:05] hitbox. Okay, so from here, let's open
+[1:22:07] up the player scene. Now, we could take
+[1:22:10] the hurt logic and stick it in the
+[1:22:11] player script, but I don't want to muddy
+[1:22:13] up this logic here. So, I want to create
+[1:22:15] another component that will handle
+[1:22:16] taking damage. So, let's create one more
+[1:22:18] called component.
+[1:22:22] Open it up and change its name to hurt
+[1:22:24] component.
+[1:22:26] And this is going to have a reference to
+[1:22:27] our herbox component.
+[1:22:30] But first, we actually need to add the
+[1:22:32] herbox component to our player. So, go
+[1:22:34] over to the player scene, search for her
+[1:22:37] box, not her component, but the hurt box
+[1:22:39] component. And again, we'll come back to
+[1:22:41] the collision shape in a minute. And
+[1:22:44] now, let's add a her component to the
+[1:22:45] player scene. And that's this one.
+[1:22:50] So, right now, the her component will
+[1:22:51] take a hurtbox component reference. So,
+[1:22:54] let's wire that up.
+[1:22:57] So, since the hurt component only tells
+[1:22:59] us that we've been hit by a hitbox,
+[1:23:03] we need to be able to process that hit
+[1:23:05] and take damage.
+[1:23:07] So, we need something to track the
+[1:23:09] player's health. Let's do that in
+[1:23:11] something called an attribute component.
+[1:23:13] So, again, let's create another
+[1:23:14] component.
+[1:23:17] Create a class name attribute component.
+[1:23:20] And let's create a property that will
+[1:23:21] track our player's health.
+[1:23:26] I think it's important to know when our
+[1:23:27] health changes. So, in case it does,
+[1:23:29] let's create another signal called
+[1:23:31] health changed.
+[1:23:34] And looking ahead, I think it might be a
+[1:23:36] good idea to have a signal that tells us
+[1:23:37] when the player is dead or runs out of
+[1:23:39] health.
+[1:23:41] So, let's use this health change signal
+[1:23:43] when our health changes.
+[1:23:46] This will be helpful to leverage if,
+[1:23:48] let's say, you wanted to update some UI
+[1:23:51] element like a health bar when the
+[1:23:52] health value changes. and let's emit the
+[1:23:54] no health signal when their health
+[1:23:56] reaches zero.
+[1:23:59] I think it's also going to be helpful to
+[1:24:01] have a function to reset their health,
+[1:24:02] like if you want to restart the match
+[1:24:04] and put all the players back to full
+[1:24:06] health. So, let's add that helper
+[1:24:07] function here. So, I set the health to a
+[1:24:10] starting health variable that we can add
+[1:24:12] to track what the starting health should
+[1:24:14] be for the player. And for now, we'll
+[1:24:15] set it to five. So, let's head back to
+[1:24:17] the her component. Now, we need to apply
+[1:24:19] the hit damage to our health attribute,
+[1:24:22] which means we need a reference to the
+[1:24:24] attribute component,
+[1:24:27] which also means we need to add an
+[1:24:28] attribute component to our player to
+[1:24:30] track their health.
+[1:24:32] So, let's drag over the attribute
+[1:24:34] component to the her component.
+[1:24:37] So, if we look back where we left off at
+[1:24:39] our hurt box, we created a signal called
+[1:24:42] that should register hits when it comes
+[1:24:43] into contact with the hitbox component.
+[1:24:45] So, let's connect to that signal so we
+[1:24:47] know when a player is hit.
+[1:24:52] So, let's use this inline function to
+[1:24:54] subtract the damage from the hitbox from
+[1:24:56] the attribute component's health.
+[1:25:00] And I like printing a debug statement
+[1:25:02] that tells me what the player's current
+[1:25:03] health is during development. So, our
+[1:25:05] player has an attribute component which
+[1:25:08] tracks its health. And by the way, you
+[1:25:09] can track other things in here. We're
+[1:25:11] just going to start with health. And
+[1:25:12] then we use a her component.
+[1:25:15] It has a reference to the attribute
+[1:25:17] component and hurtbox. And all the
+[1:25:18] hurtbox component does is it enables the
+[1:25:21] object that it's attached to to take
+[1:25:23] damage. And that's what we're doing
+[1:25:25] right here. When our player's hurt box
+[1:25:27] is hit by a hitbox, so we subtract the
+[1:25:30] health from the damage that the hitbox
+[1:25:32] component deals. Through the use of
+[1:25:34] these components, we're able to add
+[1:25:36] health and maybe some other stuff to our
+[1:25:39] player object. We're enabling them to be
+[1:25:42] able to be hit by something. And then we
+[1:25:44] created a component to handle that. And
+[1:25:46] this is nice because it keeps our player
+[1:25:48] script clean from all the clutter
+[1:25:50] because you can imagine all this would
+[1:25:51] add up over time, but by putting it in
+[1:25:53] these nice little component chunks,
+[1:25:55] we're able to remove and add them as
+[1:25:57] needed or apply them to other objects if
+[1:26:00] you wanted to extend the same
+[1:26:01] functionality to some other object in
+[1:26:04] your game. Okay, so let's take a look at
+[1:26:06] this warning. So it's saying we don't
+[1:26:08] have a collision shape. So, let's take
+[1:26:10] our existing collision shape and add it
+[1:26:14] underneath the hurtbox component. And
+[1:26:16] now our player is complaining about an
+[1:26:18] error because it doesn't have a
+[1:26:20] collision shape because the player is of
+[1:26:22] type character body 2D. So, I actually
+[1:26:25] think I want to fix that really quick.
+[1:26:26] So, let's head over to the player
+[1:26:28] script. And of course, right now the
+[1:26:30] player is a character body 2D, but I
+[1:26:33] think we can change that for this demo.
+[1:26:35] So, let's head over to the player scene
+[1:26:37] and change the type to a node 2D and
+[1:26:40] then update the script as well. That's
+[1:26:43] also going to cause some problems in our
+[1:26:44] movement. So, because we moved away from
+[1:26:46] a character body 2D, we no longer have a
+[1:26:48] velocity property. So, let's create one.
+[1:26:52] And let's update the references.
+[1:26:56] And we also can no longer use move and
+[1:26:57] slide. So, let's use translate instead.
+[1:27:00] And because we're not using the move and
+[1:27:02] slide functionality anymore, we actually
+[1:27:04] need to apply a delta to the velocity.
+[1:27:07] Let's test it out really quick.
+[1:27:10] And it looks like the movement is still
+[1:27:12] working as expected. I know we created
+[1:27:14] our player originally as a character
+[1:27:16] body 2D, but since we've moved away from
+[1:27:18] that and are now using hurt and hitbox
+[1:27:21] components to register our damage, I
+[1:27:23] think it might be a bit overkill to
+[1:27:25] leave it at that type. And of course,
+[1:27:27] there are use cases where you'd want to
+[1:27:29] stick with using a character body 2D.
+[1:27:31] There are some functionality that it
+[1:27:32] provides that you may want to leverage.
+[1:27:34] And in that instance, you would just
+[1:27:35] rework your player design. Now, we need
+[1:27:38] to fix the projectile scene. So, drag
+[1:27:41] the collision shape under the hitbox
+[1:27:42] component. And then, let's change our
+[1:27:45] projectile type back to a node 2D.
+[1:27:50] And make sure you update the projectile
+[1:27:52] script as well.
+[1:27:55] And there's one more change we need to
+[1:27:57] make that I just remembered over in the
+[1:27:59] weapon script.
+[1:28:01] Change the instantiation as an area 2D
+[1:28:04] back to a node 2D.
+[1:28:06] Let's kick off a demo and see how
+[1:28:08] everything is working out.
+[1:28:18] So it looks like we wired up everything
+[1:28:19] correctly. Our player health is being
+[1:28:21] reduced by one point as you can see
+[1:28:23] printed out in the logs. But it looks
+[1:28:25] like it printed twice. So I think we
+[1:28:27] might need to wrap something in an
+[1:28:29] authority check there. So let's go back
+[1:28:31] to the code.
+[1:28:33] Let's check back in with the hurt
+[1:28:35] component script. So if we look at the
+[1:28:38] output logs, you can see that it was
+[1:28:39] printing twice each time the player took
+[1:28:41] damage. And the reason why is because
+[1:28:44] each time this hurt signal was emitted
+[1:28:45] when the player took damage, it's
+[1:28:48] running this function on both the local
+[1:28:50] client instance of the pier and the
+[1:28:52] remote instance which is the authority
+[1:28:54] host. So because we have a server
+[1:28:57] authoritative setup here, we don't need
+[1:28:59] to be subtracting health on the local
+[1:29:01] player. And I think we should actually
+[1:29:02] synchronize the health instead of
+[1:29:04] updating it locally on the client. So
+[1:29:07] let's wrap this with an is authority
+[1:29:09] check.
+[1:29:12] and then go back over to the player
+[1:29:13] scene, select the multiplayer
+[1:29:16] synchronizer,
+[1:29:18] and let's add a reference to the
+[1:29:19] player's health from the attribute
+[1:29:21] component so we can synchronize that
+[1:29:23] with other clients.
+[1:29:27] And we'll synchronize it when the player
+[1:29:29] spawns, and then we'll replicate it when
+[1:29:30] it changes. Let's make sure everything
+[1:29:32] is working.
+[1:29:40] Great. It looks like it's printing out
+[1:29:41] the health correctly now and it's still
+[1:29:42] updating as expected. And make sure you
+[1:29:45] check whatever functionality you're
+[1:29:46] testing on both the host authority pier
+[1:29:49] and also the client peers as well
+[1:29:51] because sometimes things will work on
+[1:29:52] the host and not the client and vice
+[1:29:54] versa. I've seen that come up a lot over
+[1:29:56] the last couple years. And now that our
+[1:29:58] players can take damage from
+[1:29:59] projectiles, let's add a health bar to
+[1:30:01] wrap up this section. So go over to the
+[1:30:03] player scene.
+[1:30:07] Create a new control element.
+[1:30:10] Rename it health bar container.
+[1:30:13] Let's switch over to the 2D view
+[1:30:16] and create a progress bar called health
+[1:30:18] bar. In this case, we'll use a texture
+[1:30:20] progress bar.
+[1:30:23] Rename it health bar. Now, I've gone
+[1:30:25] ahead and found a nice layout for this.
+[1:30:27] So, I'm just going to show you the
+[1:30:28] settings that I used.
+[1:30:40] And these are the layout settings that I
+[1:30:42] use for the health bar.
+[1:30:47] But let's create a health bar that can
+[1:30:49] change color. So under textures where it
+[1:30:52] says progress, select gradient 2D
+[1:30:54] texture. Select the texture and change
+[1:30:56] the width to 100 and the height to 8.
+[1:31:00] You can adjust this to make it look best
+[1:31:01] for your game. So, select the gradient.
+[1:31:04] So, I'm going to select this box to
+[1:31:06] change the color. Double click. So, I'm
+[1:31:09] going to change it to this green color.
+[1:31:10] This will be the starting color of the
+[1:31:12] health bar when you're at full health.
+[1:31:14] And technically, I don't want to use a
+[1:31:15] gradient color at this point. So, I'm
+[1:31:16] going to delete this other node. Now,
+[1:31:19] before you move away, this is a really
+[1:31:20] important point here. Under resource,
+[1:31:24] select local to scene. And you need to
+[1:31:26] do that for both the gradient and the
+[1:31:28] progress texture.
+[1:31:30] And the reason why we do this is so that
+[1:31:32] the health bar will update individually
+[1:31:34] per player in the game. Otherwise, all
+[1:31:37] the health bars update together. And
+[1:31:38] then scroll down to the range. Set the
+[1:31:42] max range to five because that's going
+[1:31:43] to match the health value that we have
+[1:31:45] for each player. And then set the
+[1:31:47] current value to five. And at this
+[1:31:50] point, if you did everything correctly,
+[1:31:51] you should see a green health bar show
+[1:31:53] up. So it'll look something like this.
+[1:31:56] So I think this is good enough for our
+[1:31:58] demo game. Let's head back to the player
+[1:31:59] script and I want to be able to change
+[1:32:01] the health bar based on how much health
+[1:32:03] they have left. Let's add another
+[1:32:04] variable called health colors. And let's
+[1:32:07] grab a reference to the attribute
+[1:32:09] component.
+[1:32:11] And the reason why I wanted a reference
+[1:32:12] to the attribute component is that you
+[1:32:14] remember when we created that signal for
+[1:32:16] health change? Well, I'm going to
+[1:32:18] leverage that to update the player's
+[1:32:20] health bar.
+[1:32:26] So, let's wire up the attribute
+[1:32:27] components health change signal to a new
+[1:32:30] function called health changed.
+[1:32:34] Now, let's set the health bar value
+[1:32:35] equal to the player's health. Oh, but
+[1:32:37] first, we need a reference to the health
+[1:32:39] bar.
+[1:32:43] Now, select the player scene and connect
+[1:32:44] up our health bar and attribute
+[1:32:46] component while we're over there.
+[1:32:49] And let's set the health bar value equal
+[1:32:50] to the player's health. And let's test
+[1:32:52] it out and see if our health bar changes
+[1:32:54] as we get hit by projectiles.
+[1:32:58] And it looks like it's working as
+[1:32:59] expected on the client pier
+[1:33:04] and also on the host pier. But let's
+[1:33:06] have it change color as the health gets
+[1:33:08] lower.
+[1:33:11] So the health bars texture progress
+[1:33:13] attribute as a gradient and colors
+[1:33:16] property. We're going to set that to the
+[1:33:17] health colors that correspond to the
+[1:33:19] current health value. And that health
+[1:33:21] colors comes from the array that we
+[1:33:22] created earlier on.
+[1:33:25] So let's make sure it works.
+[1:33:28] So as you can see the health bar is
+[1:33:30] changing color as it gets lower and
+[1:33:32] lower.
+[1:33:34] It goes from green to yellow to red,
+[1:33:36] orange, and then orange.
+[1:33:39] So I think we can call that feature
+[1:33:40] complete. And to wrap up this section
+[1:33:43] with a quick note on authority, we don't
+[1:33:46] wrap this with an authority check
+[1:33:47] because we actually want the health to
+[1:33:49] change on all representation of the
+[1:33:51] player. If we wrap this with an is
+[1:33:53] authority checked, well then this health
+[1:33:55] change would only change the colors of
+[1:33:57] their health bar on the host pier. But
+[1:33:59] we want it to change on all connected
+[1:34:01] peers. So we allow the signal to run on
+[1:34:03] all connected peers so that the health
+[1:34:05] bar is reflected accurately across all
+[1:34:08] players. And the last thing I want to do
+[1:34:10] in this section is reset the player's
+[1:34:12] health after they've died. And if you
+[1:34:14] remember back in our attribute
+[1:34:16] component, we had a signal that emits
+[1:34:18] when the player has no health. So, let's
+[1:34:19] wire that up. Back in the player script,
+[1:34:22] let's wire up the no health signal to a
+[1:34:25] new function called player no health.
+[1:34:29] In this case, we are going to wrap the
+[1:34:31] signal with an authority check because
+[1:34:33] we don't need this to fire on all peers,
+[1:34:36] just on the host pier. And the reason
+[1:34:38] for that is because we're just going to
+[1:34:40] reset the health. And since health is
+[1:34:41] synchronized across client peers from
+[1:34:43] the host, this doesn't need to run on
+[1:34:45] the other peers.
+[1:34:48] So, let's reset the player's health.
+[1:34:50] Create a new function called reset
+[1:34:52] player.
+[1:34:54] And we'll leverage that function to
+[1:34:56] reset the health back to the starting
+[1:34:57] health that we set here.
+[1:35:01] So, when the player is down to zero
+[1:35:03] health, I don't want it to immediately
+[1:35:05] reset. I think this will play better if
+[1:35:07] we give it a one second pause between
+[1:35:09] resetting.
+[1:35:13] I think a one second cooldown should be
+[1:35:14] enough.
+[1:35:19] And you can see there the player's
+[1:35:21] health has been reset. Now's a good time
+[1:35:23] to commit your working changes before we
+[1:35:25] move on to the next section.
+[1:35:28] So at this point you can just call it a
+[1:35:30] day. You have a multiplayer setup where
+[1:35:32] you can fly around some game world. You
+[1:35:34] can shoot each other, take damage, and
+[1:35:36] the health will reset, and you can just
+[1:35:38] have fun with that. But I think it would
+[1:35:40] be cool to wrap up things with a game
+[1:35:41] over screen that displays the score. And
+[1:35:43] then after you win, let's say, five
+[1:35:45] matches, you can restart the match.
+[1:35:47] Let's dive in. First, let's create a
+[1:35:49] component to manage displaying the score
+[1:35:51] on screen. I'm going to name it
+[1:35:53] scoreboard component,
+[1:35:55] and let's set the class name.
+[1:35:58] Let's open up the game scene, and then
+[1:36:00] add this new node to it.
+[1:36:03] If we have a look at the 2D view, let's
+[1:36:05] create a couple labels to track the
+[1:36:07] player score. So, under the existing
+[1:36:09] game menu panel, let's add a label for
+[1:36:11] player one and two, respectively.
+[1:36:21] So, here's the transform properties that
+[1:36:23] I'm going to set for this. And then
+[1:36:25] under theme overrides,
+[1:36:29] I'm going to up the font to 36.
+[1:36:33] And let's duplicate that.
+[1:36:40] And we'll move it to the other side of
+[1:36:41] the view. And while we're in here, let's
+[1:36:43] go ahead and just create a button for
+[1:36:44] when we want to play again.
+[1:36:49] I'm going to set the font size to 72.
+[1:36:53] And we can just center it in the middle
+[1:36:55] of the screen.
+[1:36:57] Great. And for now, let's just hide it.
+[1:37:00] So, back in the scoreboard component,
+[1:37:01] let's wire up those labels.
+[1:37:15] So, we need a way to figure out how we
+[1:37:17] can keep score and share that across all
+[1:37:20] the connected clients. There are a few
+[1:37:22] ways to do this, like synchronizing a
+[1:37:25] score field, but I'm going to use RPCs
+[1:37:28] to report the score as needed to the
+[1:37:30] connected clients. And keep in mind,
+[1:37:32] this is a twoperson match, so I'm going
+[1:37:35] to be making some assumptions when
+[1:37:36] designing how this all works out. Let's
+[1:37:39] create a new autoload called match
+[1:37:41] manager. Let's go to the project
+[1:37:42] settings, globals tab.
+[1:37:49] I'm going to move this under the
+[1:37:50] multiplayer directory.
+[1:37:52] Looks good. So, I'm going to use the
+[1:37:55] match manager to handle those things
+[1:37:57] that are going to commonly occur during
+[1:38:00] a match. We're going to reset scores or
+[1:38:02] restart a match. What happens when a
+[1:38:04] player leaves a game and when a player
+[1:38:06] dies, that sort of thing. So, right off
+[1:38:08] the bat, I know we're going to need a
+[1:38:09] winning score constant that marks when a
+[1:38:12] player well wins the game. So, how are
+[1:38:14] we going to keep score? Well, I think
+[1:38:16] when a player dies, we just award the
+[1:38:18] other player a point. So, we need to
+[1:38:20] report to the match manager when a
+[1:38:22] player gets zero health or dies.
+[1:38:26] Let's go to the player script to see
+[1:38:28] what we're going to call that.
+[1:38:30] So, when the player reaches no health,
+[1:38:32] which happens within the authority
+[1:38:34] context in this case, which I believe is
+[1:38:35] okay, we'll make a call to the match
+[1:38:38] manager here and pass in the name of the
+[1:38:41] player that just died. So, let's build
+[1:38:43] out that function.
+[1:38:45] So, to be able to track the player
+[1:38:46] scores, we need a variable to house that
+[1:38:48] data. So, I created a dictionary and I
+[1:38:50] think we're going to use the player's
+[1:38:52] name as the key or the network ID and
+[1:38:55] then we're just going to set that equal
+[1:38:56] to the score. So, for one player, it'll
+[1:38:58] look something like this.
+[1:39:00] But first, we need to add the players to
+[1:39:02] this once they join the game so that we
+[1:39:04] can enable scorekeeping. So, let's add a
+[1:39:06] function to do that.
+[1:39:12] So, we add the player based on their
+[1:39:14] network ID or player name and then we'll
+[1:39:16] just start their score at zero. And
+[1:39:18] since we're adding players, we should
+[1:39:19] probably also be able to remove players
+[1:39:21] if they disconnect from the game. So,
+[1:39:23] let's add that.
+[1:39:28] So, now we need to figure out when we're
+[1:39:30] going to add them to scorekeeping. I
+[1:39:32] think we can do this in the spawn
+[1:39:33] manager when we're getting ready to add
+[1:39:34] them to the game.
+[1:39:36] So, right before we add them to the
+[1:39:38] spawn path, let's make a call to
+[1:39:40] register them with scorekeeping.
+[1:39:44] And in this game setup, the name is the
+[1:39:46] same as the network ID. And now that I'm
+[1:39:48] thinking about it, I think we should add
+[1:39:49] the call to remove them from
+[1:39:50] scorekeeping if they disconnect from the
+[1:39:52] game. But let's wrap that in a different
+[1:39:54] function in case we want to do some
+[1:39:55] other cleanup when they leave the game.
+[1:40:00] And for now, we're just going to remove
+[1:40:02] the player from scorekeeping, but in the
+[1:40:04] future, you may want to add some
+[1:40:05] additional things here to clean them up
+[1:40:06] when they leave the game.
+[1:40:10] So, back in the spawn manager under pier
+[1:40:12] disconnected, let's make a call back to
+[1:40:14] the match manager.
+[1:40:16] So, after the pier disconnects, we make
+[1:40:18] a call back to the match manager. And
+[1:40:19] that way, our players will be cleaned up
+[1:40:21] nice and tidy if they leave the game.
+[1:40:22] So, now that we can keep score, let's
+[1:40:24] get back to what happens when a player
+[1:40:26] dies. So, we need to loop through our
+[1:40:27] player score dictionary and find the one
+[1:40:30] that didn't just die and add a point to
+[1:40:32] them.
+[1:40:39] So here we loop through all the player
+[1:40:41] scores, find the player that wasn't
+[1:40:43] killed, and add a point to their tally.
+[1:40:46] So our score has been updated, but this
+[1:40:48] is only happening on the authority. As
+[1:40:50] if you look back at the player script,
+[1:40:52] player no health happens under the
+[1:40:54] context of the server authority.
+[1:40:59] So once the score has changed, we need a
+[1:41:01] way to report that to the other
+[1:41:02] connected peers. So I think the best way
+[1:41:04] to do this is with an RPC. So let's add
+[1:41:07] an RPC called report score.
+[1:41:13] So since we are operating in the context
+[1:41:16] of an authority, I want to make sure
+[1:41:18] that this RPC can only be called from an
+[1:41:20] authority out to the connected peers to
+[1:41:23] report the score. That's why I've set
+[1:41:25] the mode to authority. Here
+[1:41:29] we're going to add call local because we
+[1:41:30] want the host pier to be able to report
+[1:41:32] scores to itself. And I'm going to add
+[1:41:34] the transfer mode of reliable because we
+[1:41:36] really want to make sure that our scores
+[1:41:37] are reported. So back in our player died
+[1:41:39] function, let's add a call to report the
+[1:41:42] scores.
+[1:41:45] So this will actually call from the host
+[1:41:47] down to the other connected peer. But we
+[1:41:50] still don't have a way to update the
+[1:41:51] scores back in our scoreboard component.
+[1:41:54] So in order to inform the scoreboard
+[1:41:56] component that the scores have been
+[1:41:57] updated on that local client pier, let's
+[1:42:00] create a signal to emit that once the
+[1:42:02] scores are reported, it can update its
+[1:42:04] labels.
+[1:42:09] So let's listen for that signal back in
+[1:42:11] the scoreboard component.
+[1:42:19] And then once we have the scores, let's
+[1:42:21] update the labels.
+[1:42:29] This is going to be a pretty crude
+[1:42:30] approach to updating the player scores.
+[1:42:32] You can see I'm just checking if this is
+[1:42:34] the host player based on their network
+[1:42:35] ID and then I'm updating the text
+[1:42:37] accordingly.
+[1:42:39] Let's create the player one label that
+[1:42:40] we can reuse when the scores are updated
+[1:42:48] and make sure you update it to point to
+[1:42:49] player two. Let's create another label
+[1:42:52] for player two. So, let's run a demo to
+[1:42:55] make sure the scores are updated when a
+[1:42:56] player is killed.
+[1:43:00] And look at that. You can see the player
+[1:43:02] one was been updated on both clients
+[1:43:04] when player two was killed.
+[1:43:09] This is working as expected. After the
+[1:43:11] player's health dips below five, the
+[1:43:13] other player is awarded a point.
+[1:43:19] But now we need to report the winner of
+[1:43:22] the game once one player has reached
+[1:43:24] five wins.
+[1:43:26] So let's look back at our player died
+[1:43:27] function in the match manager. And once
+[1:43:30] the player registers a point, let's see
+[1:43:32] if they actually won the game.
+[1:43:37] So I'm going to check against the
+[1:43:38] winning score to see if the player has
+[1:43:40] reached that threshold. So at this point
+[1:43:42] when a player wins, we need to inform
+[1:43:44] everyone that the game has ended. So, I
+[1:43:46] think this is a good time to create
+[1:43:48] another RPC for game over.
+[1:43:54] I'm going to use the same RPC
+[1:43:56] configuration as the other RPC because
+[1:43:58] it's the same context and it's going to
+[1:44:01] accept a winning player name and the
+[1:44:03] final scores. Since I already struggled
+[1:44:06] through setting this up, I realized that
+[1:44:08] passing in the final scores to the game
+[1:44:10] over RPC call is the best way to go
+[1:44:13] rather than reporting the scores like we
+[1:44:15] did earlier. In short, based on the way
+[1:44:17] I have this set up, it just makes sure
+[1:44:19] that we don't overwrite the winning
+[1:44:21] label once the game has ended.
+[1:44:25] So, let's add the RPC call with the
+[1:44:28] winner
+[1:44:30] and then the final player scores.
+[1:44:33] So at this point we can emit the same
+[1:44:35] scores updated signal
+[1:44:38] so that our scoreboard can be updated
+[1:44:42] and let's create another signal called
+[1:44:44] game ended. And we're going to pass in
+[1:44:47] the winning player name.
+[1:44:52] So let's go back to our scoreboard
+[1:44:53] component and wire up that gameended
+[1:44:56] signal.
+[1:45:04] So, when the game is over, I think we'll
+[1:45:06] just add a winning label to the player
+[1:45:08] that won the game. And again, I'm doing
+[1:45:10] that crew check against the network ID
+[1:45:12] of the host. You'll have to come up with
+[1:45:14] something a little better if you have
+[1:45:15] more than two players.
+[1:45:19] So, all I'm doing here is just tacking
+[1:45:21] on the word winner to the label that
+[1:45:22] we've already created.
+[1:45:25] Genius, isn't it? So, at this point, I
+[1:45:27] think we can show the play again button
+[1:45:29] that we created earlier. However, I only
+[1:45:31] want it to show up on the host because I
+[1:45:34] want them to decide whether or not the
+[1:45:35] game continues.
+[1:45:39] Now, that on the topic of the play again
+[1:45:41] button, let's connect a function to it
+[1:45:43] when it's pressed. And after the button
+[1:45:45] is pressed, we'll just hide it again.
+[1:45:52] Now, let's test if our winning label
+[1:45:53] works.
+[1:45:56] Well, looks like our play again button
+[1:45:57] worked, but it looks like the winning
+[1:45:58] label did not. So, you remember earlier
+[1:46:00] when I said I wanted to pass in the
+[1:46:02] final scores instead of reusing the
+[1:46:03] report score RPC? Well, it ended up
+[1:46:06] happening anyways because we still have
+[1:46:08] a call to it right here. So, to remedy
+[1:46:11] that, let's just add a return statement
+[1:46:12] here after we found the winner.
+[1:46:18] And look at that. Player one is our
+[1:46:20] winner.
+[1:46:22] But if we hit play again, we need to
+[1:46:24] restart the actual match. And right now,
+[1:46:26] that doesn't happen. So, let's go back
+[1:46:27] into the match manager. Let's create a
+[1:46:29] new function called restart match.
+[1:46:32] And in there, we want to reset the
+[1:46:35] scores and also the labels. So, we're
+[1:46:38] going to call to a new function called
+[1:46:39] reset scores.
+[1:46:47] So, our restart match function will
+[1:46:49] first reset the scores. But where are we
+[1:46:52] actually calling this restart match
+[1:46:53] from? Well, when the player hits play
+[1:46:55] again, I think that's a good place to
+[1:46:56] put it. So, back in the scoreboard
+[1:46:59] component, after the player clicks the
+[1:47:01] play again button, let's add the call
+[1:47:02] there.
+[1:47:06] But we still need to reset the score
+[1:47:08] labels.
+[1:47:11] So, while we're in here, let's add
+[1:47:12] another function called reset
+[1:47:14] scoreboard.
+[1:47:27] Okay, so we have our utility function to
+[1:47:29] reset the scoreboard. How do we actually
+[1:47:32] tell the scoreboard component to reset
+[1:47:33] it though? Since restart match is only
+[1:47:36] called on the host machine, that means
+[1:47:38] that the scores will only be reset there
+[1:47:40] as well. So we need another RPC call to
+[1:47:43] reset the scores.
+[1:47:49] So let's create another one called play
+[1:47:50] again. And we can reuse the same RPC
+[1:47:53] configuration as the context is the
+[1:47:55] same. But once the play again RPC lands
+[1:47:58] on the other connected client, we need
+[1:48:00] another signal to tell the scoreboard
+[1:48:02] component to update the labels. So,
+[1:48:04] let's name it game restarted.
+[1:48:15] And let's not forget to call the play
+[1:48:17] again RPC when restart match is hit.
+[1:48:20] Now, we need to connect to the game
+[1:48:21] restarted signal back in our scoreboard
+[1:48:23] component.
+[1:48:29] and we can connect it to our reset
+[1:48:31] scoreboard function that we created a
+[1:48:32] minute ago. Now that I'm thinking about
+[1:48:34] it, I think we need to leverage this
+[1:48:36] game restarted signal in our player
+[1:48:38] script because not only do we need to
+[1:48:41] reset the player scores, but also the
+[1:48:43] player health.
+[1:48:45] So, let's take a look at the player
+[1:48:46] script really quick.
+[1:48:50] If we scroll down, we have this reset
+[1:48:52] player function. So, I think it may be a
+[1:48:56] good idea to hit that when the game
+[1:48:58] restarts because what if the client
+[1:49:00] leaves in the middle of the game and the
+[1:49:02] player's left with only four health,
+[1:49:04] like the host machine, and then a new
+[1:49:06] player joins in and that player has full
+[1:49:08] health, but the existing player only has
+[1:49:10] four health. Don't you think that we
+[1:49:12] should reset their health? I think it's
+[1:49:14] a good idea for our player to listen to
+[1:49:16] the game restarted just to be sure that
+[1:49:18] if a new player joins the game, their
+[1:49:20] health will be reset.
+[1:49:22] So, let's wire that up.
+[1:49:30] Okay, just going back to the match
+[1:49:32] manager. I'm thinking we got everything
+[1:49:33] working. So, let's do a quick demo.
+[1:49:39] All right, so we have our winner. Let's
+[1:49:40] go ahead and click play again. And the
+[1:49:43] player's health and score labels both
+[1:49:45] reset. Now, let's test it on the other
+[1:49:47] client.
+[1:49:52] We've got the correct winner label and
+[1:49:54] score. So, let's hit play again on the
+[1:49:55] host. And look at that. Everything is
+[1:49:58] reset. Perfect. Now, if we look at the
+[1:50:00] example that I was talking about earlier
+[1:50:02] where the player was at a lower health
+[1:50:04] and then left the game and then
+[1:50:06] rejoined, that'll look something like
+[1:50:08] this.
+[1:50:12] So, the host player, he's got like one
+[1:50:14] health left and then this client drops
+[1:50:15] out.
+[1:50:18] I know this might be a bit of an edge
+[1:50:19] case, but I just wanted to handle it for
+[1:50:21] illustrative purposes. So, let's say you
+[1:50:23] have the matchmaking and lobby and all
+[1:50:25] that set up to where another player can
+[1:50:26] drop back in. In this case, represented
+[1:50:29] by clicking join game again.
+[1:50:32] The new player has full health, but the
+[1:50:34] host does not. So, I think we should be
+[1:50:36] able to reset their health when a new
+[1:50:37] player joins. So, how do we do that?
+[1:50:41] Well, I think back in the spawn manager
+[1:50:42] might be a good place to do it.
+[1:50:45] Basically, what we can say is anytime a
+[1:50:47] pier is added through the peer connected
+[1:50:49] method, we can just restart the game.
+[1:50:52] Yeah, it'll run either way if it's a new
+[1:50:54] game or if a player joins halfway
+[1:50:56] through the match. But either way, it
+[1:50:58] just resets the scores because if we
+[1:51:00] look back at what restart match does, it
+[1:51:02] resets the scores and hits the play
+[1:51:05] again RPC and that's going to run on all
+[1:51:08] the connected clients which emits the
+[1:51:09] game restarted signal. And if we look at
+[1:51:12] where that's used, and then back over in
+[1:51:14] the player script, what we added just a
+[1:51:16] minute ago, it's going to reset the
+[1:51:18] player's health. So, I think that's a
+[1:51:20] perfect way to reset the match and make
+[1:51:21] sure if there's a late joining client,
+[1:51:23] their health and scores are all reset.
+[1:51:25] Let's do a quick test to make sure it
+[1:51:27] works.
+[1:51:29] Okay, so their health is pretty low.
+[1:51:32] Player two leaves the game. New player
+[1:51:34] joins back in.
+[1:51:36] Score and health is all reset. Looks
+[1:51:38] perfect. And we should just double check
+[1:51:41] that everything is still working. So,
+[1:51:42] let's just go through a match really
+[1:51:43] quick.
+[1:51:48] And it looks like things are functioning
+[1:51:49] as expected. So, one last thing that may
+[1:51:53] or may not be that important to you is I
+[1:51:55] was thinking about pausing the controls
+[1:51:57] on the inputs and firing the missiles
+[1:51:59] once we get to the play again winner
+[1:52:01] screen. Like right now I can still move
+[1:52:03] around and shoot missiles and all that
+[1:52:05] stuff, but it's still going to take
+[1:52:07] damage and it's probably going to give
+[1:52:09] me a score. Yeah, see it's moved me up
+[1:52:11] to six. So there's a few ways to handle
+[1:52:13] this, but basically what I want to do is
+[1:52:16] prevent them from moving or firing in
+[1:52:18] the game once we get to a game over
+[1:52:20] state. So one quick way to handle this
+[1:52:23] is to add a game pause variable to the
+[1:52:25] match manager.
+[1:52:29] So I think the first place we can set
+[1:52:31] the game to pause is when the game is
+[1:52:33] over. But we need to set it on both
+[1:52:36] clients. So since we know the game over
+[1:52:38] RPC calls down to all the connected
+[1:52:40] peers, we can actually update that
+[1:52:42] there.
+[1:52:46] And since the play again RPC will
+[1:52:48] restart the game, I think we can unpause
+[1:52:50] the game safely there. and also because
+[1:52:52] we know this is ran on all the local
+[1:52:54] peers.
+[1:52:57] Okay, so this is where we set the game
+[1:52:59] to be paused or not. But where can we
+[1:53:01] put the checks to make sure the player
+[1:53:02] can't move or fire the weapons? Well,
+[1:53:04] the first place I can think of is the
+[1:53:05] player input. So, since we already have
+[1:53:08] this conditional here that makes sure
+[1:53:10] only the local authority is the one that
+[1:53:12] can change the inputs, we should just be
+[1:53:14] able to tack on a check to make sure the
+[1:53:16] game is not paused.
+[1:53:19] So, I know this will prevent players
+[1:53:21] from moving or firing a weapon when the
+[1:53:23] game is paused, but I'm a little
+[1:53:26] suspicious that something else might
+[1:53:27] happen.
+[1:53:29] Let's just run the game to see.
+[1:53:32] So, I'm firing here and I'm about to
+[1:53:35] kill the player and okay, so I can't
+[1:53:37] move anywhere, but I can't actually stop
+[1:53:39] moving. So, yeah, that's what I was
+[1:53:41] suspicious about. So, this is an edge
+[1:53:43] case where your player received an input
+[1:53:47] to move in one direction and in this
+[1:53:49] case across the screen, but the input
+[1:53:52] will never change because we just
+[1:53:55] wrapped it in a conditional. So, your
+[1:53:58] player is just going to continue to move
+[1:53:59] in that same direction because it's
+[1:54:01] never updated. So, I think we just need
+[1:54:04] to add another conditional here that
+[1:54:05] says don't keep running the physics
+[1:54:08] process, which moves our player if the
+[1:54:10] game is paused. So, regardless if we are
+[1:54:13] moving them or not, let's just make sure
+[1:54:15] they don't move at all.
+[1:54:19] Now, let's try that test again. So, I'm
+[1:54:21] going to keep moving forward when I fire
+[1:54:22] this last projectile. Let's see if the
+[1:54:24] game prevents me from moving. Yes, it
+[1:54:27] worked as expected. Excellent. So, I
+[1:54:30] think that wraps up this GDO basic
+[1:54:32] multiplayer tutorial. If you've got
+[1:54:34] everything working, now's a good time to
+[1:54:36] make that commit. What about playing
+[1:54:39] with a friend? Well, I'm going to cover
+[1:54:41] that in a detailed follow-up video. That
+[1:54:43] is if you're interested. So, please let
+[1:54:45] me know in the comments. In short, you
+[1:54:47] can export a client build, share it with
+[1:54:50] a friend that's on the same network, but
+[1:54:52] first, make sure you make an update to
+[1:54:54] pass in the local IP of the host
+[1:54:56] computer into the create client
+[1:54:57] function, or just have your friend pull
+[1:55:00] down the project from GitHub and then
+[1:55:01] make the same changes to point to the
+[1:55:03] host computer. If you want to test out
+[1:55:05] your skills to see where to go from
+[1:55:06] here, try to create a move component
+[1:55:09] that handles all the move functionality,
+[1:55:11] similar how we set up the hit and hurt
+[1:55:13] box components. Create a tally of wins
+[1:55:16] that shows how many total wins a player
+[1:55:18] has during a game session. Keep players
+[1:55:20] from leaving the bounds of the window.
+[1:55:22] Add sound for ship movement, missile
+[1:55:24] firing, and explosions. We are barely
+[1:55:26] scratching the surface with this effort,
+[1:55:28] but I'm hoping that it helps you better
+[1:55:30] understand one set of networking tools
+[1:55:32] so you can begin your multiplayer
+[1:55:34] journey to familiarize you with some
+[1:55:36] basic multiplayer concepts through
+[1:55:38] illustrative examples assembled for
+[1:55:40] brevity. I didn't make the whole project
+[1:55:42] out of components, but we dabbled with
+[1:55:44] it to get you used to good design
+[1:55:46] practices. We didn't cover lag
+[1:55:49] compensation, but you've been introduced
+[1:55:50] to authority, a fundamental concept for
+[1:55:53] multiplayer development. We could have
+[1:55:55] probably used a multiplayer synchronizer
+[1:55:57] and the game scene to sync those scores
+[1:56:00] between players, but I wanted to show
+[1:56:02] you how we could leverage signals, an
+[1:56:04] autoload with RBC's to report the scores
+[1:56:07] from the authority to the connected
+[1:56:08] peers. The point is, there is much to
+[1:56:10] learn, but keep at it and it will
+[1:56:12] eventually click. One stage of your
+[1:56:15] journey is over, another begins. If this
+[1:56:18] video was helpful and you'd like me to
+[1:56:19] continue the series with more in-depth
+[1:56:21] tutorials on using the multiplayer
+[1:56:23] synchronizer and spawner, demonstrating
+[1:56:25] authority, applying lag compensation, or
+[1:56:27] exporting server builds, hosting with
+[1:56:29] Steam, and so on, or any other questions
+[1:56:32] you may have, please let me know.
+[1:56:34] Comment below or drop by the Discord.
+[1:56:36] Thanks for watching.

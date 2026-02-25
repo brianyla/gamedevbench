@@ -1,0 +1,17 @@
+[
+  {
+    "name": "QuestManager",
+    "url": "https://github.com/example/quest-manager",
+    "description": "Quest system tutorial repository"
+  },
+  {
+    "name": "GodotMovement",
+    "url": "https://github.com/example/godot-movement",
+    "description": "Character movement tutorial"
+  },
+  {
+    "name": "UITutorial",
+    "url": "https://github.com/example/ui-tutorial",
+    "description": "UI systems tutorial"
+  }
+]

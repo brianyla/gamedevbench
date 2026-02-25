@@ -1,0 +1,27 @@
+llm:
+  provider: anthropic
+  model: claude-sonnet-4.5
+  api_key_env: ANTHROPIC_API_KEY
+  max_tokens: 8000
+  temperature: 0.3
+
+sources:
+  videos: pipeline/data/videos/
+  repos: pipeline/data/repos/
+
+output:
+  tasks: pipeline/data/tasks/
+
+processing:
+  max_workers: 20  # Parallel downloads/clones
+  llm_batch_size: 10  # Process N items at a time
+  max_retries: 3  # Retry failed operations
+
+reference_tasks:
+  - tasks/task_0001  # Quest UI example
+  - tasks/task_0050  # Movement example
+  - tasks/task_0100  # Shader example
+
+godot:
+  executable: godot  # Assumes godot is in PATH
+  validation_timeout: 30  # seconds
