@@ -4,6 +4,18 @@ Get started with the GameDevBench task generation pipeline in 5 minutes.
 
 ## 1. Setup Environment
 
+### Option A: Using `uv` (Recommended - No manual install needed!)
+
+```bash
+# From repository root:
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# That's it! uv automatically handles dependencies from root pyproject.toml
+# Just run with: uv run python pipeline/<script>
+```
+
+### Option B: Traditional pip install
+
 ```bash
 cd pipeline
 
@@ -12,7 +24,11 @@ pip install -r requirements.txt
 
 # Set API key
 export ANTHROPIC_API_KEY="sk-ant-..."
+```
 
+### Verify Godot
+
+```bash
 # Verify Godot is installed
 godot --version
 # If not in PATH, update config.yaml with full path
@@ -43,23 +59,33 @@ Create `my_videos.json` with video IDs from YouTube URLs:
 
 ## 3. Test on Small Subset
 
+### With uv (recommended):
+
 ```bash
 # Test with 2-3 videos first
-python scripts/02_clone_repos.py --repos my_repos.json --workers 2
+uv run python scripts/02_clone_repos.py --repos my_repos.json --workers 2
 
 # Analyze commits
-python scripts/03_analyze_commits.py --repos "MyGodotProject"
+uv run python scripts/03_analyze_commits.py --repos "MyGodotProject"
 
 # Check results
-python scripts/utils.py --stats
+uv run python scripts/utils.py --stats
 cat data/repos/MyGodotProject/commits.json | head -50
+```
+
+### Without uv:
+
+```bash
+python scripts/02_clone_repos.py --repos my_repos.json --workers 2
+python scripts/03_analyze_commits.py --repos "MyGodotProject"
+python scripts/utils.py --stats
 ```
 
 ## 4. Run Discovery
 
 ```bash
 # Match transcripts to commits (uses LLM)
-python scripts/04_discover_tasks.py --videos "9tu-Q-T--mY"
+uv run python scripts/04_discover_tasks.py --videos "9tu-Q-T--mY"
 
 # Check candidates
 cat data/videos/9tu-Q-T--mY/candidates.json
@@ -69,7 +95,7 @@ cat data/videos/9tu-Q-T--mY/candidates.json
 
 ```bash
 # Extract before/after states from git
-python scripts/05_extract_task_from_commit.py --videos "9tu-Q-T--mY"
+uv run python scripts/05_extract_task_from_commit.py --videos "9tu-Q-T--mY"
 
 # Check extracted tasks
 ls data/tasks/
@@ -79,7 +105,7 @@ ls data/tasks/
 
 ```bash
 # Generate validation tests (uses LLM)
-python scripts/06_generate_tests.py --tasks "task_xxxxx"
+uv run python scripts/06_generate_tests.py --tasks "task_xxxxx"
 
 # Check test
 cat data/tasks/task_xxxxx/ground_truth/scripts/test.gd
@@ -89,7 +115,7 @@ cat data/tasks/task_xxxxx/ground_truth/scripts/test.gd
 
 ```bash
 # Run validation
-python scripts/07_validate_tasks.py --tasks "task_xxxxx"
+uv run python scripts/07_validate_tasks.py --tasks "task_xxxxx"
 
 # Check report
 cat validation_report.json | jq '.stats'
@@ -101,17 +127,17 @@ Once you've tested individual stages:
 
 ```bash
 # Run everything on all videos/repos
-python run_pipeline.py --all
+uv run python run_pipeline.py --all
 
 # Or resume from where you left off
-python run_pipeline.py --all --resume
+uv run python run_pipeline.py --all --resume
 ```
 
 ## Monitoring Progress
 
 ```bash
 # View statistics
-python scripts/utils.py --stats
+uv run python scripts/utils.py --stats
 
 # Output:
 # ============================================================
@@ -135,6 +161,13 @@ python scripts/utils.py --stats
 
 ### "No module named 'anthropic'"
 
+With uv:
+```bash
+# Just use: uv run python <script>
+# Dependencies are auto-installed
+```
+
+Without uv:
 ```bash
 pip install -r requirements.txt
 ```

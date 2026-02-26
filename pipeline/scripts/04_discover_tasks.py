@@ -170,6 +170,12 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
             return []
 
         # Find matching repository
+        # Check sources mapping (passed from main)
+        if not repo_name and hasattr(llm_client, '_sources_mapping'):
+            repo_name = llm_client._sources_mapping.get(video_dir.name)
+            if repo_name:
+                print(f"📎 Using repo from sources.json: {repo_name}")
+
         if repo_name:
             repo_dir = repos_dir / repo_name
             if not repo_dir.exists():
@@ -177,7 +183,8 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
                 return []
             repo_dirs = [repo_dir]
         else:
-            # Try all repos (can be refined with metadata)
+            # Fallback: try all repos (less efficient)
+            print(f"⚠️  No repo specified for {video_dir.name}, trying all repos")
             repo_dirs = [d for d in repos_dir.iterdir()
                         if d.is_dir() and (d / "commits.json").exists()]
 
@@ -207,12 +214,29 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
         return []
 
 
+def load_sources_mapping(sources_file: Path) -> Dict[str, str]:
+    """Load video_id -> repo_name mapping from sources.json."""
+    if not sources_file.exists():
+        return {}
+
+    with open(sources_file) as f:
+        data = json.load(f)
+
+    mapping = {}
+    for source in data.get("sources", []):
+        mapping[source["video_id"]] = source["repo_name"]
+
+    return mapping
+
+
 def main():
     parser = argparse.ArgumentParser(description="Discover task candidates")
     parser.add_argument("--videos", nargs="+",
                        help="Specific video IDs to process")
     parser.add_argument("--repo",
                        help="Specific repo name to match against")
+    parser.add_argument("--sources", default="pipeline/sources.json",
+                       help="Sources JSON file")
     parser.add_argument("--config", default="pipeline/config.yaml",
                        help="Config file path")
 
@@ -222,6 +246,9 @@ def main():
     config = Config(args.config)
     videos_dir = Path(config.get('sources.videos'))
     repos_dir = Path(config.get('sources.repos'))
+
+    # Load video -> repo mapping from sources.json
+    sources_mapping = load_sources_mapping(Path(args.sources))
 
     # Initialize LLM client
     llm_client = LLMClient(config)
@@ -235,13 +262,21 @@ def main():
 
     print(f"📊 Processing {len(video_dirs)} videos")
 
+    # Store sources mapping in llm_client for access in discover_tasks_for_video
+    llm_client._sources_mapping = sources_mapping
+
     # Process videos
     print("\n🚀 Starting discovery...\n")
 
     total_candidates = 0
     for video_dir in video_dirs:
+        # Get repo from command line, or from sources mapping
+        repo = args.repo
+        if not repo:
+            repo = sources_mapping.get(video_dir.name)
+
         candidates = discover_tasks_for_video(
-            video_dir, repos_dir, llm_client, args.repo
+            video_dir, repos_dir, llm_client, repo
         )
         total_candidates += len(candidates)
 

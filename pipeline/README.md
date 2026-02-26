@@ -56,16 +56,36 @@ pipeline/
 
 ### Installation
 
+#### Option A: Using `uv` (Recommended)
+
+```bash
+# From repository root, no installation needed! Just set API key:
+export ANTHROPIC_API_KEY="your-key-here"
+
+# Run with: uv run python pipeline/<script>
+# Dependencies are automatically installed from root pyproject.toml
+```
+
+#### Option B: Traditional pip
+
 ```bash
 # Install dependencies
+pip install -r requirements.txt
+# or
 pip install anthropic pyyaml
 
 # Set API key
 export ANTHROPIC_API_KEY="your-key-here"
+```
 
+#### Verify Godot
+
+```bash
 # Verify Godot is in PATH
 godot --version
 ```
+
+See [UV_USAGE.md](UV_USAGE.md) for complete `uv` guide.
 
 ### Configuration
 
@@ -84,6 +104,18 @@ godot:
 ## Usage
 
 ### Quick Start
+
+#### With uv (recommended):
+
+```bash
+# Test with small subset
+uv run python run_pipeline.py --all --videos "video1,video2,video3"
+
+# Run full pipeline
+uv run python run_pipeline.py --all
+```
+
+#### Without uv:
 
 ```bash
 # Test with small subset

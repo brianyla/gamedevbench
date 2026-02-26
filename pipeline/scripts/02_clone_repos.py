@@ -15,14 +15,28 @@ from scripts.utils import Config, GitOperations, MetadataManager
 def load_repo_list(file_path: str) -> List[Dict[str, str]]:
     """Load repository list from JSON file.
 
-    Expected format:
-    [
-        {"name": "QuestManager", "url": "https://github.com/user/repo"},
-        ...
-    ]
+    Supports two formats:
+    1. Direct repo list: [{"name": "...", "url": "..."}, ...]
+    2. Sources file: {"sources": [{"repo_name": "...", "repo_url": "..."}, ...]}
     """
     with open(file_path) as f:
-        return json.load(f)
+        data = json.load(f)
+
+    # Check if it's a sources file
+    if isinstance(data, dict) and "sources" in data:
+        # Extract unique repos from sources
+        repos = {}
+        for source in data["sources"]:
+            repo_name = source["repo_name"]
+            if repo_name not in repos:
+                repos[repo_name] = {
+                    "name": repo_name,
+                    "url": source["repo_url"]
+                }
+        return list(repos.values())
+
+    # Otherwise assume it's a direct repo list
+    return data
 
 
 def clone_single_repo(repo_info: Dict[str, str], data_dir: Path) -> bool:
@@ -106,8 +120,10 @@ def clone_repos_parallel(repo_list: List[Dict[str, str]],
 
 def main():
     parser = argparse.ArgumentParser(description="Clone GitHub repositories")
-    parser.add_argument("--repos", required=True,
-                       help="JSON file with repository list")
+    parser.add_argument("--sources",
+                       help="Sources JSON file (extracts repos from sources)")
+    parser.add_argument("--repos",
+                       help="Direct repos JSON file (legacy format)")
     parser.add_argument("--workers", type=int, default=10,
                        help="Number of parallel workers")
     parser.add_argument("--config", default="pipeline/config.yaml",
@@ -115,14 +131,18 @@ def main():
 
     args = parser.parse_args()
 
+    if not args.sources and not args.repos:
+        parser.error("Must provide either --sources or --repos")
+
     # Load config
     config = Config(args.config)
     data_dir = Path(config.get('sources.videos')).parent
 
     # Load repository list
-    print(f"📋 Loading repository list from {args.repos}")
-    repo_list = load_repo_list(args.repos)
-    print(f"📊 Found {len(repo_list)} repositories")
+    repo_file = args.sources or args.repos
+    print(f"📋 Loading repository list from {repo_file}")
+    repo_list = load_repo_list(repo_file)
+    print(f"📊 Found {len(repo_list)} unique repositories")
 
     # Clone repositories
     print(f"\n🚀 Starting clone with {args.workers} workers...\n")

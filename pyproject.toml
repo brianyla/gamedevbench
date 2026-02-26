@@ -17,6 +17,8 @@ dependencies = [
     "openhands-sdk; python_version >= '3.12'",
     "openhands-tools; python_version >= '3.12'",
     "brokenaxes>=0.6.2",
+    "anthropic>=0.18.0",  # For pipeline task generation
+    "youtube-transcript-api>=0.6.0",  # For downloading YouTube transcripts
 ]
 
 [project.scripts]
