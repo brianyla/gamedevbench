@@ -108,13 +108,16 @@ class GitOperations:
             return False
 
     @staticmethod
-    def get_commit_history(repo_path: Path, max_commits: int = 100) -> List[Dict[str, Any]]:
+    def get_commit_history(repo_path: Path, max_commits: int = None) -> List[Dict[str, Any]]:
         """Extract commit history from repository."""
         try:
-            # Get commit metadata
+            # Get commit metadata (all commits if max_commits is None)
+            cmd = ["git", "log", "--all", "--pretty=format:%H|%s|%an|%ad|%P"]
+            if max_commits:
+                cmd.insert(2, f"-{max_commits}")
+
             result = subprocess.run(
-                ["git", "log", f"-{max_commits}", "--all",
-                 "--pretty=format:%H|%s|%an|%ad|%P"],
+                cmd,
                 cwd=repo_path,
                 capture_output=True,
                 text=True,
@@ -159,13 +162,26 @@ class GitOperations:
 
                 # Only include commits that changed Godot files
                 if files_changed:
+                    # Get diff stats (concise summary of changes)
+                    stat_result = subprocess.run(
+                        ["git", "show", "--stat", "--format=", commit_hash],
+                        cwd=repo_path,
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
+
+                    # Stats show lines added/removed per file
+                    diff_stats = stat_result.stdout.strip() if stat_result.returncode == 0 else ""
+
                     commits.append({
                         "hash": commit_hash,
                         "message": parts[1],
                         "author": parts[2],
                         "date": parts[3],
                         "parents": parts[4].split() if len(parts) > 4 else [],
-                        "files_changed": files_changed
+                        "files_changed": files_changed,
+                        "diff_stats": diff_stats  # Summary of changes
                     })
 
             return commits

@@ -27,7 +27,7 @@ def load_commits(repo_dir: Path) -> List[Dict[str, Any]]:
 
 
 def create_commit_summaries(commits: List[Dict[str, Any]], max_commits: int = 50) -> str:
-    """Create concise commit summaries for LLM prompt."""
+    """Create detailed commit summaries with diff stats for LLM prompt."""
     summaries = []
     for commit in commits[:max_commits]:
         files = [f["path"] for f in commit["files_changed"][:5]]
@@ -35,16 +35,50 @@ def create_commit_summaries(commits: List[Dict[str, Any]], max_commits: int = 50
         if len(commit["files_changed"]) > 5:
             file_str += f" (+ {len(commit['files_changed']) - 5} more)"
 
-        summaries.append(
-            f"• {commit['hash'][:8]}: {commit['message']}\n"
-            f"  Files: {file_str}"
-        )
+        summary = f"• {commit['hash'][:8]}: {commit['message']}\n"
+        summary += f"  Files: {file_str}"
 
-    return "\n".join(summaries)
+        # Include diff stats for better context
+        if commit.get('diff_stats'):
+            summary += f"\n  Stats:\n{commit['diff_stats']}"
+
+        summaries.append(summary)
+
+    return "\n\n".join(summaries)
+
+
+def filter_commits_by_range(commits: List[Dict[str, Any]], commit_range: Dict) -> List[Dict[str, Any]]:
+    """Filter commits to only include those in the specified range."""
+    if not commit_range:
+        return commits
+
+    start_hash = commit_range.get("start")
+    end_hash = commit_range.get("end")
+
+    if not start_hash or not end_hash:
+        return commits
+
+    # Find indices of start and end commits
+    start_idx = None
+    end_idx = None
+    for i, commit in enumerate(commits):
+        if commit["hash"].startswith(start_hash):
+            end_idx = i  # Commits are in reverse chronological order
+        if commit["hash"].startswith(end_hash):
+            start_idx = i
+
+    if start_idx is None or end_idx is None:
+        print(f"⚠️  Could not find commit range {start_hash[:8]}..{end_hash[:8]}")
+        return commits
+
+    # Return commits in the range (inclusive)
+    filtered = commits[end_idx:start_idx+1]
+    print(f"📎 Filtered to {len(filtered)} commits in range {start_hash[:8]}..{end_hash[:8]}")
+    return filtered
 
 
 def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
-                               llm_client: LLMClient) -> List[Dict[str, Any]]:
+                               llm_client: LLMClient, commit_range: Dict = None) -> List[Dict[str, Any]]:
     """Use LLM to match transcript segments to specific commits."""
 
     video_id = video_dir.name
@@ -59,6 +93,10 @@ def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
     if not commits:
         print(f"⚠️  No commits found for {repo_name}")
         return []
+
+    # Filter commits by range if specified
+    if commit_range:
+        commits = filter_commits_by_range(commits, commit_range)
 
     # Create prompt
     commit_summaries = create_commit_summaries(commits, max_commits=50)
@@ -152,7 +190,8 @@ Output ONLY the JSON array, no additional text."""
 
 def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
                             llm_client: LLMClient,
-                            repo_name: str = None) -> List[Dict[str, Any]]:
+                            repo_name: str = None,
+                            commit_range: Dict = None) -> List[Dict[str, Any]]:
     """Discover tasks for a single video."""
 
     candidates_file = video_dir / "candidates.json"
@@ -190,7 +229,7 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
 
         all_candidates = []
         for repo_dir in repo_dirs:
-            candidates = match_transcript_to_commits(video_dir, repo_dir, llm_client)
+            candidates = match_transcript_to_commits(video_dir, repo_dir, llm_client, commit_range)
             all_candidates.extend(candidates)
 
         if all_candidates:
@@ -214,8 +253,8 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
         return []
 
 
-def load_sources_mapping(sources_file: Path) -> Dict[str, str]:
-    """Load video_id -> repo_name mapping from sources.json."""
+def load_sources_mapping(sources_file: Path) -> Dict[str, Dict]:
+    """Load video_id -> source data mapping from sources.json."""
     if not sources_file.exists():
         return {}
 
@@ -224,7 +263,10 @@ def load_sources_mapping(sources_file: Path) -> Dict[str, str]:
 
     mapping = {}
     for source in data.get("sources", []):
-        mapping[source["video_id"]] = source["repo_name"]
+        mapping[source["video_id"]] = {
+            "repo_name": source["repo_name"],
+            "commit_range": source.get("commit_range")
+        }
 
     return mapping
 
@@ -270,13 +312,18 @@ def main():
 
     total_candidates = 0
     for video_dir in video_dirs:
-        # Get repo from command line, or from sources mapping
+        # Get repo and commit_range from command line or sources mapping
         repo = args.repo
+        commit_range = None
+
         if not repo:
-            repo = sources_mapping.get(video_dir.name)
+            source_data = sources_mapping.get(video_dir.name)
+            if source_data:
+                repo = source_data.get("repo_name")
+                commit_range = source_data.get("commit_range")
 
         candidates = discover_tasks_for_video(
-            video_dir, repos_dir, llm_client, repo
+            video_dir, repos_dir, llm_client, repo, commit_range
         )
         total_candidates += len(candidates)
 

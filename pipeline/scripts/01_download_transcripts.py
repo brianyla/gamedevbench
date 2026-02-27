@@ -36,12 +36,14 @@ def format_timestamp(seconds):
 def download_transcript(video_id: str) -> str:
     """Download transcript for a video ID."""
     try:
-        # Get transcript using youtube-transcript-api
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+        # Get transcript using youtube-transcript-api (correct API)
+        ytt_api = YouTubeTranscriptApi()
+        fetched_transcript = ytt_api.fetch(video_id, languages=['en'])
+        raw_data = fetched_transcript.to_raw_data()
 
         # Format with timestamps
         lines = []
-        for entry in transcript_list:
+        for entry in raw_data:
             timestamp = format_timestamp(entry["start"])
             text = entry["text"].strip()
             lines.append(f"[{timestamp}] {text}")
@@ -65,9 +67,10 @@ def download_single_transcript(video_id: str, video_dir: Path) -> bool:
     print(f"📥 Downloading {video_id}...")
 
     try:
+        # Download transcript
         transcript = download_transcript(video_id)
 
-        # Save to file
+        # Save transcript to file
         transcript_file.write_text(transcript)
 
         # Update metadata

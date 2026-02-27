@@ -3,10 +3,14 @@
     {
       "video_id": "Pa0P1lUoC-M",
       "video_url": "https://www.youtube.com/watch?v=Pa0P1lUoC-M",
-      "video_title": "Godot 4 Deck Builder Tutorial",
+      "video_title": "Slay the Spire Clone Godot 4 Tutorial: Card Dragging & State Machines (02/08)",
       "repo_name": "deck_builder_tutorial",
       "repo_url": "https://github.com/guladam/deck_builder_tutorial",
-      "description": "Deck building card game tutorial"
+      "description": "Deck building card game tutorial",
+      "commit_range": {
+        "start": "COMMIT_HASH_START",
+        "end": "COMMIT_HASH_END"
+      }
     }
   ]
 }

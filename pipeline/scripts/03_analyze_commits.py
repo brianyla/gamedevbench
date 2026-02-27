@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from scripts.utils import Config, GitOperations, MetadataManager
 
 
-def analyze_single_repo(repo_dir: Path, max_commits: int = 100) -> bool:
-    """Analyze commit history for a single repository."""
+def analyze_single_repo(repo_dir: Path, max_commits: int = None) -> bool:
+    """Analyze commit history for a single repository (all commits if max_commits=None)."""
 
     repo_name = repo_dir.name
     code_dir = repo_dir / "code"
@@ -62,7 +62,7 @@ def analyze_single_repo(repo_dir: Path, max_commits: int = 100) -> bool:
 
 
 def analyze_repos_parallel(repos_dir: Path, max_workers: int = 20,
-                          max_commits: int = 100) -> dict:
+                          max_commits: int = None) -> dict:
     """Analyze multiple repositories in parallel."""
 
     repo_dirs = [d for d in repos_dir.iterdir() if d.is_dir()]
@@ -93,8 +93,8 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze commit history")
     parser.add_argument("--repos", nargs="+",
                        help="Specific repo names to analyze")
-    parser.add_argument("--max-commits", type=int, default=100,
-                       help="Maximum commits to analyze per repo")
+    parser.add_argument("--max-commits", type=int, default=None,
+                       help="Maximum commits to analyze per repo (default: all)")
     parser.add_argument("--workers", type=int, default=20,
                        help="Number of parallel workers")
     parser.add_argument("--config", default="pipeline/config.yaml",
