@@ -8,8 +8,8 @@
       "repo_url": "https://github.com/guladam/deck_builder_tutorial",
       "description": "Deck building card game tutorial",
       "commit_range": {
-        "start": "COMMIT_HASH_START",
-        "end": "COMMIT_HASH_END"
+        "start": "4b83fa80d86589988438751958efa2f9bf515002",
+        "end": "a6f2c9c63c6cfa616a8cecc2fa68a5fb037d83a8"
       }
     }
   ]

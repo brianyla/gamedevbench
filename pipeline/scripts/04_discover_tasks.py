@@ -26,10 +26,32 @@ def load_commits(repo_dir: Path) -> List[Dict[str, Any]]:
     return json.loads(commits_file.read_text())
 
 
-def create_commit_summaries(commits: List[Dict[str, Any]], max_commits: int = 50) -> str:
-    """Create detailed commit summaries with diff stats for LLM prompt."""
+def get_commit_diff(repo_dir: Path, commit_hash: str) -> str:
+    """Get the actual code diff for a commit (only .gd and .tscn files)."""
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["git", "show", commit_hash, "--", "*.gd", "*.tscn"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode == 0:
+            return result.stdout.strip()
+        return ""
+    except Exception as e:
+        print(f"⚠️  Failed to get diff for {commit_hash[:8]}: {e}")
+        return ""
+
+
+def create_commit_summaries(commits: List[Dict[str, Any]], repo_dir: Path,
+                           include_diffs: bool = True) -> str:
+    """Create detailed commit summaries with actual code diffs for LLM prompt."""
     summaries = []
-    for commit in commits[:max_commits]:
+    for commit in commits:
         files = [f["path"] for f in commit["files_changed"][:5]]
         file_str = ", ".join(files)
         if len(commit["files_changed"]) > 5:
@@ -38,40 +60,56 @@ def create_commit_summaries(commits: List[Dict[str, Any]], max_commits: int = 50
         summary = f"• {commit['hash'][:8]}: {commit['message']}\n"
         summary += f"  Files: {file_str}"
 
-        # Include diff stats for better context
-        if commit.get('diff_stats'):
-            summary += f"\n  Stats:\n{commit['diff_stats']}"
+        # Include actual code diff for better context
+        if include_diffs:
+            diff = get_commit_diff(repo_dir, commit['hash'])
+            if diff:
+                summary += f"\n  Diff:\n{diff}\n"
+            elif commit.get('diff_stats'):
+                # Fallback to stats if diff is unavailable
+                summary += f"\n  Stats:\n{commit['diff_stats']}"
 
         summaries.append(summary)
 
     return "\n\n".join(summaries)
 
 
+def estimate_tokens(text: str) -> int:
+    """Rough token estimation (1 token ≈ 4 characters)."""
+    return len(text) // 4
+
+
 def filter_commits_by_range(commits: List[Dict[str, Any]], commit_range: Dict) -> List[Dict[str, Any]]:
-    """Filter commits to only include those in the specified range."""
+    """Filter commits to only include those in the specified range.
+
+    Commits are in reverse chronological order (newest first).
+    start = older commit, end = newer commit
+    """
     if not commit_range:
         return commits
 
-    start_hash = commit_range.get("start")
-    end_hash = commit_range.get("end")
+    start_hash = commit_range.get("start")  # Older commit
+    end_hash = commit_range.get("end")      # Newer commit
 
     if not start_hash or not end_hash:
         return commits
 
     # Find indices of start and end commits
-    start_idx = None
-    end_idx = None
+    start_idx = None  # Index of older commit (higher index)
+    end_idx = None    # Index of newer commit (lower index)
+
     for i, commit in enumerate(commits):
         if commit["hash"].startswith(start_hash):
-            end_idx = i  # Commits are in reverse chronological order
+            start_idx = i  # Older commit
         if commit["hash"].startswith(end_hash):
-            start_idx = i
+            end_idx = i    # Newer commit
 
     if start_idx is None or end_idx is None:
         print(f"⚠️  Could not find commit range {start_hash[:8]}..{end_hash[:8]}")
         return commits
 
     # Return commits in the range (inclusive)
+    # Since commits are reverse chronological, end_idx should be <= start_idx
     filtered = commits[end_idx:start_idx+1]
     print(f"📎 Filtered to {len(filtered)} commits in range {start_hash[:8]}..{end_hash[:8]}")
     return filtered
@@ -79,7 +117,10 @@ def filter_commits_by_range(commits: List[Dict[str, Any]], commit_range: Dict) -
 
 def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
                                llm_client: LLMClient, commit_range: Dict = None) -> List[Dict[str, Any]]:
-    """Use LLM to match transcript segments to specific commits."""
+    """Use LLM to match transcript segments to specific commits.
+
+    Automatically batches commits if context window would be exceeded.
+    """
 
     video_id = video_dir.name
     repo_name = repo_dir.name
@@ -98,15 +139,43 @@ def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
     if commit_range:
         commits = filter_commits_by_range(commits, commit_range)
 
-    # Create prompt
-    commit_summaries = create_commit_summaries(commits, max_commits=50)
+    # Estimate tokens for transcript
+    transcript_tokens = estimate_tokens(transcript)
+    print(f"📊 Transcript: ~{transcript_tokens:,} tokens")
+
+    # Context window limit (leave 20k for response + safety margin)
+    MAX_CONTEXT_TOKENS = 180_000
+    available_tokens = MAX_CONTEXT_TOKENS - transcript_tokens
+
+    # Create commit summaries with diffs and check size
+    commit_summaries = create_commit_summaries(commits, repo_dir, include_diffs=True)
+    commit_tokens = estimate_tokens(commit_summaries)
+
+    print(f"📊 Commits ({len(commits)} total): ~{commit_tokens:,} tokens")
+    print(f"📊 Total: ~{transcript_tokens + commit_tokens:,} tokens")
+
+    # Check if we need to batch
+    if transcript_tokens + commit_tokens > MAX_CONTEXT_TOKENS:
+        print(f"⚠️  Context would be {transcript_tokens + commit_tokens:,} tokens (exceeds {MAX_CONTEXT_TOKENS:,})")
+        print(f"🔄 Batching commits into multiple API calls...")
+        return match_with_batching(video_dir, repo_dir, transcript, commits, llm_client, available_tokens)
+
+    # Single API call - everything fits
+    print(f"✅ Context fits in single API call")
+    return match_single_batch(video_dir, repo_dir, transcript, commits, commit_summaries, llm_client)
+
+
+def match_single_batch(video_dir: Path, repo_dir: Path, transcript: str,
+                      commits: List[Dict[str, Any]], commit_summaries: str,
+                      llm_client: LLMClient) -> List[Dict[str, Any]]:
+    """Match transcript to commits in a single API call."""
 
     prompt = f"""Match this Godot tutorial transcript to specific Git commits.
 
 VIDEO TRANSCRIPT:
-{transcript[:15000]}  # Limit to ~15k chars
+{transcript}
 
-GIT COMMITS (most recent 50):
+GIT COMMITS:
 {commit_summaries}
 
 For each distinct feature/task taught in the transcript:
@@ -139,7 +208,54 @@ Output ONLY the JSON array, no additional text."""
 
     try:
         response = llm_client.call(prompt)
+        return parse_and_validate_candidates(response, commits, video_dir.name, repo_dir.name)
 
+    except Exception as e:
+        print(f"❌ Error matching transcript: {e}")
+        return []
+
+
+def match_with_batching(video_dir: Path, repo_dir: Path, transcript: str,
+                       commits: List[Dict[str, Any]], llm_client: LLMClient,
+                       available_tokens: int) -> List[Dict[str, Any]]:
+    """Match transcript to commits using multiple batched API calls."""
+
+    all_candidates = []
+    batch_size = 1
+    total_batches = (len(commits) + batch_size - 1) // batch_size
+
+    # Try to fit as many commits as possible per batch
+    test_summaries = create_commit_summaries(commits[:batch_size], repo_dir, include_diffs=True)
+    test_tokens = estimate_tokens(test_summaries)
+
+    if test_tokens < available_tokens:
+        # Calculate optimal batch size
+        batch_size = min(len(commits), max(1, int(available_tokens / test_tokens)))
+        total_batches = (len(commits) + batch_size - 1) // batch_size
+
+    print(f"📦 Processing {len(commits)} commits in {total_batches} batch(es) of ~{batch_size} commits each")
+
+    for i in range(0, len(commits), batch_size):
+        batch = commits[i:i + batch_size]
+        batch_num = (i // batch_size) + 1
+
+        print(f"\n🔄 Batch {batch_num}/{total_batches}: {len(batch)} commits")
+
+        commit_summaries = create_commit_summaries(batch, repo_dir, include_diffs=True)
+        candidates = match_single_batch(video_dir, repo_dir, transcript, batch,
+                                       commit_summaries, llm_client)
+
+        all_candidates.extend(candidates)
+        print(f"   Found {len(candidates)} candidates in this batch")
+
+    return all_candidates
+
+
+def parse_and_validate_candidates(response: str, commits: List[Dict[str, Any]],
+                                 video_id: str, repo_name: str) -> List[Dict[str, Any]]:
+    """Parse LLM response and validate commit references."""
+
+    try:
         # Parse JSON response
         # Handle potential markdown code blocks
         response = response.strip()
@@ -184,7 +300,7 @@ Output ONLY the JSON array, no additional text."""
         return []
 
     except Exception as e:
-        print(f"❌ Error matching transcript: {e}")
+        print(f"❌ Error parsing response: {e}")
         return []
 
 
