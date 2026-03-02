@@ -59,7 +59,7 @@ def extract_task_from_commit(candidate: Dict[str, Any], repos_dir: Path,
     task_dir = tasks_dir / task_id
 
     # Check if already extracted
-    if (task_dir / "ground_truth").exists() and (task_dir / "starting_point").exists():
+    if (task_dir / "task_config.json").exists():
         print(f"✓ Already extracted: {task_id}")
         return True
 
@@ -108,24 +108,35 @@ def extract_task_from_commit(candidate: Dict[str, Any], repos_dir: Path,
             print(f"⚠️  Ground truth has syntax errors")
             # Don't fail - might be fixable
 
-        # Save task metadata
-        task_spec = {
-            "task_id": task_id,
+        # Save task metadata in format matching existing tasks
+        task_id_number = abs(hash(f'{repo_name}_{commit_hash}')) % 100000
+
+        # Build repo URL from repo name
+        repo_url = f"https://github.com/{repo_name}" if not repo_name.startswith('http') else repo_name
+
+        task_config = {
+            "task_id": task_id_number,
             "name": candidate["name"],
             "instruction": candidate["instruction"],
-            "difficulty": candidate.get("difficulty", "intermediate"),
-            "estimated_time_minutes": candidate.get("estimated_time_minutes", 30),
-            "tags": candidate.get("tags", []),
-            "video_id": candidate["video_id"],
-            "repo_name": repo_name,
-            "commit_hash": commit_hash,
-            "commit_message": candidate.get("commit_message", ""),
-            "transcript_segment": candidate.get("transcript_segment", ""),
-            "files_changed": len(gt_files),
-            "starting_point_files": len(sp_files)
+            "metadata": {
+                "tutorial_source": f"YouTube: {candidate.get('video_id', 'unknown')}",
+                "video_id": candidate.get("video_id", ""),
+                "github_repo": repo_url,
+                "transcript_excerpt": candidate.get("transcript_excerpt", "")[:200],  # Limit length
+                "transcript_segment": candidate.get("transcript_segment", ""),
+                "difficulty": candidate.get("difficulty", "intermediate"),
+                "estimated_time_minutes": candidate.get("estimated_time_minutes", 30),
+                "tags": candidate.get("tags", []),
+                "commit_hash": commit_hash,
+                "commit_message": candidate.get("commit_message", ""),
+                "files_changed": len(gt_files),
+                "starting_point_files": len(sp_files),
+                "expected_nodes": [],  # TODO: Extract from ground truth analysis
+                "key_properties": {}   # TODO: Extract from ground truth analysis
+            }
         }
 
-        (task_dir / "task_spec.json").write_text(json.dumps(task_spec, indent=2))
+        (task_dir / "task_config.json").write_text(json.dumps(task_config, indent=2))
 
         # Update metadata
         MetadataManager.update_stage_status(task_dir, "extraction", "completed")

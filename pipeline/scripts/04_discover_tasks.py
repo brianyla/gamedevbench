@@ -30,20 +30,57 @@ def get_commit_diff(repo_dir: Path, commit_hash: str) -> str:
     """Get the actual code diff for a commit (only .gd and .tscn files)."""
     import subprocess
 
+    # The actual git repo is in the 'code' subdirectory
+    code_dir = repo_dir / "code"
+
+    if not (code_dir / ".git").exists():
+        print(f"⚠️  No git repository at {code_dir}")
+        return ""
+
     try:
+        # Get full diff with proper format
         result = subprocess.run(
-            ["git", "show", commit_hash, "--", "*.gd", "*.tscn"],
-            cwd=repo_dir,
+            ["git", "show", "--format=", commit_hash],
+            cwd=code_dir,
             capture_output=True,
             text=True,
             timeout=30
         )
 
-        if result.returncode == 0:
-            return result.stdout.strip()
-        return ""
+        if result.returncode != 0:
+            print(f"⚠️  Git show failed for {commit_hash[:8]}: {result.stderr}")
+            return ""
+
+        full_diff = result.stdout
+
+        if not full_diff.strip():
+            print(f"⚠️  Empty diff for {commit_hash[:8]}")
+            return ""
+
+        # Filter to only include .gd and .tscn file sections
+        lines = full_diff.split('\n')
+        filtered_lines = []
+        include_section = False
+
+        for line in lines:
+            # Check if this is a new file diff
+            if line.startswith('diff --git'):
+                # Check if it's a .gd or .tscn file
+                include_section = '.gd' in line or '.tscn' in line
+
+            if include_section:
+                filtered_lines.append(line)
+
+        filtered_diff = '\n'.join(filtered_lines).strip()
+
+        if not filtered_diff:
+            print(f"⚠️  No .gd/.tscn files in diff for {commit_hash[:8]}")
+            return ""
+
+        return filtered_diff
+
     except Exception as e:
-        print(f"⚠️  Failed to get diff for {commit_hash[:8]}: {e}")
+        print(f"⚠️  Exception getting diff for {commit_hash[:8]}: {e}")
         return ""
 
 
@@ -116,7 +153,8 @@ def filter_commits_by_range(commits: List[Dict[str, Any]], commit_range: Dict) -
 
 
 def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
-                               llm_client: LLMClient, commit_range: Dict = None) -> List[Dict[str, Any]]:
+                               llm_client: LLMClient, commit_range: Dict = None,
+                               debug: bool = False) -> List[Dict[str, Any]]:
     """Use LLM to match transcript segments to specific commits.
 
     Automatically batches commits if context window would be exceeded.
@@ -158,53 +196,92 @@ def match_transcript_to_commits(video_dir: Path, repo_dir: Path,
     if transcript_tokens + commit_tokens > MAX_CONTEXT_TOKENS:
         print(f"⚠️  Context would be {transcript_tokens + commit_tokens:,} tokens (exceeds {MAX_CONTEXT_TOKENS:,})")
         print(f"🔄 Batching commits into multiple API calls...")
-        return match_with_batching(video_dir, repo_dir, transcript, commits, llm_client, available_tokens)
+        return match_with_batching(video_dir, repo_dir, transcript, commits, llm_client, available_tokens, debug)
 
     # Single API call - everything fits
     print(f"✅ Context fits in single API call")
-    return match_single_batch(video_dir, repo_dir, transcript, commits, commit_summaries, llm_client)
+    return match_single_batch(video_dir, repo_dir, transcript, commits, commit_summaries, llm_client, debug)
 
 
 def match_single_batch(video_dir: Path, repo_dir: Path, transcript: str,
                       commits: List[Dict[str, Any]], commit_summaries: str,
-                      llm_client: LLMClient) -> List[Dict[str, Any]]:
+                      llm_client: LLMClient, debug: bool = False) -> List[Dict[str, Any]]:
     """Match transcript to commits in a single API call."""
 
-    prompt = f"""Match this Godot tutorial transcript to specific Git commits.
+    prompt = f"""You are analyzing a Godot tutorial to extract programming tasks.
+
+CONTEXT:
+This transcript covers a tutorial episode where the instructor teaches multiple features in sequence.
+Each feature was implemented in a separate Git commit.
+The commits are listed in chronological order (oldest to newest).
+
+Your goal: Match each feature taught in the video to its corresponding commit.
 
 VIDEO TRANSCRIPT:
 {transcript}
 
-GIT COMMITS:
+GIT COMMITS (chronological order, with code diffs):
 {commit_summaries}
 
-For each distinct feature/task taught in the transcript:
-1. Identify the tutorial segment (with approximate timestamp/section)
-2. Find the matching Git commit(s) that implement that feature
-3. Extract a clear, specific task instruction
+INSTRUCTIONS:
+For each commit that's clearly taught in the transcript:
 
-Requirements:
-- Only include commits that implement complete, testable features
-- Task instruction should be implementable by a student
-- Focus on gameplay mechanics, UI systems, or visual effects
-- Exclude trivial changes (typo fixes, formatting, etc.)
+1. Find the transcript segment where this feature is explained (use timestamps)
+2. Extract a quote showing the instructor teaching this specific feature
+3. Write a clear instruction describing what the student should implement
+4. Assess the difficulty and estimated time
 
-Output a JSON array with this exact structure:
+Rules:
+- Create one task per commit (1:1 mapping)
+- A single transcript will produce multiple tasks (one for each commit)
+- Use timestamp ranges to show which part teaches which commit
+- Skip commits that aren't explained in the transcript
+- Skip trivial commits (typos, formatting, minor tweaks)
+- If a commit has multiple related changes, describe them all in one comprehensive instruction
+
+Difficulty guidelines:
+- beginner: Simple scenes/scripts, basic node setup, following direct instructions
+- intermediate: Multiple systems, signals, state management, requires understanding connections
+- advanced: Complex architecture, custom resources, algorithmic logic, design decisions
+
+JSON output format:
 [
   {{
-    "name": "Quest HUD System",
-    "instruction": "Create a CanvasLayer-based quest HUD that displays active quests and updates when quest state changes. Connect signals from QuestManager to update UI labels in real-time.",
-    "transcript_segment": "Section 2: UI Implementation",
-    "transcript_excerpt": "Now we'll connect the signals from QuestManager...",
+    "name": "Card Dragging State Machine",
+    "instruction": "Implement a state machine for card dragging. Create a CardStateMachine node that manages three states: CardBaseState (idle), CardDraggingState (follows mouse), and CardReleasedState (returns to position). Connect the card's gui_input signal to trigger state transitions.",
+    "transcript_segment": "[2:30] - [15:20]",
+    "transcript_excerpt": "Now we need a state machine to handle the different card states. When the player clicks...",
     "commit_hash": "a1b2c3d4",
-    "commit_message": "Add quest UI with signal connections",
+    "commit_message": "Add card state machine",
+    "difficulty": "intermediate",
+    "estimated_time_minutes": 25,
+    "tags": ["state_machine", "input_handling", "ui"]
+  }},
+  {{
+    "name": "Card Targeting System",
+    "instruction": "Create a CardTargetSelector that highlights valid targets when dragging a card. Add target validation logic and visual feedback for targetable enemies.",
+    "transcript_segment": "[15:30] - [28:45]",
+    "transcript_excerpt": "Next, let's add targeting. When dragging an attack card, we need to show which enemies...",
+    "commit_hash": "b2c3d4e5",
+    "commit_message": "Add card targeting mechanics",
     "difficulty": "intermediate",
     "estimated_time_minutes": 30,
-    "tags": ["ui", "signals", "canvas_layer"]
+    "tags": ["targeting", "game_logic", "ui"]
   }}
 ]
 
-Output ONLY the JSON array, no additional text."""
+Return only the JSON array."""
+
+    # Debug: Save prompt to file
+    if debug:
+        debug_file = video_dir / "debug_prompt.txt"
+        debug_file.write_text(prompt)
+        print(f"📝 Saved full prompt to: {debug_file}")
+
+        # Also save just the commit summaries
+        commits_file = video_dir / "debug_commits.txt"
+        commits_file.write_text(commit_summaries)
+        print(f"📝 Saved commit summaries to: {commits_file}")
 
     try:
         response = llm_client.call(prompt)
@@ -217,7 +294,7 @@ Output ONLY the JSON array, no additional text."""
 
 def match_with_batching(video_dir: Path, repo_dir: Path, transcript: str,
                        commits: List[Dict[str, Any]], llm_client: LLMClient,
-                       available_tokens: int) -> List[Dict[str, Any]]:
+                       available_tokens: int, debug: bool = False) -> List[Dict[str, Any]]:
     """Match transcript to commits using multiple batched API calls."""
 
     all_candidates = []
@@ -243,7 +320,7 @@ def match_with_batching(video_dir: Path, repo_dir: Path, transcript: str,
 
         commit_summaries = create_commit_summaries(batch, repo_dir, include_diffs=True)
         candidates = match_single_batch(video_dir, repo_dir, transcript, batch,
-                                       commit_summaries, llm_client)
+                                       commit_summaries, llm_client, debug)
 
         all_candidates.extend(candidates)
         print(f"   Found {len(candidates)} candidates in this batch")
@@ -273,6 +350,8 @@ def parse_and_validate_candidates(response: str, commits: List[Dict[str, Any]],
         valid_candidates = []
         commit_hashes = {c["hash"]: c for c in commits}
 
+        seen_commits = set()
+
         for candidate in candidates:
             # Verify commit exists
             commit_hash = candidate.get("commit_hash", "")
@@ -283,6 +362,13 @@ def parse_and_validate_candidates(response: str, commits: List[Dict[str, Any]],
             # Find full commit hash
             full_hash = next(h for h in commit_hashes.keys()
                            if h.startswith(commit_hash[:8]))
+
+            # Check for duplicates (enforce one task per commit)
+            if full_hash in seen_commits:
+                print(f"⚠️  Skipping duplicate: commit {commit_hash[:8]} already has a task")
+                continue
+
+            seen_commits.add(full_hash)
             candidate["commit_hash"] = full_hash
 
             # Add video and repo info
@@ -307,7 +393,8 @@ def parse_and_validate_candidates(response: str, commits: List[Dict[str, Any]],
 def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
                             llm_client: LLMClient,
                             repo_name: str = None,
-                            commit_range: Dict = None) -> List[Dict[str, Any]]:
+                            commit_range: Dict = None,
+                            debug: bool = False) -> List[Dict[str, Any]]:
     """Discover tasks for a single video."""
 
     candidates_file = video_dir / "candidates.json"
@@ -345,7 +432,7 @@ def discover_tasks_for_video(video_dir: Path, repos_dir: Path,
 
         all_candidates = []
         for repo_dir in repo_dirs:
-            candidates = match_transcript_to_commits(video_dir, repo_dir, llm_client, commit_range)
+            candidates = match_transcript_to_commits(video_dir, repo_dir, llm_client, commit_range, debug)
             all_candidates.extend(candidates)
 
         if all_candidates:
@@ -397,6 +484,8 @@ def main():
                        help="Sources JSON file")
     parser.add_argument("--config", default="pipeline/config.yaml",
                        help="Config file path")
+    parser.add_argument("--debug", action="store_true",
+                       help="Save full prompts to debug files")
 
     args = parser.parse_args()
 
@@ -439,7 +528,7 @@ def main():
                 commit_range = source_data.get("commit_range")
 
         candidates = discover_tasks_for_video(
-            video_dir, repos_dir, llm_client, repo, commit_range
+            video_dir, repos_dir, llm_client, repo, commit_range, args.debug
         )
         total_candidates += len(candidates)
 

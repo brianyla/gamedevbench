@@ -147,7 +147,7 @@ def generate_test_for_task(task_dir: Path, llm_client: LLMClient,
     """Generate test for a single task."""
 
     task_id = task_dir.name
-    task_spec_file = task_dir / "task_spec.json"
+    task_config_file = task_dir / "task_config.json"
     ground_truth_dir = task_dir / "ground_truth"
     test_file = ground_truth_dir / "scripts" / "test.gd"
 
@@ -157,14 +157,22 @@ def generate_test_for_task(task_dir: Path, llm_client: LLMClient,
         MetadataManager.update_stage_status(task_dir, "test_generation", "completed")
         return True
 
-    # Load task spec
-    if not task_spec_file.exists():
-        print(f"⏭️  Skipping {task_id}: no task spec")
+    # Load task config
+    if not task_config_file.exists():
+        print(f"⏭️  Skipping {task_id}: no task config")
         return False
 
-    task_spec = json.loads(task_spec_file.read_text())
+    task_config = json.loads(task_config_file.read_text())
 
-    print(f"🧪 Generating test for {task_id}: {task_spec['name']}")
+    # Extract fields for compatibility
+    task_spec = {
+        "name": task_config["name"],
+        "instruction": task_config["instruction"],
+        "difficulty": task_config.get("metadata", {}).get("difficulty", "intermediate"),
+        "tags": task_config.get("metadata", {}).get("tags", [])
+    }
+
+    print(f"🧪 Generating test for {task_id}: {task_config['name']}")
 
     try:
         # Generate test
