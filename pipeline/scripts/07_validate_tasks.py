@@ -10,7 +10,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from scripts.utils import Config, GodotValidator, MetadataManager
 
 
-def validate_single_task(task_dir: Path, validator: GodotValidator) -> Dict[str, Any]:
+def validate_single_task(task_dir: Path, validator: GodotValidator,
+                        headless: bool = True) -> Dict[str, Any]:
     """Validate a single task."""
 
     task_id = task_dir.name
@@ -41,7 +42,7 @@ def validate_single_task(task_dir: Path, validator: GodotValidator) -> Dict[str,
     # Run test on ground truth (should pass)
     test_file = ground_truth_dir / "scripts" / "test.gd"
     if test_file.exists():
-        test_result = validator.run_test(ground_truth_dir)
+        test_result = validator.run_test(ground_truth_dir, headless=headless)
         results["ground_truth"]["test_passed"] = test_result["passed"]
         results["ground_truth"]["test_output"] = test_result["output"]
 
@@ -67,7 +68,7 @@ def validate_single_task(task_dir: Path, validator: GodotValidator) -> Dict[str,
         sp_test_file.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(test_file, sp_test_file)
 
-        test_result = validator.run_test(starting_point_dir)
+        test_result = validator.run_test(starting_point_dir, headless=headless)
         results["starting_point"]["test_passed"] = test_result["passed"]
         results["starting_point"]["test_output"] = test_result["output"]
 
@@ -98,6 +99,8 @@ def main():
                        help="Output report file")
     parser.add_argument("--config", default="pipeline/config.yaml",
                        help="Config file path")
+    parser.add_argument("--headful", action="store_true",
+                       help="Run tests with Godot GUI visible (for debugging)")
 
     args = parser.parse_args()
 
@@ -130,7 +133,7 @@ def main():
 
     for task_dir in task_dirs:
         try:
-            results = validate_single_task(task_dir, validator)
+            results = validate_single_task(task_dir, validator, headless=not args.headful)
             all_results.append(results)
 
             # Update stats

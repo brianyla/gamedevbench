@@ -24,4 +24,4 @@ reference_tasks:
 
 godot:
   executable: godot  # Assumes godot is in PATH
-  validation_timeout: 30  # seconds
+  validation_timeout: 60  # seconds (increased for complex tests)

@@ -7,7 +7,7 @@ from typing import Dict, Any, List
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from scripts.utils import Config, LLMClient, MetadataManager
+from scripts.utils import Config, LLMClient, MetadataManager, GodotValidator
 
 
 def analyze_ground_truth_structure(ground_truth_dir: Path) -> Dict[str, Any]:
@@ -142,6 +142,165 @@ Output ONLY the complete test.gd script content, no markdown formatting or expla
         raise
 
 
+def fix_test_with_llm(task_config: Dict, ground_truth_dir: Path,
+                     current_test: str, error_output: str,
+                     llm_client: LLMClient, config: Config) -> str:
+    """Ask LLM to fix a failing test."""
+
+    prompt = f"""The test you generated has errors. Please fix it.
+
+TASK: {task_config['name']}
+INSTRUCTION: {task_config['instruction']}
+
+CURRENT TEST (BROKEN):
+```gdscript
+{current_test}
+```
+
+ERROR OUTPUT:
+```
+{error_output[:1000]}
+```
+
+COMMON ISSUES AND FIXES:
+
+1. "Test timed out" → The test is taking too long or stuck in infinite loop
+   - Add early returns in validation functions
+   - Avoid recursive node searches without depth limits
+   - Don't wait for frames unnecessarily
+   - Make sure quit() is called at the end
+
+2. "doesn't inherit from SceneTree" → Script MUST extend SceneTree or Node
+   - ALWAYS use: extends SceneTree
+   - NEVER change this to extends Node or anything else
+   - Use _initialize() function with: await run_validation()
+
+3. "Parse Error: coroutine" → Missing await
+   - If function uses await internally, call it with await
+   - Example: await validate_something() not validate_something()
+
+4. Resource/path errors → File doesn't exist
+   - Use ResourceLoader.exists() to check before loading
+   - Handle missing resources gracefully with early returns
+
+CRITICAL RULES:
+- ALWAYS extend SceneTree (never change this)
+- ALWAYS use _initialize() with await run_validation()
+- ALWAYS call quit(0) or quit(1) at the end of run_validation()
+- Keep validation simple - don't overcomplicate
+- Add timeouts to any loops
+
+Please provide a FIXED version that:
+1. Extends SceneTree (REQUIRED)
+2. Has _initialize() that calls await run_validation()
+3. Ends with quit(0) or quit(1)
+4. Fixes the specific error shown above
+5. Completes quickly (under 10 seconds)
+
+Output ONLY the complete fixed test.gd script."""
+
+    try:
+        response = llm_client.call(prompt)
+
+        # Clean up response
+        response = response.strip()
+        if response.startswith("```gdscript"):
+            response = response[11:]
+        elif response.startswith("```"):
+            response = response[3:]
+        if response.endswith("```"):
+            response = response[:-3]
+
+        return response.strip()
+
+    except Exception as e:
+        print(f"❌ Error asking LLM to fix test: {e}")
+        return current_test  # Return unchanged if LLM fails
+
+
+def generate_and_validate_test(task_dir: Path, llm_client: LLMClient,
+                               config: Config, validator: GodotValidator,
+                               max_retries: int = 3) -> bool:
+    """Generate test and retry with LLM feedback if it fails."""
+
+    task_id = task_dir.name
+    task_config_file = task_dir / "task_config.json"
+    ground_truth_dir = task_dir / "ground_truth"
+    test_file = ground_truth_dir / "scripts" / "test.gd"
+
+    # Check if already generated and passing
+    if test_file.exists():
+        result = validator.run_test(ground_truth_dir)
+        if result["passed"]:
+            print(f"✓ Test already exists and passes: {task_id}")
+            MetadataManager.update_stage_status(task_dir, "test_generation", "completed")
+            return True
+
+    # Load task config
+    if not task_config_file.exists():
+        print(f"⏭️  Skipping {task_id}: no task config")
+        return False
+
+    task_config = json.loads(task_config_file.read_text())
+
+    # Initial generation
+    print(f"🧪 Generating test for {task_id}: {task_config['name']}")
+
+    try:
+        test_content = generate_test_script(task_config, ground_truth_dir,
+                                           llm_client, config)
+        test_file.parent.mkdir(parents=True, exist_ok=True)
+        test_file.write_text(test_content)
+    except Exception as e:
+        print(f"❌ Failed to generate initial test: {e}")
+        MetadataManager.update_stage_status(
+            task_dir, "test_generation", "failed",
+            error=f"Initial generation failed: {str(e)}"
+        )
+        return False
+
+    # Validation loop with retries
+    for attempt in range(max_retries + 1):
+        print(f"   Attempt {attempt + 1}/{max_retries + 1}: Validating...")
+
+        # Run validation
+        result = validator.run_test(ground_truth_dir)
+
+        if result["passed"]:
+            print(f"✅ Test passed for {task_id} (took {attempt + 1} attempt(s))")
+            MetadataManager.update_stage_status(
+                task_dir, "test_generation", "completed"
+            )
+            return True
+
+        # Test failed - check if we should retry
+        if attempt < max_retries:
+            print(f"⚠️  Test failed, asking LLM to fix (attempt {attempt + 1})...")
+            print(f"   Error: {result['output'][:200]}")
+
+            # Extract error details
+            error_output = result["output"]
+
+            # Ask LLM to fix the test
+            test_content = fix_test_with_llm(
+                task_config, ground_truth_dir, test_content,
+                error_output, llm_client, config
+            )
+
+            # Save fixed test
+            test_file.write_text(test_content)
+        else:
+            # Max retries exceeded
+            print(f"❌ Test still failing after {max_retries} retries")
+            MetadataManager.update_stage_status(
+                task_dir, "test_generation", "failed",
+                error=f"Test validation failed after {max_retries} attempts: {error_output[:200]}"
+            )
+            return False
+
+    return False
+
+
 def generate_test_for_task(task_dir: Path, llm_client: LLMClient,
                           config: Config) -> bool:
     """Generate test for a single task."""
@@ -204,6 +363,10 @@ def main():
                        help="Specific task IDs to process")
     parser.add_argument("--config", default="pipeline/config.yaml",
                        help="Config file path")
+    parser.add_argument("--max-retries", type=int, default=3,
+                       help="Maximum retry attempts for fixing tests")
+    parser.add_argument("--no-validation", action="store_true",
+                       help="Skip validation and retry logic (old behavior)")
 
     args = parser.parse_args()
 
@@ -214,6 +377,9 @@ def main():
     # Initialize LLM client
     llm_client = LLMClient(config)
 
+    # Initialize validator (if validation enabled)
+    validator = None if args.no_validation else GodotValidator(config)
+
     # Get task directories
     if args.tasks:
         task_dirs = [tasks_dir / tid for tid in args.tasks
@@ -223,6 +389,8 @@ def main():
                     if d.is_dir() and (d / "ground_truth").exists()]
 
     print(f"📊 Processing {len(task_dirs)} tasks")
+    if not args.no_validation:
+        print(f"🔄 Max retries per task: {args.max_retries}")
     print("\n🚀 Starting test generation...\n")
 
     # Generate tests
@@ -230,10 +398,22 @@ def main():
     failed_count = 0
 
     for task_dir in task_dirs:
-        success = generate_test_for_task(task_dir, llm_client, config)
-        if success:
-            success_count += 1
-        else:
+        try:
+            if args.no_validation:
+                # Old behavior: just generate without validation
+                success = generate_test_for_task(task_dir, llm_client, config)
+            else:
+                # New behavior: generate with validation and retry
+                success = generate_and_validate_test(
+                    task_dir, llm_client, config, validator, args.max_retries
+                )
+
+            if success:
+                success_count += 1
+            else:
+                failed_count += 1
+        except Exception as e:
+            print(f"❌ Exception for {task_dir.name}: {e}")
             failed_count += 1
 
     # Print summary

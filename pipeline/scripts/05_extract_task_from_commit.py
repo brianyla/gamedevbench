@@ -11,13 +11,66 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from scripts.utils import Config, GitOperations, MetadataManager, GodotValidator
 
 
+def import_godot_project(project_dir: Path, validator: GodotValidator) -> bool:
+    """Run Godot to import/parse project (generates .godot folder)."""
+    import subprocess
+    import time
+
+    if not (project_dir / "project.godot").exists():
+        print(f"⚠️  No project.godot found in {project_dir}")
+        return False
+
+    try:
+        # Run Godot with --import flag to import all assets
+        # This is the proper way to reimport a project
+        cmd = [
+            validator.godot_executable,
+            "--headless",
+            "--import",
+            "--path", str(project_dir)
+        ]
+
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=60  # Longer timeout for importing
+        )
+
+        # Give it a moment to finish writing files
+        time.sleep(1)
+
+        # Check if .godot/imported folder has files
+        imported_dir = project_dir / ".godot" / "imported"
+        if imported_dir.exists():
+            # Count imported files
+            imported_files = list(imported_dir.iterdir())
+            if len(imported_files) > 0:
+                return True
+            else:
+                print(f"⚠️  .godot/imported folder is empty")
+                return False
+        else:
+            print(f"⚠️  .godot/imported folder not created")
+            return False
+
+    except subprocess.TimeoutExpired:
+        print(f"⚠️  Godot import timed out (>60s)")
+        return False
+    except Exception as e:
+        print(f"⚠️  Failed to import project: {e}")
+        return False
+
+
 def extract_files_from_commit(repo_path: Path, commit_hash: str,
                               target_dir: Path) -> List[str]:
     """Extract files from a specific commit state."""
 
     # Get list of files that exist at this commit
     godot_patterns = ['.gd', '.tscn', '.tres', '.gdshader', '.gdshaderinc',
-                     '.png', '.jpg', '.svg', '.wav', '.ogg', '.mp3',
+                     '.png', '.jpg', '.jpeg', '.svg', '.webp',
+                     '.wav', '.ogg', '.mp3',
+                     '.ttf', '.otf', '.woff', '.woff2', '.fnt',
                      'project.godot', '.import', '.godot']
 
     files = GitOperations.get_files_at_commit(repo_path, commit_hash, godot_patterns)
@@ -101,6 +154,18 @@ def extract_task_from_commit(candidate: Dict[str, Any], repos_dir: Path,
         if not gt_files:
             print(f"⚠️  No files extracted for ground truth")
             return False
+
+        # Import the ground truth project (generates .godot folder)
+        print(f"   Importing ground truth project...")
+        if not import_godot_project(ground_truth_dir, validator):
+            print(f"⚠️  Failed to import ground truth project")
+            # Don't fail - might still work
+
+        # Import the starting point project
+        print(f"   Importing starting point project...")
+        if not import_godot_project(starting_point_dir, validator):
+            print(f"⚠️  Failed to import starting point project")
+            # Don't fail - might still work
 
         # Check if ground truth is valid
         print(f"   Validating ground truth...")

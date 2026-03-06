@@ -305,12 +305,19 @@ class GodotValidator:
         except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
             return False
 
-    def run_test(self, project_path: Path, test_script: str = "scripts/test.gd") -> Dict[str, Any]:
+    def run_test(self, project_path: Path, test_script: str = "scripts/test.gd",
+                 headless: bool = True) -> Dict[str, Any]:
         """Run a validation test script."""
         try:
+            cmd = [self.godot_executable, "--path", str(project_path)]
+
+            if headless:
+                cmd.append("--headless")
+
+            cmd.extend(["-s", test_script])
+
             result = subprocess.run(
-                [self.godot_executable, "--path", str(project_path),
-                 "--headless", "-s", test_script],
+                cmd,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout
