@@ -36,7 +36,7 @@ class OpenHandsSolver(BaseSolver):
 
     # Model name mapping for litellm format
     MODEL_MAPPING = {
-        "claude": "anthropic/claude-sonnet-4-20250514",
+        "claude": "anthropic/claude-sonnet-4-5-20250929",
         "gpt": "openai/gpt-4o",
         "gpt-4o": "openai/gpt-4o",
         "gpt-4": "openai/gpt-4",
@@ -73,7 +73,10 @@ class OpenHandsSolver(BaseSolver):
         self.model = self.MODEL_MAPPING.get(model, model)
 
         # Optional overrides
-        self.api_base = api_base or os.environ.get("OPENROUTER_API_BASE")
+        # Keep raw override separate from OPENROUTER_API_BASE so non-openrouter models
+        # don't accidentally route to OpenRouter endpoints.
+        self.api_base = api_base
+        self.openrouter_api_base = os.environ.get("OPENROUTER_API_BASE")
         self.openrouter_site_url = openrouter_site_url or os.environ.get("OR_SITE_URL")
         self.openrouter_app_name = openrouter_app_name or os.environ.get("OR_APP_NAME")
 
@@ -125,6 +128,9 @@ class OpenHandsSolver(BaseSolver):
                 api_key = os.environ.get("OPENAI_API_KEY")
                 key_name = "OPENAI_API_KEY"
 
+            key_loaded = bool(api_key)
+            print(f"[OpenHands] API key check: {key_name} loaded={key_loaded}")
+
             if not api_key:
                 return SolverResult(
                     success=False,
@@ -141,16 +147,27 @@ class OpenHandsSolver(BaseSolver):
             # Explicitly cap max_output_tokens to avoid models like kimi-k2.5 where
             # litellm reports max_output_tokens == context_window (262144), making
             # any request with input tokens exceed the total context limit.
+
+            # Set base_url only if explicitly configured via api_base parameter
+            # For standard providers (Anthropic, OpenAI), don't set base_url - let LiteLLM handle routing
+            # Only set base_url for OpenRouter or custom endpoints
             llm_kwargs = dict(
                 model=self.model,
                 api_key=SecretStr(api_key),
                 temperature=0.0,
-                base_url=self.api_base,
                 max_output_tokens=32768,
             )
+
+            # Only set base_url for OpenRouter models, unless an explicit override was provided.
             if self.model.startswith("openrouter/"):
+                if self.api_base:
+                    llm_kwargs["base_url"] = self.api_base
+                elif self.openrouter_api_base:
+                    llm_kwargs["base_url"] = self.openrouter_api_base
                 llm_kwargs["openrouter_site_url"] = self.openrouter_site_url or "https://docs.all-hands.dev/"
                 llm_kwargs["openrouter_app_name"] = self.openrouter_app_name or "OpenHands"
+            elif self.api_base:
+                llm_kwargs["base_url"] = self.api_base
             llm = LLM(**llm_kwargs)
 
             mcp_config = {
