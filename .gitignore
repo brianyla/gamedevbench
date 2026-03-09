@@ -249,6 +249,9 @@ data_*/
 mono_crash.*.json
 
 results/*
+finetune/data/processed/*
+finetune/artifacts/*
+finetune/reports/*
 .claude/*
 runs/*
 scripts/youtube_data_codex/**/repo
