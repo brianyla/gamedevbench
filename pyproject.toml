@@ -19,6 +19,7 @@ dependencies = [
     "brokenaxes>=0.6.2",
     "anthropic>=0.18.0",  # For pipeline task generation
     "youtube-transcript-api>=0.6.0",  # For downloading YouTube transcripts
+    "openai>=2.20.0",
 ]
 
 [project.scripts]
