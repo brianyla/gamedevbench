@@ -89,6 +89,42 @@ Benchmark results are saved to `results/` directory with the following informati
 - Execution time
 - Validation results
 
+## Fine-Tuning Pipeline
+
+A reproducible fine-tuning workflow is provided under `finetune/`.
+
+Use it to:
+- Validate and split canonical trajectory data
+- Export OpenAI chat fine-tuning JSONL
+- Run baseline vs tuned model benchmark under identical workflow settings
+
+### Dataset Preparation
+
+```bash
+uv run python finetune/scripts/prepare_dataset.py \
+  --input finetune/data/canonical/dataset.jsonl \
+  --train-out finetune/data/processed/train.canonical.jsonl \
+  --val-out finetune/data/processed/val.canonical.jsonl \
+  --manifest-out finetune/artifacts/dataset_manifest.json
+```
+
+### Export to OpenAI Chat Fine-Tuning Format
+
+```bash
+uv run python finetune/scripts/export_openai_chat.py \
+  --input finetune/data/processed/train.canonical.jsonl \
+  --output finetune/data/processed/train.openai.jsonl
+```
+
+### Controlled A/B Benchmark (Baseline vs Tuned)
+
+Edit `finetune/config/experiment.yaml`, then run:
+
+```bash
+uv run python finetune/scripts/run_ab_benchmark.py \
+  --config finetune/config/experiment.yaml
+```
+
 ## Citation
 
 ```bibtex
