@@ -151,11 +151,27 @@ class OpenHandsSolver(BaseSolver):
             # Set base_url only if explicitly configured via api_base parameter
             # For standard providers (Anthropic, OpenAI), don't set base_url - let LiteLLM handle routing
             # Only set base_url for OpenRouter or custom endpoints
+            max_output_tokens = 32768
+            # Fine-tuned gpt-4o-mini models currently cap completion tokens at 16384.
+            if "gpt-4o-mini" in self.model:
+                max_output_tokens = 16384
+
+            # Optional manual override for troubleshooting/provider limits.
+            max_output_override = os.environ.get("OPENHANDS_MAX_OUTPUT_TOKENS")
+            if max_output_override:
+                try:
+                    max_output_tokens = int(max_output_override)
+                except ValueError:
+                    if self.debug:
+                        print(
+                            f"Invalid OPENHANDS_MAX_OUTPUT_TOKENS={max_output_override}, using {max_output_tokens}"
+                        )
+
             llm_kwargs = dict(
                 model=self.model,
                 api_key=SecretStr(api_key),
                 temperature=0.0,
-                max_output_tokens=32768,
+                max_output_tokens=max_output_tokens,
             )
 
             # Only set base_url for OpenRouter models, unless an explicit override was provided.
