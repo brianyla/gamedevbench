@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Weapons" load_steps=2 format=3 uid="uid://dyimu2tge30wf"]
+
+[ext_resource type="Script" path="res://meshes/weapons/weapons.gd" id="1_ob2ex"]
+
+[resource]
+script = ExtResource("1_ob2ex")
+name = &""
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+shadow = false

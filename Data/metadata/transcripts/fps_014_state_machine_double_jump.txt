@@ -1,0 +1,81 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.84] video we're adding a double jump to our
+[9.96] basic jump mechanic the basic FPS
+[12.72] controller project from episode 1 is
+[14.64] available for free on GitHub and if you
+[16.48] would like to use the written version of
+[18.12] this tutorial or download all of the
+[20.08] source files you can get access by
+[22.16] joining my patreon let's dive
+[25.52] in let's take a quick look at the
+[27.96] existing jump state from the last
+[30.20] episode whenever we press our jump key
+[32.60] we transition to our jump state where we
+[35.04] add to the Y velocity of our player
+[37.28] character the overall State logic is
+[39.76] actually very simple and to add a double
+[41.80] jump meaning the player can jump again
+[43.80] after jumping once is really just as
+[46.28] easy the question is do we create an
+[48.64] entirely new state or just expand on our
+[51.64] jumping State while we've been adding
+[53.56] States for every new movement in this
+[55.52] case I think it's Justified that we just
+[57.88] expand our existing jump state the
+[60.36] player will only be able to double jump
+[62.68] if they have already jumped anyway and
+[64.92] functionally we only need to check if
+[67.12] the player presses jump again and then
+[69.28] add to the Y velocity one more time can
+[72.12] you make it more complicated absolutely
+[74.28] but for now we're just adding the
+[76.16] ability to jump midair so we'll stick to
+[78.48] expanding our jump
+[79.37] [Music]
+[81.00] State let's head to our jumping State
+[83.28] script and add two more variables double
+[86.44] jump velocity and a double jump Boolean
+[89.56] Within our update function we'll check
+[91.44] if the player presses the jump key again
+[93.64] and if double jump is false the double
+[96.24] jump Boolean will act as a check to see
+[98.44] if the player has already double jumped
+[100.88] when the if check passes we immediately
+[103.24] set our double jump Boolean to true and
+[105.68] then set our player's y velocity here
+[108.48] I'm going to set the velocity to equal
+[110.40] our double jump velocity rather than add
+[112.88] to it this is because if the player is
+[115.12] falling their velocity is actually going
+[117.08] to be negative so adding a value will
+[119.52] less than the actual jump boost while
+[122.00] simply setting the velocity to our value
+[123.92] means it will always equal that velocity
+[126.52] finally when we exit our state we reset
+[128.88] our double jump Boolean back to false so
+[131.20] it's ready for next time and that's it a
+[133.64] very simple way to add a double jump
+[135.52] boost to our player now jumping can be
+[137.72] much more responsive and look a lot
+[139.88] better than what we've set up so far for
+[142.08] example having how long the button is
+[144.08] pressed determine the strength of the
+[145.84] jump and adding animations so in the
+[148.32] next episode we'll look at creating a
+[150.32] more advanced jumping mechanic for our
+[152.64] FPS all right guys if this tutorial was
+[154.92] helpful consider it a like And subscribe
+[156.96] to the channel as we're going to be
+[158.08] covering a lot more thanks to all of my
+[160.96] patrons who keep this series going you
+[163.12] too can get access to the written
+[164.88] tutorials and the project source files
+[167.44] by joining my patreon you can download
+[169.64] everything there and you'll also get
+[171.28] early access to my videos and sneak
+[173.36] peeks at Future tutorials thanks for
+[175.72] watching and as always keep
+[178.76] creating

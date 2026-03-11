@@ -1,0 +1,60 @@
+[0.28] in my FPS UI interaction video we
+[2.84] connected two separate scripts using the
+[5.08] global reference technique that's where
+[7.16] we use a global script autoload that
+[9.36] contains variable references of scripts
+[11.56] and objects we create a global variable
+[14.16] we set that variable equal to our script
+[16.04] or object boom we're done it works but
+[18.96] what if you want to reduce dependency
+[20.68] issues and make use of signals instead
+[23.76] then we need what's called a message bus
+[26.44] a script that holds Global signals and
+[28.40] or functions that can connect two
+[30.28] unrelated scripts a message bus can make
+[32.64] it so two different scripts can
+[34.56] communicate with one another but don't
+[36.72] actually know or care if the other
+[38.64] exists this reduces dependency and makes
+[41.52] it easier to connect other scripts to
+[43.24] the same signals first we create a new
+[45.64] autoload script called message bus and
+[48.00] make sure Global variable is enabled
+[50.08] this script will hold signals that we
+[51.72] can access globally in any other script
+[54.12] for our FPS interaction system we have a
+[56.80] signal for when we look at an
+[58.16] interactable object and when we look
+[60.32] away in our UI context component from
+[62.80] the last video we assigned a global
+[65.00] reference to the script with our message
+[67.08] butts we instead connect our Global
+[69.40] signals to their respective functions in
+[71.92] our case we want to update our UI
+[74.00] interaction text and icon when we look
+[76.36] at an interactable object and reset it
+[79.00] when we look away so we connect those
+[80.96] two signals to our update and reset
+[83.32] functions a quick note here as well I've
+[86.12] revamped the update functions into one
+[88.76] update function to simplify the code
+[91.12] it's just one update function that
+[92.76] updates both the text and icon of our UI
+[95.80] interaction control nodes be sure to set
+[97.92] the defaults for your parameters as well
+[99.80] so you don't need to pass all three when
+[102.04] emitting our new signals in our
+[103.68] interaction component we currently
+[105.60] access the UI context component via our
+[108.08] Global autoload now we can just
+[110.44] reference our message bus and emit our
+[112.60] focused and unfocused signals with the
+[114.88] needed parameters and that's it we've
+[117.12] now connected our interaction component
+[119.16] to our interaction UI context components
+[121.88] just using signals as always you can get
+[124.12] these source files for everything that
+[125.72] you saw in this video on my patreon I'll
+[127.96] catch you in the next one and as always
+[129.68] keep creating
+[131.45] [Music]

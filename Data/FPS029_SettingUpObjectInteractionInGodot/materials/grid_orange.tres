@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dk3jneeu84dqp"]
+
+[ext_resource type="Texture2D" uid="uid://btymiocim3geu" path="res://textures/texture_02.png" id="1_yrpep"]
+
+[resource]
+resource_name = "Material"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_yrpep")
+emission = Color(0.192157, 1, 0, 1)
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true

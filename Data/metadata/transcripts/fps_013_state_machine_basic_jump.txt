@@ -1,0 +1,110 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[8.08] video we're adding a basic jump mechanic
+[10.36] to our FPS controller State machine the
+[13.20] basic FPS controller project from
+[15.00] episode 1 is available for free on
+[16.88] GitHub and if you would like to use the
+[18.60] written version of this tutorial or
+[20.56] download all of the source files you can
+[22.76] get access by joining my patreon let's
+[25.04] dive
+[26.92] in for this episode we're going to
+[29.16] create our new jump State script and
+[31.40] setup our actual jump mechanic will be
+[33.88] pretty basic for now if you've stumbled
+[36.16] on this episode and haven't done any
+[37.80] states or state machine go check out the
+[40.08] beginning of the state machine episodes
+[41.68] in the playlist we'll get to a more
+[43.96] advanced jump animation in the next
+[46.12] episode and beyond that we'll add a
+[47.92] double jump and more unique jump
+[50.12] mechanics later on to get started we
+[52.52] need to add another child node to our
+[54.60] state machine for our jump player state
+[57.76] so let's add our child node and attach a
+[59.60] new script jumping player state that
+[62.20] extends our player movement State script
+[64.84] like our other states we'll Define our
+[66.68] class and set our export variables speed
+[69.36] acceleration and deceleration then two
+[72.28] new export variables one to control our
+[74.88] jump velocity force and another to
+[77.12] control our input amount when in the aor
+[80.16] I've named M jump velocity and input
+[83.04] multiplier then in our enter function
+[85.40] which runs when we enter our states we
+[87.80] add our jump velocity to the Y of our
+[90.28] players velocity this will give us an
+[92.92] upward push we'll also pause any
+[95.32] animations that we might be in for now
+[97.72] we won't add an animation to our jump
+[99.56] but we're going to be adding one later
+[101.48] on so we'll touch on that in the future
+[103.76] then in our update function we run our
+[106.04] gravity function input function and
+[108.40] velocity function with a slight change
+[110.80] to our input function we might play with
+[113.40] this more in the future but we don't
+[115.08] necessarily want the player to move all
+[117.32] around while in the air but we do want
+[120.16] some control you could comment this out
+[122.48] completely and the player will just jump
+[124.48] in whatever Direction they start in and
+[126.80] won't be able to adjust till they land
+[128.96] this may be realistic physically but
+[131.52] games tend to allow the player to adjust
+[133.76] midair so we multiply the speed value by
+[137.28] our input multiplier variable and you
+[139.72] can adjust that variable to your needs
+[142.12] the goal here is to allow the player to
+[144.00] move while in the air but at a less
+[146.28] amount than if they were on the ground
+[148.48] then to transition out of our jumping
+[150.12] State we do an if check for when the
+[151.88] player is back on the floor then
+[153.80] transition back to idle which can
+[155.92] properly adjust to walking sprinting or
+[157.88] whatever within one
+[159.36] [Music]
+[161.08] frame to get to the jumping State we
+[163.48] need to add some transitions to our
+[165.32] other states within our idle walking
+[168.00] sprinting and honestly even crouching if
+[170.36] you want we need to add this if check
+[173.20] for a new Jump input you can create this
+[176.08] new input map in the project settings so
+[178.36] go do that before we move on
+[180.32] we'll also check if our player is on the
+[182.04] floor if true then we transition to our
+[184.88] jump finally jump will bring us up but
+[187.56] we need gravity to bring us back down
+[190.24] got typically ships with a default
+[192.36] gravity setting of 9.8 to reflect
+[195.04] natural physics properties this works
+[197.40] fine but honestly it does seem a little
+[200.00] slow for my taste so I've adjusted my
+[202.28] gravity in my player script to 12 and I
+[205.76] kind of like it a little bit better
+[207.32] again adjust to your liking for the
+[208.84] needs of your game
+[210.24] you should now have a basic jump for
+[212.44] your FPS character and you can adjust
+[214.56] the jump velocity settings to make it a
+[216.80] smaller or bigger jump all right guys if
+[219.68] this tutorial was helpful consider it a
+[221.56] like And subscribe to the channel as
+[223.20] we're going to be covering a lot more
+[225.44] thanks to all of my patrons who keep
+[227.24] this series going you too can get access
+[229.80] to the written tutorials and the project
+[232.16] source files by joining my patreon you
+[234.56] can download everything there and you'll
+[236.40] also get early access to my videos and
+[238.52] sneak peeks at future tutorials thanks
+[241.04] for watching and as always keep
+[243.80] [Music]
+[247.96] creating

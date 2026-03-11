@@ -1,0 +1,82 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.84] video we're animating our Dynamic
+[9.68] Crosshair so that it reacts to the
+[11.44] movement speed of our player and in the
+[13.68] future reducing our gun accuracy the
+[16.00] basic FPS controller project from
+[17.76] episode 1 is available for free on
+[19.68] GitHub and if you would like to use the
+[21.36] written version of this tutorial or
+[23.36] download all of the source files you can
+[25.52] get access by joining my patreon let's
+[27.84] Dive
+[28.96] In we're picking up right where we ended
+[31.76] in the create Dynamic Crosshair video
+[34.04] link to that is in the description first
+[36.44] head to the reticle script where we need
+[38.40] to add the following export variables
+[41.04] retical lines will house our four line
+[43.40] 2D nodes in an array this line2d is
+[46.56] called a type hint and tells the script
+[48.80] what kind of node should go in our array
+[51.16] player controller references our
+[52.64] controller so we can get the player
+[54.36] speed retical speed determines how
+[56.44] quickly the lines of our Crosshair or
+[58.24] reticle change when the player moves
+[59.88] moves and retical distance sets how far
+[62.84] they move before we add more code be
+[64.96] sure to add each of the four line 2D
+[67.28] nodes to our reticle scripts in the
+[69.00] inspector going in order from top right
+[72.44] bottom and left and then select our
+[74.56] player controller parent node for our
+[76.44] player controller
+[78.26] [Music]
+[79.52] variable then add this function that
+[81.72] will run every frame in our process
+[84.08] function this code will get the current
+[86.40] velocity of our player then gets the
+[88.92] movement speed by getting the distance
+[91.04] between our origin point which is our
+[93.52] Vector 3 0000 0 and our velocity then we
+[97.56] have one line of code for each line 2D
+[100.04] node to update the position of our lines
+[102.56] based on our speed the first line for
+[105.16] example gets the line 2D node in our
+[107.24] array at index zero or the first node
+[109.96] that we added top then sets it to a lurp
+[112.92] of its current position to its adjusted
+[115.56] position where y equals our retical
+[118.12] distance multiplied by our movement
+[120.52] speed with our retical speed as our
+[123.52] Alpha this line is repeated for each of
+[126.12] our four lines the difference basically
+[128.12] being what direction we want the line to
+[130.16] move finally add our adjust retical
+[132.84] lines function to our process function
+[135.20] so it runs every frame and then run your
+[141.92] [Music]
+[144.16] scene we can use our retical distance to
+[146.72] adjust how far the lines move outward
+[149.04] when the player moves moves and the
+[150.60] reticle speed to change how slowly or
+[153.28] quickly they move and now you have a
+[155.32] dynamic Crosshair ready for some
+[157.28] shooting mechanics all right guys if
+[159.64] this tutorial was helpful consider it a
+[161.52] like And subscribe to the channel as
+[163.16] we're going to be covering a lot more
+[165.48] thanks to all of my patrons who keep
+[167.28] this series going you too can get access
+[169.84] to the written tutorials and the project
+[172.04] source files by joining my patreon you
+[174.44] can download everything there and you'll
+[176.32] also get early access to my videos and
+[178.44] sneak peeks at future tutorials thanks
+[180.96] for watching and as always keep
+[185.76] [Music]
+[188.12] creating

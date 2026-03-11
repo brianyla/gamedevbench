@@ -1,0 +1,113 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.76] video we're making one more State
+[9.84] falling for our FPS controller before we
+[12.56] move on to adding weapons the basic FPS
+[15.32] controller project from episode 1 is
+[17.24] available for free on GitHub and if you
+[19.08] would like to use the written version of
+[20.72] this tutorial or download all of the
+[22.68] source files you can get access by
+[24.76] joining my patreon let's dive
+[28.16] in so our car already Falls because
+[31.64] we've set up gravity so why on Earth do
+[34.16] we want to create a whole new state for
+[36.20] falling well new States in general means
+[38.72] we have more control over what happens
+[41.04] when our player does certain things
+[43.32] right now when our player walks off a
+[45.44] platform the current state stays the
+[47.52] same by adding a falling State we
+[50.08] distinguish between when the player is
+[52.08] actually on the ground or when they are
+[54.20] falling this allows us to set unique
+[56.84] settings when the player is falling say
+[59.44] shooting at accuracy or camera movement
+[62.00] for this episode we're going to focus on
+[63.88] adding an animation when we land and
+[66.44] letting the player double jump after
+[68.88] [Music]
+[70.48] falling as usual we'll need a new child
+[73.36] State node and state script that extends
+[75.56] our player movement State script the
+[77.84] tutorials for both of these are in the
+[79.68] earlier episodes and I'll leave a link
+[81.36] to them in the description first we'll
+[83.36] create our falling State script then
+[85.52] we'll make slight adjustments to our
+[87.12] idle walking and sprinting scripts so we
+[89.92] transition to our new falling State we
+[92.16] create a new class name and extend our
+[94.48] player movement State script then four
+[97.08] export variables to give us
+[98.44] customization options for our max speed
+[101.08] acceleration deceleration and the
+[103.40] velocity of our double jump then like we
+[105.96] did in our double jump episode We'll add
+[107.84] a Boolean that will track whether the
+[110.12] player has already double jumped or not
+[112.92] when we enter our falling State we'll
+[114.68] pause our animation player so we don't
+[116.32] have any leftover head bombing movement
+[118.44] then in our update function we run our
+[120.68] usual update gravity input and velocity
+[123.72] functions for our double jump we'll
+[125.92] check if the player presses the jump key
+[128.08] and if double jump is false I.E they
+[131.00] haven't double jumped yet if that passes
+[133.48] we set our double jump Boolean to true
+[135.52] and then our player's y velocity to
+[137.64] equal our double jump velocity then once
+[140.20] the player is on the floor again we play
+[142.16] our jump end animation and transition
+[144.72] back to idle that jump in animation was
+[147.36] created in the last episode when we did
+[149.88] our jump animations finally when we exit
+[152.40] our falling State we reset our double
+[154.28] jump Boolean to false within our idle
+[156.76] animation we've already coded a check to
+[159.08] see if our animation is the jump in
+[160.92] animation and if it is to finish it and
+[163.80] from here the player can walk Sprint
+[166.04] Crouch and
+[168.36] jump to transition to our falling State
+[171.08] We'll add a check to our idle walking
+[173.48] and sprinting States our if statement
+[175.92] checks if our y velocity is less than -3
+[178.96] and if the player is not on the floor
+[181.36] using an exclamation here is just
+[183.20] shorthand for not true why check for -3
+[187.36] velocity well if the player just falls
+[189.60] from a short distance or hasn't been
+[191.16] falling for very long having an
+[193.24] exaggerated falling animation doesn't
+[195.28] really make a whole lot of sense so we
+[197.12] check if the player is falling fast
+[198.92] enough before we actually transition to
+[201.20] Falling you could also check the
+[203.08] distance the player has fallen but for
+[204.88] now just checking the Y velocity is a
+[207.40] little bit easier this transition check
+[209.44] can be added to any state where you want
+[211.52] the player to have the ability to fall
+[213.80] from for example I've left the sliding
+[216.20] State untouched but I've added it to
+[218.36] idle walking and sprinting you should
+[220.92] now have a new falling state where you
+[223.12] can fine-tune any player interactions
+[225.72] while falling all right guys if this
+[227.84] tutorial was helpful consider it a like
+[229.88] And subscribe to the channel as we're
+[231.28] going to be covering a lot more thanks
+[233.72] to all of my patrons who keep this
+[235.32] series going you too can get access to
+[237.88] the project source files by joining my
+[240.08] patreon you can download everything
+[242.36] there and you'll also get early access
+[244.16] to my videos and sneak peeks at Future
+[246.76] tutorials thanks for watching and as
+[249.16] always keep
+[251.75] [Music]
+[255.92] creating

@@ -1,0 +1,381 @@
+[0.20] hey everyone I'm building an entire
+[1.76] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials in this
+[7.76] video we're adding a simple Bullet Hole
+[9.80] decal to our raycast shooting mechanic
+[12.64] the basic FPS controller project from
+[14.64] episode 1 is available for free on
+[16.52] GitHub and if you would like to download
+[18.36] all of the source files you can get
+[20.32] access by joining my patreon let's dive
+[24.52] in all right welcome back to another
+[26.80] tutorial for the FPS project today we're
+[29.48] going to take that Ray cast that we did
+[31.20] in the last episode and we're going to
+[33.20] swap out our truly ugly sphere looking
+[37.00] mesh thing we did for our test and we're
+[39.56] going to add a bullet decal it's
+[41.12] actually going to be pretty quick today
+[42.96] not too complicated to actually do this
+[45.48] given our setup now if you're coming
+[46.84] from your own setup and it's fresh what
+[49.40] we're basically going to be doing is
+[51.56] taking a raycast and spawning a scene
+[54.80] that has a decal the main difficulty
+[56.88] with this is figuring out what the
+[58.88] normal is of the surface that we've hit
+[61.96] and rotating our decal so it looks not
+[65.92] like trash again if you want to be
+[67.60] working from the same project that I'm
+[69.44] working on you can get that on my
+[71.28] patreon otherwise let's let's jump in
+[73.60] let's do this now our current decal
+[75.96] setup is just a uh basic mesh instance
+[79.92] 3D we're going to be swapping this first
+[82.60] with a decal so let's add a decal node
+[87.56] now what the the decal node does is it
+[90.32] projects a 2D image onto our 3D surfaces
+[94.96] and that's exactly what we need for our
+[96.72] Bullet Hole now the other cool thing
+[99.04] that you can do with the decal node in
+[101.72] got 4 is you can not only add the albo
+[105.20] texture but you can add a normal texture
+[107.20] or emission or roughness or metallic so
+[110.16] you can actually do a pretty cool look
+[113.28] with just a decal but today we're just
+[115.44] going to do an albo because that's what
+[117.56] I've got for our free resource for our
+[120.08] Bullet Hole so now we've added our decal
+[122.60] node let's go ahead and set this to our
+[125.76] scene rout so now our raycast test scene
+[129.56] is really a decal scene and let's uh
+[133.72] let's just delete our ugly sphere
+[136.08] because we don't need that all right
+[137.76] we've got our decal let's grab our
+[140.24] Bullet Hole image so this is the Bullet
+[142.24] Hole image that we're going to use and
+[144.12] this is coming from opengameart.org this
+[146.64] is a open source image you can use this
+[148.96] in your own Project without any issue
+[150.96] public domain and we're going to
+[152.52] download this and going to pop it into
+[154.44] our project now if you've downloaded
+[156.64] your Bullet Hole decal or if you're
+[158.44] using your own
+[159.64] decal we're going to add this to our
+[161.88] projects and let's add it to our our
+[164.16] textures folder again when you're
+[165.84] importing stuff in gato you can just
+[167.96] grab that file click drag pop it in it's
+[172.48] going to import exactly where you
+[174.16] selected in the file system and there's
+[176.56] our Bullet Hole so let's add that to our
+[180.08] Cal node we'll drop that into our albo
+[183.80] now we can't see
+[185.36] anything yet in fact let's uh let's add
+[188.56] a
+[190.04] mesh just to to see how this works a
+[192.72] little bit all right now our boxes our
+[196.00] box is actually fine our decal is way
+[198.12] too big so let's adjust this we've got a
+[200.44] couple settings in the decal node the
+[202.16] first being a a size setting and we want
+[204.76] to set this um probably to like .1 m
+[209.80] let's do a tenth of a
+[211.88] meter and even though this is a 2d
+[214.68] texture you'll notice that we're setting
+[216.32] it in three dimensions wh we got to got
+[219.16] to adjust this so I'm moving the parent
+[221.52] so it's moving the child we can actually
+[224.24] um unattach this if we do transform top
+[229.00] level on our mesh instance 3D node and
+[231.32] that's going to keep it independent of
+[233.40] our our parent node little trick there
+[235.36] for
+[237.20] you all right so we've got our our
+[240.00] three-dimensional cube of a decal and
+[242.44] it's projecting that decal along this y
+[246.56] AIS right here so if we move it up we
+[249.44] actually have a little bit of a fade
+[250.76] effect that we can utilize now if I turn
+[253.20] this you're going to
+[256.32] notice there we go you're going to
+[258.48] notice that it distorts a little
+[260.72] bit that's because if I turn it 90
+[263.80] degrees it's now projecting along this
+[266.60] axis globally so let's set this back on
+[270.44] our rotation we're going to visit that
+[272.48] rotation aspect a little bit
+[274.44] later and let's set this back to our
+[277.12] Center get rid of our mesh instance 3D
+[280.00] node because we don't need it and we've
+[282.84] got our decal ready to go now we can
+[285.08] actually test this because we've already
+[286.80] set up our testing rcast function which
+[289.76] is now going to be our our Bullet Hole
+[291.68] function and we're spawning that
+[294.08] instance whenever we shoot a surface so
+[296.76] let's see what the uh the decal does now
+[298.76] that we put that in there so we fire on
+[300.84] a surface and our
+[303.16] decal is already showing up now we have
+[306.52] a problem that we need to adjust because
+[308.56] it's not that simple let's head down
+[311.08] here and actually
+[312.56] shoot on the side and notice how we have
+[316.36] our our projection issue that we talked
+[318.76] about it's projecting up and down and so
+[322.00] we're getting this sort of side cut of
+[325.12] our image and that's not what we want
+[327.52] what we want is the decal to actually
+[330.16] rotate depending upon the surface normal
+[333.76] of our raycast so we're here in our our
+[337.12] weapon script and here's our test rast
+[340.36] function I'm going to actually Zoom this
+[342.28] up a little bit so it's a little bit
+[344.04] easier to
+[345.32] see there we go so whenever we we shoot
+[348.96] the gun whenever we attack we are doing
+[351.92] a raycast onto the surface getting that
+[354.72] result and then currently we're just
+[356.64] getting the position so we can spawn our
+[359.88] our test scene at that position and
+[362.72] we're doing that by running our test
+[364.72] rast function and we talked about this
+[366.40] in the last video but I'll I'll go over
+[368.36] it real quick for this
+[370.48] one we create an instance of that scene
+[374.52] and we add that to the the root of our
+[376.96] level as a child and then we set that
+[379.68] Global position of that instance to the
+[382.08] position of our raycast hit and then
+[385.08] we're just uh doing a timer of 3 seconds
+[387.64] and and destroying it so what we need to
+[390.36] do is not only set the position but also
+[394.24] adjust the rotation so that it aligns
+[396.68] with the normal of our raycast depending
+[399.44] on what surface we hit and we can do
+[401.24] that by just adding a little bit more to
+[403.24] this function so after we set the global
+[406.40] position what we want to do is get our
+[409.80] instance and use what is called the look
+[413.40] at function now what this function does
+[416.80] is it takes a position and automatically
+[421.28] rotates the scene or whatever you're
+[424.16] adjusting to that position so that it's
+[427.20] looking at it and the first thing that
+[428.84] we need to get is the global position
+[431.84] for it to look at and we can get that by
+[434.12] getting our
+[435.56] instance Global
+[438.32] transform and getting its origin okay
+[441.40] that's going to get the very center of
+[443.60] our scene of our instance so that gives
+[446.08] us our position and then the second
+[447.88] parameter for this is we need to add a
+[450.20] vector 3 up this lets the scripts know
+[453.68] what our orientation is for our scene
+[456.52] now this alone is not going to do it we
+[458.08] also need to use the normal of the
+[460.80] surface that we hit so we need to
+[462.84] actually get that from our result so
+[466.00] what we're going to do is go back to our
+[467.60] test rcast function which in fact let's
+[470.88] go ahead and rename this
+[474.20] to Bullet Hole and we'll
+[478.44] adjust where we call it to Bullet Hole
+[481.56] we need to add another parameter to this
+[483.88] and it's going to be normal and that's
+[486.80] going to be a vector
+[489.04] 3 now when we call the Bullet Hole
+[491.76] function we're already asking to get the
+[494.80] position from our result we need to do
+[497.16] the same thing only we're going to ask
+[500.40] for the normal of our results now what
+[505.32] this is going to do again is get the
+[508.00] normal the direction of the
+[510.76] surface wherever we hit with our raycast
+[514.12] which is exactly what we want now that
+[516.28] we are passing that normal value we can
+[518.72] take that and add
+[520.92] it to the position that we want to look
+[523.84] at let me uh let me draw this out so
+[526.56] it's a little bit easier to understand
+[528.40] um let's grab let's grab some paint so
+[531.76] imagine you have a straight up and down
+[536.40] wall right here and we're going to fire
+[538.80] our gun
+[540.20] in this direction and it's going to hit
+[543.60] right at that point that is the global
+[547.96] position the point of impact that we're
+[549.92] already using and now we're also going
+[552.56] to get the normal that is the direction
+[555.48] that that surface is pointing to in our
+[558.88] results now that normal is pointing this
+[562.92] way and that result is going to be a
+[564.60] vector three usually if it's going left
+[567.84] or right might be one 0 0 if it's
+[571.52] pointing up it's going to be 0 1 0 and
+[575.64] we're going to add that normal to that
+[578.88] Global position right there and what
+[580.56] that's going to do is give you a little
+[583.20] point just a little bit in front
+[585.52] depending on where that surface is
+[587.00] pointing so when we spawn and rotate
+[589.56] that decal right there it's going to
+[592.72] point towards that little Green Dot so
+[595.20] we've set in our look at function to
+[598.12] look at the global transform origin plus
+[601.08] that
+[601.80] normal let's go ahead and run that same
+[605.16] test all right up is working but up was
+[608.52] already working let's test the
+[611.36] side well we're still having the same
+[613.48] issue but if you go back and you'll
+[615.16] notice our image does look a little bit
+[617.72] different and we have to do one more
+[619.64] check when we are doing our rotation
+[622.72] orientation now because of the way that
+[625.32] the decal is set up it's it's more of an
+[628.12] up and down than it is this to a left
+[630.04] and right remember that it's
+[631.72] projecting at uh default up and down so
+[635.00] let's see what happens when we take our
+[636.60] instance and we rotate
+[639.72] it
+[641.40] locally
+[643.00] by 90° on the x axis and you can do that
+[649.00] by rotate object local the first
+[651.68] parameter is what axis you want to
+[654.00] rotate on and we're going to do it on
+[655.60] the x axis and then you're going to tell
+[658.16] the amount the degrees so let's uh let's
+[662.24] add that it's unhappy with me oh because
+[665.08] I I miss build instance there we go
+[667.92] let's test it
+[672.24] now there we
+[674.44] go so now that we've adjusted for the
+[677.72] the decals weird
+[679.32] orientation we've got a a working
+[682.08] sideways bullet decal
+[685.32] but it's a little
+[687.48] funky if we're doing our up and down so
+[691.36] what we can do instead of rotating every
+[694.32] single instance we can check if the
+[698.00] normal of the impact Point equals up or
+[703.56] down and if it equals up or down we
+[706.12] don't want to rotate it there's no need
+[707.52] to do that so we're going to do an if
+[710.12] normal does not equal vector
+[714.72] three and we'll get our up Vector you
+[718.76] can do that with um actually you can do
+[721.12] a shorthand for that just do up and
+[725.72] normal does not equal vector
+[730.84] 3
+[734.36] down meaning if it's not straight up or
+[738.32] straight down then we'll rotate all
+[741.80] right now let's
+[744.72] check all right check our
+[747.56] up that's working like it should check
+[750.88] our
+[752.28] side that's working like it
+[755.32] should and there's a couple of other
+[757.52] spots although it's mainly a left right
+[761.56] down setup so let's actually let's let's
+[764.40] add a
+[765.80] sphere let's let's switch this over here
+[771.40] select this box and let's switch it to a
+[775.80] sphere now a sphere is going to have a
+[778.20] ton of different surface normals is
+[779.76] going to go in every single Direction so
+[781.36] it'll be a good
+[782.64] test for our our new script and we'll
+[786.04] add a Tres static body so we have our
+[789.40] Collision you can see the collision with
+[791.56] our our blue wireframe and let's let's
+[795.96] test that
+[800.36] out so what should happen is as we shoot
+[803.16] this sphere that decal is going to go in
+[805.80] every single surface normal that we have
+[808.56] without an issue
+[812.68] and that's looking pretty good so we're
+[814.32] going to add one more uh effect to this
+[817.56] because it's it's currently just getting
+[819.88] rid of it after 3 seconds and it's a
+[822.08] little it's kind of ugly so let's have
+[824.56] it uh let's have it fade so let's go
+[827.04] back to our script and let's go down
+[830.08] here currently we are are waiting three
+[832.12] seconds and then we're just we're
+[833.40] killing it we're getting rid of it let's
+[836.36] um Let's do an await for for 2 seconds
+[840.32] well not 32 2 seconds and then after
+[843.84] that let's create a
+[846.04] tween um I don't think I've done this in
+[849.00] a tutorial yet so this is how you do a
+[851.40] tween uh a tween is just a kind of a
+[854.12] basic animation that you can add and
+[857.80] it's it's not so permanent as being in a
+[860.84] an animation player and you can just do
+[862.76] it in code so you create a variable
+[866.16] we'll call this variable fade and
+[869.76] you get
+[871.80] our scene tree and then we're going to
+[875.44] create tween okay so that creates the uh
+[879.40] the tween and we've got two equals we
+[881.76] don't need to do that and then we get
+[884.76] our our new tween and we set our tween
+[888.88] property all right now we're going to
+[890.52] get the object that we want to Tween in
+[892.52] this case it's our instance that we've
+[895.48] set and then you can select the property
+[898.64] of that instance that you want to adjust
+[901.24] now we're doing a uh a fade
+[904.52] so each uh each node 3D is going to have
+[907.76] a modulate property and that allows you
+[910.72] to adjust the color it also allows you
+[912.84] to adjust the alpha so let's get our
+[917.76] modulate and then get the alpha value
+[920.84] for our modulate property
+[923.84] and the final value of that should be a
+[927.20] big old zero and then you can set the
+[929.20] duration of that tween let's do 1.5
+[932.48] seconds and then let's do another
+[936.28] timer and we'll just uh
+[940.33] [Music]
+[943.08] await let's say 1.5 seconds and
+[947.88] then we'll time out and then after that
+[952.32] we'll we'll kill the the instance so
+[954.44] instead of just getting rid of it after
+[956.00] 3 seconds we're going to wait two
+[957.96] seconds we're going to create a tween
+[960.56] that's going to animate the alpha of
+[962.92] that scene to zero in 1.5 seconds and
+[966.64] after that 1.5 seconds then we'll free
+[969.48] that that scene Okay so we've got that
+[972.04] all set up so let's test our scene one
+[974.24] more time and we should get a uh fading
+[977.20] out decal whenever we
+[984.36] shoot there we go
+[990.68] now obviously you can adjust that time
+[992.56] you could set it up so that you only
+[995.68] have so many decals that can spawn and
+[997.80] when you run over that you get rid of
+[999.44] the this
+[1001.12] one but that gives you a a basic
+[1004.20] decal something to build off of that
+[1006.88] will Orient depending on the surface
+[1009.76] that you shoot all right guys if this
+[1012.04] tutorial was helpful consider it a like
+[1014.08] And subscribe to the channel as we're
+[1015.48] going to be covering a lot more thanks
+[1017.88] to all of my Pat who keep the series
+[1019.92] going you too can get access to the
+[1022.28] project source files by joining my
+[1024.28] patreon you can download everything
+[1026.56] there and you'll also get early access
+[1028.40] to my videos and sneak peeks at Future
+[1030.96] tutorials thanks for watching and as
+[1033.40] always keep creating
+[1036.46] [Music]

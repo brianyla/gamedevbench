@@ -1,0 +1,174 @@
+[0.20] hey everyone I'm building an entire
+[1.76] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials in this
+[7.92] video we're creating a procedural idle
+[10.12] animation for our weapons the basic FPS
+[12.96] controller project from episode 1 is
+[14.84] available for free on GitHub and if you
+[16.68] would like to download all of the source
+[18.32] files you can get access by joining my
+[20.60] patreon let's dive
+[23.40] in the goal for this episode is actually
+[26.00] pretty simple we want our first person
+[27.80] shooter weapons to move ever so slightly
+[30.16] when the player is not moving this adds
+[32.72] to the immersion and realism of the game
+[35.04] and we can do this pretty easily using
+[37.04] procedural animation when I say
+[39.24] procedural it just means we're going to
+[40.88] be moving our weapon mesh using pure
+[42.88] code and Mathematics you can absolutely
+[45.52] create Idol animations by hand but if
+[47.96] you can offload that work to code and
+[50.12] replicate it for every weapon you're
+[51.84] going to save yourself a lot of time in
+[53.72] the last episode we made a sway
+[55.44] animation for when we look around with
+[57.16] the mouse we're going to tie into this
+[59.12] sway animation function to add our idle
+[61.64] sway the concept is this we'll
+[64.28] manipulate our X and Y position of our
+[66.44] mesh and the X and Y rotation of our
+[68.68] mesh like we already do with our sway
+[71.40] but while our sway is dependent on our
+[73.00] Mouse movement the idle movement will
+[75.04] use three parts two sine waves and a
+[78.20] noise texture the sine waves will give
+[80.48] us a pulsing movement on both our X and
+[82.76] Y values and will offset these to help
+[85.40] give some variation then we'll use the
+[87.48] noise texture to randomize the effect
+[89.48] even further
+[92.40] because we're doing this with code it
+[94.24] means we can make it scalable for our
+[96.32] different weapon types this means
+[98.64] creating idle movement parameters that
+[100.36] we can set per each weapon within my
+[102.80] weapon resource script I've added three
+[105.36] new export variables and added one
+[107.52] export variable for scale that honestly
+[109.96] I should have added earlier idle sway
+[111.96] adjustment will adjust our random sway
+[114.08] amount idle sway rotation strength
+[116.44] adjust the strength of the rotation and
+[118.96] random sway amount adjusts our sign
+[121.32] strength I've set mine with default
+[123.48] values of 10 300 and 5 with these new
+[127.12] variables you can now customize your
+[128.88] idle animation settings for each weapon
+[130.84] type you
+[133.08] create the idle animation code will be
+[135.56] added to the initiate weapon script and
+[137.80] full disclosure eventually the script
+[140.08] will probably be turned into a state
+[141.80] machine of sorts for our weapon and the
+[143.68] code will be cleaned up then for now
+[146.00] we'll house this feature in the script
+[148.00] first we create some new export
+[149.92] variables sway noise for our noise
+[152.36] texture sway speed to adjust our overall
+[155.28] idle animation speed and six new
+[157.92] variables random sway X and Y random
+[160.72] sway amount idle sway adjustment and
+[162.72] idle sway rotation strength to grab our
+[165.48] weapon resource specific variables we
+[167.20] just created and a Time variable that
+[169.80] we'll use for our sign based animation
+[172.44] within our load weapon function where we
+[174.36] set our weapon specific information from
+[176.32] our weapon resources we set our idle soy
+[179.44] adjustment
+[180.36] idle sway rotation strength and random
+[182.76] sway amount and also our scale the next
+[186.28] step is to get a value from our noise
+[188.56] texture based on the location of the
+[190.52] player in our world this will help add
+[193.00] randomization as the player moves around
+[194.80] a level using a noise texture is a great
+[197.24] way to get randomization because we
+[199.48] simply can get a value based on any X
+[202.00] and Y values and our player location is
+[205.24] perfect for that we create a new
+[207.16] function get sway noise that will return
+[209.92] values between -1 and 1 based on the
+[212.84] player's World position we create a
+[215.12] player position Vector 3 variable then
+[217.44] set that position to our player Global
+[219.88] position and we also only run this win
+[222.44] in game or you're going to get a bunch
+[224.32] of annoying warning errors every single
+[226.72] frame then we get a noise location value
+[229.52] by using the get noise 2D on our noise
+[232.24] texture with the X and Y positions of
+[234.76] our player finally we return this value
+[237.56] returning here means running this
+[239.16] function will reduce this value in our
+[241.44] sway weapon function we need to call our
+[243.80] get sway noise function and adjust its
+[246.24] strength with our idle sway adjustment
+[248.92] remember we can adjust this noise
+[250.72] strength then for each weapon with this
+[253.08] variable we have our noise adjustment
+[255.16] ready we just need to create our base
+[257.32] movement this movement will come from
+[259.40] two sine waves first we need to get how
+[262.32] much time has elapsed because the wave
+[264.52] will progress as our time progresses we
+[267.52] set our time to plus equals Delta then
+[270.84] we add our sway speed variable so we can
+[273.00] increase or decrease the number of waves
+[275.60] and add our sway random to add some
+[278.28] randomization as we move around the
+[280.08] level our first wave will equal the S
+[282.84] value of time multiplied by 1.5 this
+[286.36] makes it a bit quicker plus our random
+[288.88] sway noise value divided by the amount
+[291.72] of random sway we want our second wave
+[294.36] is similar except we don't multiply by
+[296.48] 1.5 and we subtract our random sway
+[299.96] value then divide by the ramu amount now
+[303.00] you might be asking why all these
+[304.36] adjustments well a sine wave is
+[306.60] predictable and repetitive and we want
+[308.72] to break up that repetition as
+[310.48] realistically as possible while keeping
+[313.04] the general back and forth movement that
+[315.72] can be done by changing the amount of
+[317.84] waves and by offsetting the waves doing
+[320.80] this will keep our animation from well
+[322.80] looking boring with our random sway
+[325.20] ready we need to add it to our already
+[327.68] existing sway movement code to do that
+[331.12] we simply add our random sway values to
+[333.28] the respective lines for our exp
+[335.48] position we add our random sway X and
+[338.48] the same for our y position then for our
+[340.88] rotation we add our random sway y
+[343.36] multiply by the idle sway rotation
+[345.68] strength variable and ditto for the X
+[348.08] rotation we're now adding our random
+[350.40] idle movement to our XY position and XY
+[353.20] rotation based on our two sine waves and
+[356.04] the player position and with our
+[357.84] variables we can control how fast or
+[360.80] pronounced that movement is one final
+[363.68] tip to help set your idle sway values
+[366.12] add a reset Boolean in your initiate
+[368.40] weapon script where you can run the load
+[370.88] weapon function in the editor then
+[372.96] whenever you click on the checkbox it
+[374.96] reloads the values all right guys if
+[377.36] this tutorial was helpful consider it a
+[379.24] like And subscribe to the channel as
+[380.88] we're going to be covering a lot more
+[383.16] thanks to all of my patrons who keep
+[384.92] this series going you too can get access
+[387.48] to the project source files by joining
+[389.44] my my patreon you can download
+[391.60] everything there and you'll also get
+[393.20] early access to my videos and sneak
+[395.32] peeks at Future tutorials thanks for
+[397.92] watching and as always keep
+[401.46] [Music]
+[405.64] creating

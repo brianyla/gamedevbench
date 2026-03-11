@@ -1,0 +1,117 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[8.00] video we're adding animations to our
+[9.76] jumping state for when we jump and when
+[12.08] we land the basic FPS controller project
+[14.68] from episode 1 is available for free on
+[16.80] GitHub and if you would like to use the
+[18.52] written version of this tutorial or
+[20.48] download all of the source files you can
+[22.68] get access by joining my patreon let's
+[24.96] dive
+[26.84] in we're going to try and emulate the
+[29.52] camera movement from the TitanFall to
+[31.80] jump in the example you can see there is
+[34.04] some slight vertical rotation when the
+[36.04] player initiates the jump and when they
+[38.32] hit the ground we can get something
+[40.36] close to this effect by adjusting two
+[42.84] properties of our camera setup the
+[45.16] camera controller X rotation and the Y
+[48.68] position of our camera and we'll create
+[50.92] this effect by adding two more short
+[53.04] animations to our animation player
+[55.42] [Music]
+[57.28] node to create our jump animations we'll
+[59.72] need need two more animations added to
+[61.60] our animation player jump start for when
+[63.92] we initiate our jump and jump end for
+[66.52] when we hit the ground the nature of
+[68.48] these animations is really entirely up
+[70.88] to you in terms of how much movement
+[73.04] speed Etc here's what I've come up with
+[76.24] for this example for the jump start
+[78.32] animation I'm animating the X rotation
+[81.04] and the position of the camera if we
+[83.44] ever rotate the camera itself we really
+[85.64] need to do it in the controller Because
+[87.60] the actual camera rotation is always
+[90.16] controlled by the mouse position can be
+[92.24] done either with the controller parent
+[93.92] node or the camera I'm opting for the
+[96.36] controller because I don't need zero
+[98.52] Centric movement like we did with our
+[100.44] head bobbing in this case we can just
+[102.60] reduce our vertical position and return
+[104.52] it to 1.5 I've got key frames at 0 0.2
+[109.48] and 0.55 seconds the X rotation will go
+[113.20] from
+[115.72] 0.015 and then back to zero the curves
+[119.00] look like this from my position we're
+[121.08] going to bring it down slightly as if
+[123.20] we're prepping our jump I'm going with
+[125.64] 1.5 M to 1.45 M back to 1.5 M the
+[130.80] animation itself will only run once and
+[133.64] not autoplay then we add another
+[135.92] animation for our jump end this will
+[137.96] operate the same way except the downward
+[140.16] action will happen a bit earlier I've
+[142.68] got key frames at 0
+[145.36] 0.085 and 0.4 seconds the X rotation
+[149.24] goes from
+[151.72] 0.024 and then back to zero then the
+[154.56] position goes from 1.5 to 1.45 and back
+[158.60] to 1.5 with our animations ready we just
+[161.56] need to call them in our
+[164.52] script within our jump scripts we're
+[166.72] going to replace our pause animation
+[168.96] line with a play animation line for our
+[171.44] jump start animation so as soon as we
+[174.16] enter our jump start after pressing our
+[176.00] jump key we play our jump start
+[178.08] animation then once we hit the floor
+[179.96] again we then run our jump end animation
+[182.84] and transition to idle as we normally do
+[185.56] we do have one issue to address though
+[187.60] and that's when we transition to our
+[189.36] idle animation we are pausing any and
+[192.44] all animations so our jump in animation
+[195.16] won't actually play we could use an
+[197.76] await line to wait until the animation
+[200.32] finish before we transition to idle but
+[203.04] that brings in new bugs my solution is
+[205.76] to Simply check in our idle state if an
+[208.40] animation is playing when we enter and
+[210.56] if that animation is the jump end
+[212.20] animation then we wait till it finishes
+[215.08] and then pause if nothing is playing we
+[217.80] can force a pause like before this
+[219.96] allows the jump in animation to finish
+[222.64] but we also have full control to walk
+[225.08] Crouch and jump immediately because
+[227.36] we're still transitioning to our idle
+[229.28] State and not sitting in our jump State
+[231.48] waiting this same technique can also be
+[233.92] applied to our walking and sprinting
+[236.08] States Additionally you can also set the
+[238.32] blend durations between our jump in
+[240.12] animation and other animations in case
+[242.64] there is any overlap and with our new
+[245.04] animations and new script changes you
+[247.24] should have a jumping animation to add
+[249.28] some weight to our jumping movement all
+[251.88] right guys if this tutorial was helpful
+[253.60] consider it a like And subscribe to the
+[255.44] channel as we're going to be covering a
+[257.08] lot more thanks to all of my patrons who
+[259.76] keep this series going you too can get
+[262.24] access to the project source files by
+[264.36] joining my patreon you can download
+[266.64] everything there and you'll also get
+[268.28] early access to my videos and sneak
+[270.32] peeks at Future tutorials thanks for
+[272.92] watching and as always keep
+[276.51] [Music]
+[280.68] creating

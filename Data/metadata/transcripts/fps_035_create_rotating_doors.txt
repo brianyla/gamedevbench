@@ -1,0 +1,67 @@
+[0.32] in this episode of myato FPS tutorial
+[2.72] series we're creating a rotating door
+[4.88] using our door component from a couple
+[6.76] episodes ago these tutorials are part of
+[9.04] a long series of FPS tutorials for the G
+[11.80] engine the link to the door component
+[13.60] episode is in the description and as
+[15.56] always you can grab the source files for
+[17.64] this and all of my G engine tutorials on
+[20.40] my patreon first check the origin of
+[22.68] your door because it needs to be set
+[24.60] properly if we are going to adjust the
+[26.40] door's rotation the door component moves
+[28.52] our animatable body 3D parent so we need
+[31.12] to adjust its origin so it lines up with
+[33.64] what would be the hinge of our door then
+[36.08] we can adjust our door mesh and
+[37.96] collision shape so that it fits back
+[39.76] into the doorway your door mesh origin
+[41.96] may be different or you may have set it
+[44.04] up already in your modeling software
+[46.16] either way we just need the origin of
+[48.20] this parent to be on the edge of our
+[50.48] doorway within the door component script
+[52.44] we add some variables one for our axis
+[54.64] of rotation which will likely default to
+[56.92] the Y AIS since the door will swing open
+[59.52] like this
+[60.44] and the amount of rotation we want which
+[62.56] will default to 90° then a variable to
+[65.60] hold our original rotation within the
+[67.60] ready function save the door's original
+[69.68] rotation so we can return to it when we
+[71.80] close the door and the open door
+[73.72] function add another tween property line
+[76.12] for our rotation where we'll move toward
+[78.52] the original rotation plus our rotation
+[81.40] axis multiplied by our rotation amount
+[84.32] note here that we are translating our
+[86.16] rotation amount from degrees to radians
+[89.00] we're also going to to keep our
+[90.44] transition type setting and easing
+[92.20] setting then when we close our door add
+[94.56] another tween property to return to the
+[96.56] original rotation optionally to separate
+[99.20] our sliding door and rotating door types
+[102.04] we can add an enumeration at the very
+[104.24] top for door type with the type sliding
+[106.84] and rotating then add an export variable
+[109.56] for our door type enumeration so we can
+[111.84] select the type in our inspector in the
+[114.12] open door and closed door functions we
+[116.12] use a match case for our door type
+[118.48] variable using each of the enumeration
+[120.92] types if sliding we run the position
+[123.52] tween if rotating we run the rotation
+[126.56] tween you can now adjust your door
+[128.72] component settings and create a rotating
+[130.68] door with all of the speed transition
+[133.00] and easing settings that you need and
+[135.00] the next episode we'll make it so the
+[136.60] door can open both ways depending on the
+[139.00] location of the player as always you can
+[141.24] get these source files for everything
+[142.88] that you saw in this video on my patreon
+[145.08] I'll catch you in the next one and as
+[146.44] always keep creating

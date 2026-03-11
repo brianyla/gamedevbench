@@ -1,0 +1,119 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.80] video we're beginning our weapon setup
+[9.68] in our player controller adding a
+[11.40] container node and positioning a crowbar
+[13.96] in our camera view the basic FPS
+[16.24] controller project from episode 1 is
+[18.12] available for free on GitHub and if you
+[19.96] would like to use the written version of
+[21.64] this tutorial or download all of the
+[23.56] source files you can get access by
+[25.64] joining my patreon let's Dive
+[28.96] In to add any weapon to our player
+[31.44] controller we need to think about how we
+[33.56] want to structure our weapon system
+[35.92] weapons will be a part of our player
+[37.28] controller so the structure should
+[38.60] reside in our player controller scene
+[40.84] the weapons themselves will be connected
+[42.80] to our player's view always within our
+[44.88] frame and moving with the player any
+[47.72] weapon should then be a child of our
+[49.80] camera system so that its transform is
+[52.40] dependent on the camera transform one
+[54.96] way to do this is to create a new node
+[56.84] 3D parent container called weapon rig as
+[59.48] a child of our camera 3D node and within
+[62.08] this node we'll add our
+[63.53] [Music]
+[65.32] weapons for our first weapon we're going
+[67.52] to create a melee weapon and what better
+[70.12] weapon to base it on than the Crowbar
+[72.24] from halflife we're not focused on
+[74.32] modeling or texturing at the moment so
+[76.32] I'm using this free crowbar model from
+[78.76] sketch faab by Superior the model is
+[81.84] free to use with Creative Commons
+[83.92] attribution so you can use it in your
+[85.92] project as long as you attribute it to
+[88.00] the Creator and it's included in my
+[89.92] patreon project source files I grabbed
+[92.56] the 1K texture glv version which you can
+[95.32] drop right into your project files for
+[97.20] go to import once imported simply added
+[99.96] to the FPS controller scene as a child
+[102.08] of our weapon rig you should now have
+[104.16] the Crowbar within your FPS controller
+[106.16] scene ready to be
+[109.64] positioned to position our crowbar
+[112.20] properly for our player camera we need
+[114.00] to adjust its rotation and positioning
+[116.84] our weapon rig node will be positioned
+[118.52] at the origin of our camera 3D node and
+[121.04] any positioning for our weapons will be
+[123.00] relative to that origin so why not just
+[125.48] move the weapon rig well the position
+[127.48] and rotation of our weapons won't always
+[129.36] be the same in fact this entire system
+[131.72] could be more complicated if you had a
+[133.76] player model with rigging and weapons
+[135.80] were attached to hands Etc but for now
+[138.76] we're just focused on a basic weapon
+[140.68] setup without a fully rigged character
+[143.12] and since weapons will have unique
+[145.08] position and rotation needs those
+[147.92] adjustments should be contained within
+[149.44] the weapon and not require constantly
+[151.92] changing and adjusting the weapon rig
+[153.60] container placement the final design of
+[156.20] this system will make use of custom
+[157.92] resources and a weapon scene where we
+[160.08] can load and adjust those unique
+[161.84] placement settings via script for now
+[164.00] we'll just manually adjust our position
+[165.76] in rotation so we can get an idea after
+[168.48] adding the Crowbar mesh you'll get an
+[170.48] instance of the Crowbar in the
+[172.04] controller scene my position and
+[174.16] rotation settings are as follows in my
+[176.68] example you can also use the camera
+[179.04] preview to see see how the Crowbar looks
+[180.72] through your camera feel free to use
+[182.60] real game screenshots to get an idea of
+[184.60] the placement as well now a more general
+[187.04] rule is to keep the middle of the screen
+[189.44] clear so the player has a good view of
+[192.12] the action but feel free to experiment
+[194.64] according to your needs once you have
+[196.72] your weapon placed how you want run your
+[198.92] scene and you should have your weapon
+[200.76] within your camera frame and moving with
+[202.92] your mouse now there are some issues
+[205.24] that need to be addressed and ultimately
+[206.96] this setup will get more complex in the
+[208.92] next few episodes
+[210.36] first we have a field of view issue the
+[213.08] weapon being within our camera gets
+[215.72] distorted when we adjust our field of
+[217.36] view and we're going to be using that
+[218.60] field of view when we make different
+[220.28] effects or aim down sights we'll fix
+[223.56] this in the next episode along with our
+[225.76] weapon disappearing into nearby meshes
+[228.08] in front of the player our depth issue
+[231.04] all right guys if this tutorial was
+[232.48] helpful consider a like And subscribe to
+[234.64] the channel as we're going to be
+[235.64] covering a lot more thanks to all of my
+[238.52] patrons who keep this series going you
+[240.64] too can get access to the project source
+[242.80] files by joining my patreon you can
+[245.44] download everything there and you'll
+[247.08] also get early access to my videos and
+[249.20] sneak peeks at Future tutorials thanks
+[252.00] for watching and as always keep
+[255.80] [Music]
+[259.96] creating

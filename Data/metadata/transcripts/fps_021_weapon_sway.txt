@@ -1,0 +1,147 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.84] video we're adding a procedural sway
+[9.80] animation to our weapon when the player
+[11.80] looks around with the mouse the basic
+[14.20] FPS controller project from episode 1 is
+[16.48] available for free on GitHub and if You'
+[18.48] like to download all of the source files
+[20.64] you can get access by joining my patreon
+[22.96] let's dive
+[25.08] in so what exactly is weapon sway well
+[28.80] up until now our weapon has been static
+[31.08] without movement within our camera and
+[33.40] that lack of movement looks not so great
+[36.44] when we move our arms and whatever we
+[38.64] might be holding don't move exactly the
+[40.96] same as our head and even the early FPS
+[43.80] games knew to add some movement to
+[45.96] weapons to add realism the weapon sway
+[48.28] we are adding today will happen when we
+[49.92] look around with our Mouse FPS games
+[52.68] often have weapons move on a delay with
+[54.76] the camera we look left and the weapon
+[57.36] follows but slightly behind this not
+[60.12] only affects the position of the weapon
+[61.96] but also the rotation and by doing this
+[64.64] our aiming and looking around the level
+[66.92] doesn't feel so awkward the idea is
+[69.28] simple we take the amount of mouse
+[71.20] movement while looking and apply that
+[73.28] amount to our weapon position and
+[75.12] rotation while using a lurp the lurp or
+[78.68] linear interpolation will make the
+[80.72] change in position and rotation more
+[82.88] gradual as we interpolate between the
+[85.36] difference in current position and
+[87.32] desired position we'll also add some
+[89.48] variable that will utilize our custom
+[91.40] resource weapon system we set up so that
+[93.84] we can adjust the amount speed and
+[95.92] thresholds for our sway for each weapon
+[99.10] [Music]
+[100.68] independently first we add some
+[102.60] variables we'll need for our sway
+[104.12] function in the weapon resource we
+[105.88] created in a previous episode I'll leave
+[108.24] a link to that episode in the
+[109.64] description this will provide a variable
+[111.80] for each weapon type we create so we can
+[114.12] adjust our Su parameters individually in
+[116.96] my weapons custom resource script I've
+[118.96] added a new export category in six new
+[122.16] variables A Min and Max sway amount to
+[125.40] help clamp our Mouse movement sway speed
+[128.00] for position and rotation these will set
+[130.64] the alphas of our lurs higher values
+[133.08] mean we lurp more quickly from our A to
+[135.12] B values and lower values mean more
+[137.40] slowly in other words higher values make
+[139.52] our movement quicker and finally two
+[141.96] adjustment variables to manipulate the
+[143.80] mouse movement value we get for the
+[145.84] position and
+[148.40] rotation the way function we'll create
+[150.92] will sit in our initiate weapon script
+[153.60] the script already loads our weapon
+[155.56] parameters when we load the game or
+[157.40] switch weapons in the future we could
+[160.12] add an entirely new state machine just
+[162.60] for our weapons that would coincide with
+[164.84] our movement State machine but for now
+[166.96] we'll house the function here the
+[168.80] function is rather straightforward first
+[171.16] we need our Mouse movement info we add a
+[173.36] new variable Mouse movement to hold our
+[175.72] Vector 2 info then add an if statement
+[178.60] to our input event function where we
+[180.88] check if the event is input event Mouse
+[184.04] motion this fires whenever the mouse
+[186.32] moves then we set Mouse movement to
+[188.72] equal our event. relative we use this
+[191.88] same information when we created our
+[193.84] camera movement in an earlier episode it
+[196.20] basically gets how much the mouse has
+[198.08] moved since the last frame now that we
+[200.68] have our Mouse Movement we create our
+[202.88] swap weapon function with Delta as a
+[205.44] parameter because we're going to be
+[206.68] running this every frame in our physics
+[209.00] process function
+[210.36] then we clamp our Mouse movement using
+[212.20] the Min and Max variables we created
+[214.76] earlier in our webon resource script a
+[217.24] quick note here is that I'm using the
+[218.88] clamp function from my Vector 2 not just
+[222.32] a simple clamp function and there is a
+[225.00] difference this funtion works
+[226.36] specifically with vectors and it's going
+[228.16] to provide a better result the clamp
+[230.64] will keep the sway movement within a
+[232.28] range that we set so even if the mouse
+[234.44] moves super fast the effect won't move
+[237.24] beyond our set Min and Max I'm using a
+[240.12] Minimax of -20 and 20 then we adjust the
+[244.08] x of our weapon position with a lurp
+[246.56] here we are luring between our current X
+[248.88] position to our default weapon position
+[251.56] minus our Mouse movement amount time
+[253.92] Delta note that we are adjusting our
+[256.20] Mouse movement value by our sway amount
+[258.36] variable we created to decrease the
+[260.36] intensity by multiplying by
+[263.28] 0.07 finally our lurp Alpha uses our
+[266.36] sway speed position variable which is
+[268.88] set to a below 0.1 in other words every
+[272.88] frame we are adjusting our position X to
+[275.48] get closer to our Mouse adjusted weapon
+[277.88] position by a rate of 0.1 so every frame
+[281.84] we get 10% closer to our desired value
+[285.60] the same principle applies to our y
+[287.64] position the only change being we add
+[290.40] instead of subtract to flip the movement
+[293.00] the effect is a gradual movement or
+[295.28] interpolation to our desired weapon
+[297.28] position based on our Mouse movement
+[300.20] the same process applies to our rotation
+[302.44] we set our Y and X rotations by luring
+[305.20] every frame from the current value to a
+[307.64] mouse movement adjusted value while
+[309.96] utilizing our adjustment and Alpha
+[312.20] variables we set in our custom resource
+[314.88] finally we run our sway weapon function
+[317.48] every freame all right guys if this
+[319.56] tutorial was helpful consider a like And
+[321.80] subscribe to the channel as we're going
+[323.08] to be covering a lot more thanks to all
+[325.92] of my patrons who keep this series going
+[328.12] you too can get access to the project
+[330.16] source files by joining my patreon you
+[332.96] can download everything there and you'll
+[334.80] also get early access to my videos and
+[336.92] sneak peeks at Future tutorials thanks
+[339.72] for watching and as always keep
+[343.51] [Music]
+[347.68] creating

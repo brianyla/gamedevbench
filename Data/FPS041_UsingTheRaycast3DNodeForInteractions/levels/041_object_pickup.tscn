@@ -1,0 +1,369 @@
+[gd_scene load_steps=15 format=3 uid="uid://0jhc5ju6aklp"]
+
+[ext_resource type="PackedScene" uid="uid://c3ffql15mo0aj" path="res://controllers/fps_controller.tscn" id="1_wg3ay"]
+[ext_resource type="Material" uid="uid://mln2navettj2" path="res://materials/grid_grey.tres" id="2_t4scq"]
+[ext_resource type="Script" path="res://scripts/interaction_component.gd" id="3_l06ve"]
+[ext_resource type="Script" path="res://scripts/pickup_component.gd" id="5_kroiv"]
+[ext_resource type="Material" uid="uid://b67vcr0lfksu2" path="res://materials/interaction_object.tres" id="6_fue73"]
+[ext_resource type="Material" uid="uid://4s2s2e371ynr" path="res://materials/grid_red.tres" id="6_gyc6f"]
+
+[sub_resource type="Environment" id="Environment_l2ivh"]
+background_mode = 1
+background_color = Color(0.0911214, 0.0911215, 0.0911214, 1)
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.0901961, 0.0901961, 0.0901961, 1)
+fog_density = 1.0
+fog_depth_begin = -53.0
+fog_depth_end = 54.5
+volumetric_fog_albedo = Color(0.797693, 0.677328, 1, 1)
+volumetric_fog_detail_spread = 3.605
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n73c6"]
+friction = 0.86
+bounce = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_tdckl"]
+material = ExtResource("2_t4scq")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_p7yo1"]
+points = PackedVector3Array(0.1, 0.1, 0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, -0.1, 0.1, -0.1, -0.1, -0.1, 0.1, -0.1, -0.1, -0.1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_s3fn3"]
+material = ExtResource("2_t4scq")
+size = Vector2(80, 80)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_5jcpk"]
+points = PackedVector3Array(-40, 0, -40, -40, 0, 40, 40, 0, -40, 40, 0, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vqwj6"]
+size = Vector3(1, 0.05, 3)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f8ave"]
+points = PackedVector3Array(0.5, 0.025, 1.5, 0.5, -0.025, 1.5, 0.5, 0.025, -1.5, -0.5, 0.025, 1.5, -0.5, -0.025, 1.5, 0.5, -0.025, -1.5, -0.5, 0.025, -1.5, -0.5, -0.025, -1.5)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_l2ivh")
+
+[node name="FPSController" parent="." instance=ExtResource("1_wg3ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09253, 0, 1.27025)
+
+[node name="WeaponRig" parent="FPSController/CameraController/Recoil/Camera3D" index="1"]
+visible = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.196, 0.699, 0)
+cull_mask = 1048571
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Cube" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0463648, 1.13, 0.144217)
+mass = 2.0
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube3" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0468424, 1.33974, 0.0181089)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube3"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube3"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube3"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube3/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube2" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0473362, 1.13, -0.11227)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube2"]
+transform = Transform3D(0.989046, 0, 0.147602, 0, 1, 0, -0.147602, 0, 0.989046, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube2"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube2"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube2/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube4" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0482818, 1.13, -0.361933)
+mass = 2.0
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube4"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube4"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube4"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube4/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube5" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0487594, 1.33974, -0.488041)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube5"]
+transform = Transform3D(0.740006, 0, -0.672599, 0, 1, 0, 0.672599, 0, 0.740006, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube5"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube5"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube5/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube19" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.649846, 0, 0.760066, 0, 1, 0, -0.760066, 0, 0.649846, -0.0478285, 1.33974, -0.221511)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube19"]
+transform = Transform3D(0.740006, 0, -0.672599, 0, 1, 0, 0.672599, 0, 0.740006, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube19"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube19"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube19/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube6" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0492532, 1.13, -0.618419)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube6"]
+transform = Transform3D(0.99444, 0, -0.105292, 0, 1, 0, 0.105292, 0, 0.99444, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube6"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube6"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube6/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube7" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0472798, 1.55326, -0.0973761)
+mass = 2.0
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube7"]
+transform = Transform3D(0.98334, 0, -0.181772, 0, 1, 0, 0.181772, 0, 0.98334, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube7"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube7"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube7/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube8" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0477574, 1.76299, -0.223484)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube8"]
+transform = Transform3D(0.889056, 0, 0.457796, 0, 1, 0, -0.457796, 0, 0.889056, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube8"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube8"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube8/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Cube9" type="RigidBody3D" parent="Geometry"]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, -0.0482512, 1.55326, -0.353862)
+physics_material_override = SubResource("PhysicsMaterial_n73c6")
+can_sleep = false
+
+[node name="Box2" type="MeshInstance3D" parent="Geometry/Cube9"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+material_override = ExtResource("6_fue73")
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Cube9"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_p7yo1")
+
+[node name="InteractionComponent" type="Node" parent="Geometry/Cube9"]
+script = ExtResource("3_l06ve")
+context = "Cube"
+
+[node name="PickUpComponent" type="Node" parent="Geometry/Cube9/InteractionComponent"]
+script = ExtResource("5_kroiv")
+
+[node name="Floor" type="StaticBody3D" parent="Geometry"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/Floor"]
+mesh = SubResource("PlaneMesh_s3fn3")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Geometry/Floor"]
+shape = SubResource("ConvexPolygonShape3D_5jcpk")
+
+[node name="Table" type="StaticBody3D" parent="Geometry"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("6_gyc6f")
+mesh = SubResource("BoxMesh_vqwj6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("ConvexPolygonShape3D_f8ave")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.59936, 3.24148, -5.67735)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.30161, 3.71709, -3.80317)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.66781, 3.71709, 4.25638)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D7" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8547, 3.71709, -3.80317)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D8" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8547, 3.71709, 4.25638)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.66905, 3.71709, 0.00078392)
+light_energy = 7.919
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18927, 3.71709, 5.14288)
+light_energy = 7.12
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.09477, 11.4492, 0.193905)
+light_energy = 30.0
+shadow_enabled = true
+omni_range = 17.165
+omni_attenuation = 0.707107
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-3.50991e-08, -0.596015, 0.802974, -2.60526e-08, 0.802974, 0.596015, -1, 2.84217e-14, -4.37114e-08, 0, 0, 0)
+visible = false
+shadow_enabled = true
+
+[editable path="FPSController"]

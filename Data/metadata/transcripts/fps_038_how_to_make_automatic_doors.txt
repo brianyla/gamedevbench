@@ -1,0 +1,69 @@
+[0.08] in this episode of myato FPS tutorial
+[2.52] series we're creating fully automated
+[4.52] doors with our door component system
+[6.72] these tutorials are part of a long
+[8.56] series of FPS tutorials for the G engine
+[11.16] the link to the door component episode
+[13.00] is in the description and as always you
+[14.96] can grab the source files for this and
+[17.20] all of my G engine tutorials on my
+[19.56] patreon to create automatic doors we
+[21.92] need to create an area that will act as
+[23.80] a trigger for when our player enters and
+[26.24] exits I decided to convert my door
+[28.56] component script and node from a base
+[30.60] node to an area 3D node this will give
+[33.32] us the functionality we need and keep
+[35.48] everything under one component to do
+[37.32] that change the node that our script
+[39.24] extends from node to area 3D to have
+[42.64] this update you may need to restart gato
+[44.80] so keep that in mind this will also
+[46.64] throw an error for our rotation variable
+[48.80] name because area 3D nodes already have
+[51.08] a rotation reference so first change
+[53.52] that variable and it's one occurrence in
+[55.44] the open door function to rotation axis
+[58.76] then add a new enumerator door operation
+[61.40] that will contain three different types
+[63.56] manual close automatically and open and
+[66.44] close automatically these options will
+[68.44] make it easy for us to switch between
+[70.08] our manual and automatic door options
+[72.32] add an export variable door operation to
+[74.56] hold our new enumeration in our connect
+[76.88] parent function we only want to interact
+[79.00] with the door when we are in manual mode
+[81.48] so we add an if statement to check if we
+[83.52] are in manual if true we connect our
+[86.00] interaction signal to our check door if
+[88.24] we want to close the door automatically
+[90.08] but manually open it we adjust our Open
+[92.44] Door function so that instead of our
+[93.96] close automatically Boolean variable we
+[96.48] check for our close automatically door
+[98.56] operation we can also deprecate or
+[100.88] delete our close automatically Boolean
+[103.04] finally we create a collision shaped 3D
+[105.00] node within our door component as a
+[106.96] child which is now an area 3D node this
+[109.64] Collision shape will act as our trigger
+[111.36] area for the player I'm using a sphere
+[113.72] Collision shape and you can adjust the
+[115.48] size according to how far you want the
+[117.24] door to trigger we can use the built-in
+[119.32] signals body entered and body exited
+[122.04] which I've renamed to on trigger and off
+[124.04] trigger respectively connect those
+[125.80] triggers to our script and run a door
+[128.00] operation check for our open close
+[129.88] automatically type if true we run our
+[132.56] check door function you should now have
+[134.52] a fully automatic door and the ability
+[137.16] to switch back to manual or close
+[139.08] automatically if you want as always you
+[141.60] can get these source files for
+[143.04] everything that you saw in this video on
+[144.56] my patreon I'll catch you in the next
+[146.40] one and as always keep creating
+[149.01] [Music]

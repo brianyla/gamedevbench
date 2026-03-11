@@ -1,0 +1,434 @@
+[0.12] welcome to the G engine firstperson
+[1.96] shooter project I'm building an FPS from
+[3.80] scratch in the G engine and today we're
+[6.80] adding crouching the goals for this
+[8.44] video are to add a new input for
+[10.28] crouching adjust our player size and
+[12.48] collision when we Crouch and fix some
+[15.12] common issues like bugging out when UNC
+[17.28] crouching adjusting movement speed and
+[19.32] giving the player the option to toggle
+[21.12] or hold the Crouch button We're working
+[23.36] directly from the last episode where we
+[25.56] created a basic FPS controller you can
+[28.00] grab those source files directly from my
+[30.00] GitHub and if you want the source files
+[32.12] for this episode please consider
+[34.20] becoming a GitHub sponsor to gain access
+[37.00] not only to the source files for
+[38.24] crouching but for everything we create
+[40.80] over the next
+[43.28] year to begin we're going to need two
+[45.64] platforms one that will allow our player
+[48.08] to crouch and another that will be too
+[50.16] low to crouch underneath I've set my
+[52.40] high platform to be 2 m above my floor
+[55.52] and my low platform to be 1.5 M from the
+[58.64] floor both plat platforms are using a
+[60.92] box mesh and have dimensions of 6 x5.5 M
+[65.48] you can play with the height here
+[66.64] depending on your needs and the height
+[68.36] of your player character and if you want
+[70.52] to grab the material that I'm using for
+[72.64] these platforms you can do so by going
+[74.40] to the FPS basic setup project in my
+[79.36] GitHub to get started on our Crouch
+[81.52] feature we need to add another input map
+[83.88] to our project head to project settings
+[86.56] input map and add a new action I'm
+[89.60] calling calling mine Crouch then set
+[92.24] which key you want to use to crouch
+[94.36] traditionally this might be the c key or
+[96.96] a control key I'm going to go with c and
+[100.08] already we have a choice to make FPS
+[102.56] games can use Crouch differently some do
+[104.88] it automatically some use a toggle key
+[107.16] where the player can turn it on and off
+[109.36] and some use a hold approach where the
+[111.04] player must hold the key now for our
+[112.72] initial crouching setup we're going to
+[114.00] be using both the toggle and hold
+[116.12] options and creating a Boolean export
+[118.68] variable in our controller that way we
+[120.76] can switch between both holding or
+[125.48] toggling first let's create our toggle
+[128.08] option We'll add our first new variable
+[130.88] is crouching set to false by default
+[133.64] which will be a Boolean variable that
+[135.48] will hold our crouching state or whether
+[138.00] or not we're crouching at any given
+[139.64] moment next we need a new function that
+[142.36] will run whenever the player hits our
+[144.40] Crouch key called toggle Crouch when
+[147.64] this runs we'll check if we're currently
+[149.28] crouching with our is crouching variable
+[151.64] first an if statement to see if we're
+[153.40] crouching and if we are we want to print
+[156.60] uncrouch for now then an else if
+[159.60] statement saying if is crouching is
+[161.80] false I.E we're not crouching then print
+[165.08] Crouch we'll replace these prints later
+[167.56] but it's a quick and easy way to check
+[169.12] if our code is doing what we want it to
+[171.12] do now we're using an else if here
+[173.40] because we don't want to run both of
+[175.52] these if checks every single time if the
+[178.32] first if statement is true then the
+[180.52] second one doesn't need to run it only
+[182.52] runs if the first if is false now we
+[185.60] need to add a way to check when our
+[187.24] player hits our Crouch key in order to
+[189.60] run our function like in the first
+[191.68] episode for our basic FPS setup we'll go
+[194.28] to our input event function and add a
+[196.88] new line if event is action pressed for
+[199.84] our new Crouch input map we added
+[201.68] earlier if we're hitting our Crouch key
+[204.32] then we want to run our toggle Crouch
+[208.68] function
+[211.60] now we can run our scene and test our
+[213.24] key input and whether we get our two
+[215.08] print
+[222.24] screens okay printing strings is pretty
+[224.64] cool actually it's not really cool at
+[226.12] all is it so let's actually add some
+[227.96] code it's time to make our player Crouch
+[230.20] and while you could do this just with
+[232.16] code we're actually going to be using a
+[234.40] very useful feature within the Gotto
+[236.12] engine the animation player node the
+[238.52] animation player allows you to animate
+[240.84] any node and any property of that node
+[243.28] within your scene it's a quick way to
+[245.40] make smooth adjustments to size or
+[247.56] position and allows you to make easy
+[249.80] edits later on rather than fumbling
+[252.16] through code let's go to our player
+[254.32] controller scene and add an animation
+[256.16] player node clicking on the Node will
+[258.40] bring up the animation tab at the bottom
+[260.40] of the editor here we want to create a
+[262.64] new animation called Crouch below our
+[265.64] new animation is our animation track
+[268.48] this is where we can add track for
+[269.96] different node properties that we want
+[271.40] to animate we'll animate with something
+[273.60] called key frames or a point where we
+[276.12] save a value for our property let's try
+[279.04] adding our first property track click on
+[281.28] our Collision shape 3D node and you
+[283.32] should notice these keys in our
+[285.04] inspector these Mark properties that we
+[287.52] can create key frames for we want to
+[290.08] open our capsule shape mesh and create a
+[292.36] key frame for our height property click
+[295.00] the key and create a new track we now
+[297.92] have an animation track for our height
+[299.72] property under our Collision shaped 3D
+[301.68] node and a key frame with our height
+[304.32] value repeat this process for the
+[306.68] position of our Collision shaped 3D node
+[309.28] and for the position of our camera
+[311.40] controller node your track setup should
+[313.80] look something like this also be sure
+[316.08] that your key frames are in the very
+[318.08] first frame above our tracks we have our
+[320.52] animation time in seconds and far to the
+[323.40] right our setting for animation length
+[325.96] we'll set our animation length to 1
+[328.44] second I want to use 1 second because it
+[330.84] creates a round default animation time
+[333.24] to use because we can always adjust our
+[335.48] animation speed with a variable within
+[337.60] our script with our animation time set
+[340.24] let's add our second set of key frames
+[342.84] at 1 second for each property track my
+[346.16] Collision shape 3D height will go to 1.5
+[349.00] M the Y position to 0.75 m and my camera
+[354.28] control y position to 1 meter with the
+[356.96] key frames added you should now be able
+[359.20] to play or sweep your track to see the
+[362.08] controller animate or crouching I also
+[365.52] like to change my interpolation mode to
+[367.44] cubic instead of linear for smoother
+[369.36] movement you can add more key frames to
+[371.64] change your Crouch animation if you wish
+[373.60] as well with our crouching animation
+[375.80] ready we can go back to our toggle
+[377.64] Crouch function and run our animation
+[380.16] when we hit our Crouch key first we need
+[382.56] to add a reference to our animation
+[384.48] player node we'll use the export node
+[387.16] technique and manually select our node
+[389.20] here
+[390.16] then in our toggle Crouch function get
+[392.60] our animation player variable and run
+[394.72] the play function with these parameters
+[397.76] the first sets which animation we want
+[399.88] to use here we are using our new Crouch
+[402.64] animation we'll place it here for when
+[405.08] we are not crouching so we can test it
+[407.40] right away now when I press the Crouch
+[409.96] key our camera and player controller run
+[412.16] our crouching
+[414.44] animation let's go back to our script
+[416.48] and add another variable for our
+[417.88] crouching speed we talked about earlier
+[420.28] this number will be used to adjust our
+[421.88] playback rate for our animation I've set
+[424.36] a range of 5 to 10 adjusting by 0.1 and
+[428.48] a default of seven so our animation will
+[431.28] run seven times faster then back to our
+[434.36] toggle Crouch script We'll add a third
+[436.88] parameter our playback speed to equal
+[439.28] our Crouch speed variable now when we
+[442.12] run our scene again our Crouch animation
+[444.20] is much
+[445.96] faster so let's go add our uncrouch
+[448.56] animation right now the code for this is
+[450.48] almost exactly the same except we'll use
+[452.96] our Crouch speed time -1 this makes our
+[456.48] animation play Backwards then a final
+[459.52] parameter whether we want the animation
+[461.44] to start from the end to True you'll now
+[464.36] be able to crouch and uncrouch at will
+[467.04] using both
+[469.39] [Music]
+[470.72] animations now that we have our player
+[472.68] crouching we have to work that feature
+[474.44] into the environment we can already
+[476.36] Crouch and move underneath low objects
+[478.60] now with our setup but if we uncrouch
+[481.40] while underneath we'll start to bug out
+[484.08] our player character will want to stand
+[485.96] up but the Collision mesh activates so
+[488.40] we get this jittering
+[490.04] effect we need to check whether we are
+[492.36] underneath an overhang or ceiling then
+[494.96] deactivate our uncrouch animation until
+[497.88] we can safely uncrouch so to do this we
+[501.12] need to use a cast now a lot of
+[503.52] tutorials use a ray cast in the center
+[506.72] of the controller but this can actually
+[508.92] cause a lot of bugging out along the
+[510.52] edges of an overhang the proper way is
+[513.40] to use a shape cast 3D node which will
+[516.28] cast along a single Vector like a
+[518.52] raycast but we'll do it in all three
+[521.12] dimensions this will ensure that we
+[523.00] check the full area of our controller
+[525.36] and not just one single point first we
+[527.84] add a shape cast 3D node to our player
+[529.80] controller we want it to be independent
+[532.44] of our other nodes and we'll animate its
+[534.72] position in the animation player we'll
+[536.84] use a sphere shape set our Target
+[538.92] position position to 0.5 and our
+[541.24] position to 1.5 and you can also change
+[544.20] the debug color if you want then in our
+[546.44] script we can get a reference to our
+[547.96] shape cast via an export variable this
+[550.76] code allows us to Simply select a node
+[552.44] via dropdown rather than grab it in our
+[554.32] code and it's a much cleaner way to
+[556.48] reference nodes checking for whether
+[558.64] we're going to hit a ceiling if we
+[560.00] uncrouch is actually pretty simple head
+[562.40] to our toggle Crouch function and where
+[564.60] we toggle our crouching off we can add
+[567.00] another argument to our if statement
+[568.56] this means we will only uncrouch if we
+[570.96] one are currently crouching and two if
+[573.80] our shape cast is not going to collide
+[576.04] with something overhead if either of
+[578.08] those are not true then we don't
+[579.80] uncrouch we also have one line of code
+[582.12] we need to add to fix any possible
+[583.92] bugging we want to do a collision check
+[586.00] with our shape cast against the
+[587.44] environment but not ourselves the player
+[590.52] controller can cause the Collision check
+[592.20] to be true so we need to make our player
+[594.00] controller an exception so our shape
+[596.68] cast will ignore it you can do this by
+[599.12] by adding this line in our ready
+[600.68] function so that when the script runs we
+[603.20] add our player controller character body
+[605.52] 3D node as an exception here you can
+[608.60] actually just drag the node to get the
+[610.32] reference and since this is the parent
+[612.20] node I'm not worried about finding or
+[614.16] changing it later and now we can Crouch
+[616.96] and uncrouch safely underneath objects
+[620.04] but we have an issue with our crouching
+[622.00] State being toggled on again when
+[624.28] crouching so let's change how we
+[626.28] determine our crouching State what we
+[628.72] want is to only change our crouching
+[630.68] State when our crouching animation has
+[632.44] started playing rather than when we
+[634.56] press our Crouch button we can send a
+[637.20] signal from our animation player node
+[639.52] when an animation starts then check if
+[642.32] that animation is our Crouch animation
+[644.72] and if it is flip-flop or crouching
+[647.84] Boolean then we delete our previous
+[650.40] method above but you'll notice that we
+[652.80] can jump while Crouch which we don't
+[654.92] want some games actually do let you
+[657.40] crouch jump so you can keep this in if
+[659.44] you want but we want to disable jumping
+[661.48] if we are crouched for now in a future
+[663.60] episode we might make it so that jumping
+[665.24] while crouched makes you uncrouch or get
+[667.36] a higher jump or something similar but
+[669.68] for now we'll disable
+[672.92] it in our player controller script we
+[675.52] find our input jump function and like we
+[678.12] did for our Crouch check add another
+[680.48] part to our if statement where we check
+[682.44] if we are currently crouching we only
+[685.00] want to jump if we are not
+[687.96] crouching
+[690.73] [Music]
+[704.80] so our Taco version is actually done but
+[706.76] we're also adding a hold the button
+[708.44] version for our Crouch and you and your
+[710.52] players can decide which you want later
+[712.20] on we've actually done most of the hard
+[714.20] work already so there isn't much to add
+[716.88] first let's add another export variable
+[719.04] called toggle Crouch this will be a
+[721.48] Boolean variable represented by a
+[723.32] checkbox in the editor where we can
+[725.08] either use the toggle version if true or
+[727.00] the hold version if false next we'll add
+[729.84] some more event checks in our input
+[731.76] function first we'll run our Crouch
+[734.16] function if we press our Crouch key we
+[736.96] are not currently crouching and if we're
+[739.04] on the floor we'll also want to check if
+[741.16] we're in hold mode so toggle Crouch
+[743.84] should be false if all of those are true
+[746.40] then we
+[747.88] Crouch
+[749.60] and since we're going to be crouching
+[750.84] and uncrouch in multiple places in our
+[753.00] script let's create one function that we
+[755.72] can use everywhere we can use this
+[758.08] function here to run whenever we Crouch
+[760.32] or uncrouch we pass a Boolean parameter
+[763.24] as our variable State then match true
+[766.12] for when we want to crouch and false
+[768.44] when we want to uncrouch now we can just
+[770.88] run this function with either a true or
+[772.96] false anywhere in our
+[777.84] script then add another where we check
+[780.32] if we've released the Crouch key or if
+[782.88] we are not in toggle Crouch mode this
+[785.96] represents when the player releases the
+[787.76] Crouch key and if true we run our
+[790.72] crouching function as false you should
+[793.96] now be able to uncheck your toggle
+[795.56] Crouch option in your player controller
+[797.24] variables and then use the hold Crouch
+[799.60] version when running the scene but we
+[801.80] still have to deal with the UNC
+[803.16] crouching underneath objects issue and
+[805.28] this is a little more complicated
+[806.88] because the player could rapidly press
+[808.48] and release the Crouch key so we need a
+[810.76] really solid way to check and reduce
+[812.60] possible
+[815.24] bugs my solution is to run a check
+[817.76] whenever the player releases the Crouch
+[819.84] button to uncrouch if our shape cast
+[822.68] from before is not colliding it means
+[824.88] there is nothing above the player that
+[826.44] would prevent them from standing so we
+[828.60] run our uncrouch function crouching
+[831.16] false but if we uncrouch and there is
+[834.16] something above us our Crouch shape cast
+[836.80] is colliding is true then we need to do
+[839.24] some more work in a new function
+[840.96] uncrouch check our uncrouch check
+[844.00] function will keep checking whether we
+[845.52] are colliding with something overhead if
+[847.96] we are not colliding then run our
+[849.92] uncrouch function if we are colliding
+[852.44] first wait .1 seconds then run our check
+[855.40] again this line here is a great way to
+[857.60] add a short delay to your code we could
+[860.04] run this in our process function every
+[861.80] frame but it's really overkilled to be
+[864.00] checking for that Collision that often
+[866.48] and if we can do the same thing with
+[868.24] less frequent checks you do it because
+[870.72] it's taking less system resources I.E
+[873.56] it's optimized now when we uncrouch
+[876.24] underneath an object it won't uncrouch
+[878.68] until we are safely away from hitting
+[880.60] our head okay so our crouching is
+[882.64] working pretty well at this point but
+[884.72] when you crouch you don't move the same
+[886.40] speed as when you're upright so let's
+[889.12] add a little extra spice by adjusting
+[891.40] our movement speed when we're
+[895.04] crouched we'll adjust our speed setup
+[897.44] with three new speed variables a
+[899.56] customizable default speed value
+[901.72] customizable Crouch speed value and a
+[904.20] speed variable that will hold our speed
+[906.44] our default speed will be five and our
+[908.44] Crouch speed will be slower at two you
+[911.04] can choose whichever values work best
+[912.88] for your game then within our movement
+[914.92] code let's replace our old speed
+[917.12] variable with our new underscore speed
+[919.32] variable and with an already function
+[921.44] set our speed variable to equal our
+[923.64] speed default value so whenever we start
+[926.60] our game we'll move at the default speed
+[929.80] then we'll add another function called
+[931.40] set movement speed which will take a
+[933.68] string parameter called State here we'll
+[936.28] use this function whenever we want to
+[937.76] change our movement speed and then match
+[939.88] our state parameter to either default
+[942.44] which will equal our default speed or
+[944.64] crouching which will equal our crouching
+[946.92] speed you can run different functions
+[949.00] for each but this is a really tidy way
+[951.44] to do the same thing adjust our speed
+[954.16] using the same function we just need to
+[956.32] alter the parameter when we run it with
+[958.72] our set movement speed function let's go
+[960.44] to our crouching function where we'll
+[962.32] run the set movement speed function when
+[964.84] we switch between crouching and UNC
+[967.44] crouching if crouching is true then
+[969.76] we'll set our movement speed to
+[971.04] crouching and if false back to default
+[974.08] these strings just reference the options
+[976.08] we set in our match you should now be
+[978.28] able to run the scene and Crouch and
+[980.12] uncrouch with toggling or holding see it
+[983.00] affect your movement speed and not bug
+[985.28] out when crouching under objects if you
+[987.36] would like to support this PS tutorial
+[989.40] series you can become a GitHub sponsor
+[992.16] using the link in the comments as an
+[994.16] elite sponsor you get full access to the
+[996.56] source files for every single tutorial
+[998.56] along the way including this one you'll
+[1000.68] also get access to the private Discord
+[1002.96] recognition in the readme file and help
+[1005.24] determine what FPS gameplay mechanics
+[1007.28] get covered in the future a big thanks
+[1009.32] to my very first sponsor and that is so
+[1011.40] awesome so thank you very very much you
+[1013.60] rock and as always thanks for watching
+[1016.44] and keep creating crouching is just a l
+[1019.16] a squat just imagining crouching for 30
+[1022.52] minutes kind of
+[1025.92] suck

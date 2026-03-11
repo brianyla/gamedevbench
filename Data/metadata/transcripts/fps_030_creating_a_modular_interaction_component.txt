@@ -1,0 +1,383 @@
+[0.00] [Music]
+[3.32] hey everyone welcome to another FPS
+[5.04] tutorial in the GTO engine today we're
+[6.84] going to build upon the interaction
+[8.56] setup that we did in the last episode
+[11.12] and we're going to create an interaction
+[12.80] component that component is going to be
+[14.92] something that we can add to any object
+[16.80] in our scene and make it interactable as
+[19.08] always everything in the project as you
+[21.08] see it the source files is available on
+[23.40] my patreon for my patrons you can check
+[25.80] that out with a link in the description
+[27.80] otherwise let's uh let's get going if
+[30.04] you didn't see the last video about the
+[32.40] interaction setup I'll put a link to
+[34.08] that also in the description otherwise
+[35.96] let's jump into our FPS controller just
+[37.76] to refresh where we're at we're
+[39.36] currently doing a ray cast from the
+[41.16] center of our camera out into the 3D
+[43.52] World and we're getting a result from
+[46.28] anything that we collide with we also
+[47.88] have an interact distance that we can
+[49.92] adjust and whenever we press the
+[52.12] interact button we are checking if we
+[54.64] are colliding with anything and we're
+[57.16] doing something if we are what we're
+[58.84] going to be doing is taking this this
+[60.48] print logic this do something logic and
+[63.12] we're going to put it into a component
+[65.20] now when I say component what I mean is
+[67.80] something that we can add uh easily to
+[70.72] to any object to any you know box or
+[74.04] door or physics object whatever you have
+[77.64] and it's going to make it interactable
+[79.08] and I say component because we're going
+[80.92] to reduce the dependencies I'm learning
+[83.36] as I progress through this tutorial
+[84.84] series that having things to be a little
+[86.72] bit more modular and and doing that
+[89.16] through a component system can help with
+[91.16] that is going to make it a lot easier
+[93.08] for someone to say take this interaction
+[95.80] setup and plug it into their own project
+[98.36] if I have a lot of dependencies uh
+[100.44] within my controller or weapon system
+[103.12] and and everything else these tutorials
+[105.08] are a little bit less helpful so going
+[107.12] forward and even maybe we might go back
+[109.44] and and change some things and fix some
+[111.16] things we're going to try to make things
+[112.84] as modular as as possible so to do the
+[116.36] component the first thing that we need
+[118.52] to do is create a new script so we go
+[121.16] down into our scripts folder and we're
+[122.92] going to create a new script and we're
+[125.24] going to call this script
+[128.28] interaction components now this script
+[130.96] is going to take a new class and that's
+[132.40] going to allow us
+[134.28] to uh select this when we add a new node
+[137.40] so let's go ahead and do that we'll call
+[138.76] this a interaction component and it's
+[142.40] going to extend uh just a basic node
+[145.16] because we don't at the time we don't
+[147.08] really need any 3D elements to this
+[149.92] we'll set that as a class name and
+[151.68] already if we go into our create new
+[154.88] node and we type in interaction we
+[157.44] already have it showing up so let's go
+[159.36] ahead and go to our level and let's find
+[161.60] one of our boxes over here and actually
+[165.76] the the order of this is not right so
+[167.48] let me let me adjust that I'm looking at
+[171.00] this static body 3D node that we have
+[173.72] and we're calling this interactable box
+[175.84] the idea behind this component is that
+[178.04] we can go to uh to nodes to objects that
+[181.56] we have set up and simply add this
+[184.64] interaction component to them and that's
+[186.88] it we just want to add the component and
+[188.84] that's going to handle everything else
+[190.32] that we need in terms of making it
+[192.24] interactable now of course right now
+[193.80] it's not actually doing anything so
+[195.56] we'll go back to our interaction
+[197.36] component now how this is going to work
+[199.12] is whenever we're doing our Ray cast
+[201.52] we're actually getting this object right
+[203.84] here we're getting our static body 3D
+[205.92] node right however we're not attaching
+[208.16] any scripts to this node and nor do we
+[210.36] want to because everything is being
+[211.76] handled through our component so we need
+[213.68] a way for interactions with this node to
+[217.12] communicate with our component the trick
+[219.88] is that we want to control all of these
+[222.12] signals from the input component and
+[224.92] we're going to do that through the use
+[226.28] of some variables and some uh some
+[228.52] signal logic so the first thing we need
+[230.68] is a variable to hold the parent of our
+[234.36] component that's going to be the
+[235.48] reference to the object that is being
+[238.04] detected by the raycast then in our
+[240.08] ready function we want parent to equal
+[244.08] get parent now this means that we do
+[247.96] have a uh sort of dependent logic here
+[250.80] the interaction component has to be an
+[253.48] immediate child of whatever that parent
+[256.52] object is right now that we have our
+[258.00] parent we need to make a connection to
+[260.36] this parent through our input component
+[262.52] so we're going to create a new function
+[264.52] called
+[265.44] connect
+[267.04] parents and within this function we're
+[269.56] going going to add signals to our
+[272.52] parents from the input component now
+[275.36] part of me does not like this logic that
+[277.16] we're affecting another node through
+[279.64] this node but keep in mind even without
+[282.88] a script there are already builtin
+[285.68] signals we're just going to be adding
+[287.60] signals to that there are a few ways you
+[289.24] can add signals you're probably used to
+[291.48] the traditional uh upper right no tab
+[295.04] add a signal kind of thing you can also
+[296.76] create a signal in a script and do it
+[299.80] that way another way you can do that is
+[302.12] purely through code so we're going to
+[303.60] get a reference to our parent and we're
+[305.32] going to use the function add user
+[309.28] signal and then we can name that signal
+[311.92] and we're going to be adding a few
+[313.08] signals here we're going to add a
+[315.56] focused signal which is when we are
+[318.92] essentially hovering over an
+[320.40] interactable objects we're going to be
+[322.76] adding an unfocused signal which is
+[325.60] going to be when we un hover I is that
+[328.48] is that the word actually un hover um
+[331.04] when we're unfocusing from that object
+[333.64] and then we're going to add a third and
+[335.92] final signal for when we are interacting
+[339.40] with that object so we've created these
+[342.28] signals uh think that you've created a
+[344.24] script at this point but we're not and
+[346.80] we've created these signals within the
+[348.28] parent object now we need to connect
+[350.88] these signals to functions within our
+[353.76] input component but we don't actually
+[355.80] have any functions yet so let's go ahead
+[357.52] and create those first so for our
+[360.56] focused function we're going to do a I'm
+[364.60] going to call it in range uh you could
+[366.44] do it you know Focus or however you want
+[369.60] to call it this is going to be when we
+[371.88] are detecting something with our raycast
+[374.88] and you could you know have something
+[377.76] pop up on the UI you could have it be
+[380.28] highlighted in fact we'll probably do
+[382.04] that in the next video this is just
+[384.20] going to run whenever we are detecting
+[386.68] something with our rcast and therefore
+[388.68] affect the object that we are detecting
+[391.72] for now we're just going to uh take our
+[393.72] parent and we'll print that in our
+[395.88] output just as a proof of concept then
+[399.08] for our unfocused we need another
+[401.20] function and this is going to be I'll
+[403.28] call this not in range this will be when
+[406.36] you look away from an object and we will
+[410.40] I guess in this case just print uh print
+[413.76] nothing so we'll just pass at this point
+[416.76] we can do stuff with this in the future
+[418.28] and then finally a function
+[420.08] for when we
+[423.36] interact and again we'll probably uh
+[427.16] we'll just get the parents but let's
+[429.24] print the print the name so it's
+[430.88] different than our in range I know these
+[433.16] prints are are kind of boring but it's
+[436.40] it's easy to to test things with a print
+[438.80] and you don't have to do a bunch of
+[441.00] other code that you know maybe that code
+[442.84] doesn't work and you just you need to
+[444.32] know that it works up until a point and
+[446.56] then you can proceed so we have our
+[448.20] functions the next thing that we need to
+[450.04] do is take these signals that we've
+[452.72] created and connect them to these
+[454.48] functions so we'll go back to our our
+[456.84] connect parents function and we'll do
+[460.56] the the same three signals that we
+[463.76] created now to connect we'll go to
+[466.40] parents we'll use the connect function
+[469.56] we'll get a reference to our parent
+[471.52] because again we're working within the
+[473.40] parent the parent has the signals and
+[475.64] we'll use the function connect then we
+[478.08] pick which signal we want to connect and
+[480.88] then we're going to specify the callable
+[483.68] using this syntax so we get callable and
+[487.80] then we get the the object that that
+[489.72] cable is in in this case self because
+[493.00] we're doing it from the input component
+[495.60] and then we can get the uh let's see
+[499.60] what we're doing is focus so in range
+[503.28] that's the the function that's the
+[504.84] callable that we want to run now that
+[507.28] we've done this we can emit this signal
+[510.84] from our parents and it will run the
+[513.60] function that's in our input component
+[515.68] let's go ahead and fill out our last two
+[518.96] connections here we've got unfocused
+[522.16] which will be connected to our not in
+[525.52] range and we have our in in inter
+[529.60] interacted interacted I don't know why I
+[532.12] find it so hard to type and talk at the
+[533.80] same time and we're gonna do the on
+[537.60] interact uh callable with that signal
+[541.16] and if you're having uh trouble with
+[544.28] connecting these signals there's a a
+[546.28] test that you can do you can do uh from
+[549.08] the parent you can use the function get
+[552.36] signal
+[555.40] connection list and then you can check a
+[558.40] specific signal and see where that
+[560.48] connection is is
+[562.04] at our connect parent function is ready
+[564.52] to go we need to make sure we actually
+[566.84] run that uh function otherwise it's not
+[570.16] going to do anything and also make sure
+[572.60] that you're running it after we set our
+[574.92] parent because we're we're using that uh
+[576.88] that variable all right so we have our
+[578.72] our signals set up now we can go back to
+[581.84] our our FPS controller scripts or
+[584.28] wherever you have your interaction
+[586.20] raycast logic this is where we're going
+[588.08] to be checking uh if we have these
+[590.60] signals and then we're going to emit
+[592.84] those signals now I say checking for the
+[595.56] signals because we need to know if the
+[598.20] the thing that we're looking at is
+[599.60] interactable and we can do that simply
+[601.92] by checking if it has the signal that we
+[604.08] want and I think the quickest way to um
+[607.80] proof of concept this is actually let's
+[609.44] go to our our interaction function here
+[612.16] so this runs whenever we press the
+[613.72] interact button currently we're checking
+[615.96] if we are detecting anything with our
+[617.80] rcast and then we're just printing
+[620.12] whatever that is so let's delete that
+[623.48] and let's still check if it's null
+[625.44] because we don't want to run if it's
+[627.12] null and let's also
+[630.20] check if the the object that we are
+[634.00] getting with ar raycast has user signal
+[639.16] and in this case we want to check if it
+[641.00] has the interacted
+[644.64] signal and if it does we want to access
+[648.72] our cast result and then we want to
+[651.96] emit that
+[654.52] signal so again the logic here is we
+[657.96] hitting something with our r pass that
+[660.04] thing has the interacted signal because
+[662.04] we've added the interaction components
+[664.52] and if it does we want to we want it to
+[666.76] do something and it's going to emit that
+[668.80] interacted signal so let's check this so
+[672.20] when I press
+[673.40] e something went wrong oh because I
+[677.00] can't spell let's fix that sometimes uh
+[682.40] the error is pretty stupid okay we go to
+[685.16] our box that we've added the interaction
+[687.24] component to and when we interact
+[689.68] interactable box down in our output
+[692.20] awesome so that's working let's add a
+[694.72] little bit more logic to our our casting
+[697.52] and I'm doing this for for two reasons
+[699.16] one I don't want to constantly be
+[702.76] emitting a signal like every frame and
+[704.76] two I need to know if I'm hovering over
+[706.68] the same object that I did in the last
+[708.72] frame so right now we've set the result
+[711.16] of our Collision to our current cast
+[713.60] result variable so we're going to add an
+[716.76] if statement so first we need to check
+[719.08] if if the thing that we just hit is the
+[721.84] same as the thing we hit in the last
+[723.80] frame and we can do that by if current
+[726.36] cast result does not equal interact cast
+[730.32] result because remember we are are
+[732.60] setting the interact cast result to
+[734.76] equal the current cast result now if
+[736.88] it's different if it's not the same
+[739.16] thing we want to do two things we want
+[741.20] to unfocus from the thing we just saw
+[745.44] and we want to focus on the thing we're
+[747.56] currently seeing and we can do that by a
+[750.08] couple of more if statements so if the
+[752.40] old thing exists and if the old
+[757.12] thing has the user
+[761.80] signal
+[763.88] unfocused then we want to we want to do
+[766.20] a thing so let's print uh let's print
+[771.12] just let's actually make this a string
+[774.64] interact cast results Plus
+[779.28] unfocused all right so that'll print
+[781.28] whatever we saw in the last frame has
+[783.80] been unfocused and it's unhappy with
+[785.76] something I'm missing the uh the colon
+[787.64] there once we've unfocused from the
+[789.72] other thing we need to reset our
+[791.72] interact cast to the current result and
+[794.72] then we need to take that that thing
+[797.08] that we're currently seeing see if it's
+[799.12] a collision see if it exists
+[802.00] and check if uh it has that signal and
+[805.96] that would be has user
+[810.72] signal focused and if it does let's
+[815.24] print the name of that
+[818.76] object
+[821.20] plus uh focus and we'll save that so a
+[824.80] couple things should happen we're not
+[825.96] going to run this every frame now
+[827.24] because we're checking if it's the same
+[829.24] two it's going to unfocus from the thing
+[831.72] we used to see and it's going to focus
+[834.00] on the thing we're currently seeing
+[835.68] sorry if that's a little confusing um
+[838.12] it'll make sense when we actually uh
+[840.12] test it out all right so let's go to our
+[843.64] box when we hover over it's telling
+[847.08] we've focused on it and when we hover
+[848.96] off we've unfocused Focus unfocus so
+[853.00] that's working awesome let's add another
+[855.12] interaction component just to see how
+[857.28] simple this is let's go back to our
+[859.12] level and let's make um fact we'll make
+[863.68] all of these boxes interactable I don't
+[866.36] know why I put these in in this order
+[868.40] this should be uh that should be first
+[870.88] mesh is a child of the body let's fix
+[874.48] that real quick pop that up there all
+[877.80] right there we go that's better so
+[880.64] through all this hard work all that we
+[882.52] need to do to make both of these boxes
+[885.44] interactable is to Simply add our
+[887.64] component we add it there we add it
+[890.44] there and now when we test we can hover
+[893.80] over those and un hover that's our first
+[896.88] box it's focused unfocused Focus un
+[900.24] focus and that's all there is to it so
+[902.08] just with a little bit more work and and
+[904.96] thinking through of how we set this up
+[907.20] we can make it so we simply add a node
+[909.96] we add our interaction component and
+[913.24] it's interactable now in the next
+[915.40] episode what we'll do is we'll we'll
+[917.24] visualize this a little bit and we're
+[918.48] going to add a highlight and that means
+[920.80] we're going to have to affect another
+[922.52] child of the parent which is not a
+[924.80] problem in fact we can make it just as
+[926.76] seamless as we have with this episode
+[928.64] thanks for watching and as always keep
+[931.36] creating all right guys if this tutorial
+[933.36] was helpful consider it a like And
+[935.16] subscribe to the channel as we're going
+[936.48] to be covering a lot more thanks to all
+[939.28] of my patrons who keep this series going
+[941.48] you too can get access to the project
+[943.52] source files by joining my patreon you
+[946.28] can download everything there and you'll
+[948.16] also get early access to my videos and
+[950.28] sneak peeks at Future tutorials thanks
+[953.08] for watching and as always keep creating
+[957.38] [Music]

@@ -1,0 +1,200 @@
+[0.00] [Music]
+[3.44] welcome to another FPS tutorial in the G
+[5.64] engine today we're going to keep
+[7.20] building on our interaction setup and
+[9.40] we're going to be adding a highlights to
+[11.32] any object that we interact with as
+[12.88] always the source files for the project
+[14.28] are available on my patreon so you can
+[16.64] check that out in the description in the
+[18.44] last episode we set up our component our
+[20.76] interaction component which means we can
+[23.60] simply add our our interaction component
+[25.84] node to any object in our level and it's
+[28.40] going to make that object interactable
+[30.48] immediately in this episode we're going
+[31.96] to make some adjustments to that
+[33.80] component setup so we have a little bit
+[35.40] more action than just simply printing in
+[37.88] the output so we'll head back to our
+[41.28] interaction component script again this
+[43.96] is what's attached to our interaction
+[45.84] component node and we've already set up
+[48.12] some signals to connect to our parents
+[50.52] and have them communicate with one
+[52.12] another the goal is to add a material to
+[54.20] any object that we are are looking at
+[56.56] that we're hovering over that is
+[58.20] interactable so we know it's inter
+[60.08] actable in fact let's set up the
+[61.72] material first and then we'll we'll do
+[63.88] the code so obviously we're going to be
+[65.68] interacting with our our mesh instances
+[68.64] and we don't want to change the material
+[70.96] that it currently has because we're
+[72.52] going to be hovering over it un hovering
+[75.04] we don't need to do all that there's a a
+[77.00] very neat and useful feature within the
+[79.84] GTO engine and that's this surface
+[81.72] material override we also have a
+[84.68] material overlay and what that's going
+[87.12] to do is put another material on top top
+[90.12] of the material we already have so this
+[92.16] would be useful if you wanted to
+[95.28] highlight an object but still have
+[97.44] elements of the texture underneath you
+[100.00] can absolutely do the uh override
+[102.76] there's no problem with that but for
+[104.32] this video let's do the overlay so we'll
+[106.72] create a new standard material we're
+[108.84] going to save this because we're going
+[110.80] to access this material through our code
+[113.36] so we're go to our materials folder and
+[115.64] let's add a well actually let's name it
+[119.04] a little better than that
+[121.12] interactable highlights we'll save that
+[124.96] and I think for this material let's
+[128.24] let's do an emission we can actually we
+[130.88] can look at it and test it out let's
+[132.60] make it a kind of a green emission well
+[136.68] we don't want it to Glow let's just have
+[138.12] a little bit and let's change the albo
+[142.80] to Black so we we get that color now we
+[145.60] can also add some transparency so let's
+[148.16] do that we'll make the uh transparen to
+[150.56] Alpha go to the albo and adjust the
+[153.68] alpha here and you can see as we lower
+[156.40] that we're getting the texture the
+[158.32] material that we have already set and we
+[161.40] want that we just want like a little bit
+[163.20] of a slight highlight there Perfect all
+[166.60] right so that's our material we'll save
+[168.84] that and we'll update the uh the little
+[171.76] preview icon there and let's head back
+[174.20] to our interaction component now the
+[176.12] first problem that we have is we don't
+[177.56] have any reference to our mesh we we
+[179.92] don't know where the mesh is the
+[181.76] interaction component has no idea uh
+[184.84] where the mesh is within this little
+[186.80] system we have so we can do that a
+[188.28] couple ways the the first way this is a
+[191.16] little bit more Hands-On is we can
+[193.48] create an export
+[195.60] variable and we can just set it
+[199.24] manually because you might have uh you
+[201.76] know a couple different meshes in there
+[203.24] that you don't want it to to change you
+[205.76] want it to be highlighted so you can set
+[208.00] it within that variable yourself now
+[211.24] that we have our export variable for our
+[213.64] mesh we can simply just assign it now
+[216.80] the thing that I don't like about this
+[218.76] is that unless you're naming everything
+[221.04] really specifically it doesn't uh make
+[223.76] it super obvious where these things are
+[225.48] now we do have interactable box that's
+[227.60] the name so it makes it pretty easy to
+[229.40] pick but if you had a whole bunch of
+[230.64] stuff it might be kind of a pain but
+[233.28] that's one way you can do it so we'll
+[234.68] select it uh we'll select our mesh now
+[237.20] we have a reference to our mesh instance
+[239.40] 3
+[240.24] and I'm realizing that I I put this in
+[242.28] the wrong spot so put your put your
+[244.72] export variables before your your
+[246.80] standard variables the next thing that
+[248.32] we need is a reference to the material
+[250.20] that we created so we uh add a new
+[252.72] variable we call this highlight material
+[256.32] and we're going to preload
+[258.36] this and then we'll grab it with our uh
+[263.04] autofill here interactable highlights
+[266.04] there we go and the process of of
+[268.80] assigning this is actually very very
+[270.36] simple so in our inrange function which
+[273.12] runs whenever we hover over an
+[275.32] interactable object we want to set we
+[278.48] can delete that print want to set the
+[281.44] material
+[283.32] overlay to our highlight material that's
+[286.56] it that's all we need to do and then
+[288.08] when we
+[289.48] UNH means we're not looking at it we'll
+[292.64] take that material overlay and we'll set
+[295.48] it to null set it to nothing so we'll go
+[298.04] back to our FPS controller right here is
+[300.84] uh our unfocused when we are un hovering
+[303.00] and right here is when we are hovering
+[305.56] over our object so all we need to do is
+[309.24] uh get whatever object that our raycast
+[312.56] is hitting that's interactable and we're
+[315.04] going to emit
+[318.00] our focused signal and we'll do the same
+[321.16] thing for when we
+[325.04] unfocus that should take care of it and
+[327.44] now obviously whenever we are uh
+[330.00] hovering over something we're actually
+[331.28] calling the function that we want to
+[332.60] call so we'll play that and let's go and
+[336.56] test there we go so we have our hover
+[339.56] and un hover and that's that's the
+[341.72] Highlight effect that's that's all there
+[343.16] really is to it now we do have uh one
+[346.00] thing that we can change and that's if
+[349.12] you don't want to sit there and manually
+[351.56] set the meshes to every interactable
+[353.80] object because that I could see would be
+[355.56] kind of a pain in the butt so what we
+[357.24] can do is we can use the input component
+[359.84] to find uh that mesh we'll set up
+[364.32] another function here we'll call this
+[367.44] set
+[369.28] default mesh and first we'll uh we'll
+[374.00] check if we already set it then then
+[376.56] don't worry about it so if the mesh
+[379.24] variable already has something in it
+[381.04] we'll pass else we're going to go
+[384.24] through our parents and we're going to
+[386.20] check each of the children and if that
+[387.92] child is a mesh instance 3 node we're
+[390.64] going to use that so we'll do for I in
+[395.64] parents get children so for each child
+[400.00] of the parent if that child is a mesh
+[404.72] instance
+[405.72] 3D then mesh equals that child it may
+[410.16] not be the most um graceful way of doing
+[413.20] it for instance if you had multiple
+[415.52] meshes um as children but if you got one
+[419.60] it's going to happen automatically you
+[421.00] can definitely uh refine this to make it
+[423.44] a little bit more accurate so we have
+[425.52] our set default mesh and let's run this
+[428.64] whenever we uh when we load we'll set
+[432.12] that and now whenever we we test this
+[435.60] even though we haven't set the meshes on
+[437.48] the the three other boxes the the two
+[440.40] other boxes they should still hover and
+[442.92] they do because we've automatically set
+[445.60] the reference to that mesh and now we
+[447.92] have our interactable op objects and
+[450.80] they highlight and we can adjust that
+[452.68] highlight material super easily and now
+[455.28] we're ready to add some some cooler
+[457.32] interactions then just let's make uh
+[459.76] let's make a glow thanks for watching
+[461.80] and as always you can check out the
+[463.96] patreon for the source files and uh keep
+[466.60] creating all right guys if this tutorial
+[468.80] was helpful consider it a like And
+[470.56] subscribe to the channel as we're going
+[471.88] to be covering a lot more thanks to all
+[474.68] of my patrons who keep this series going
+[476.92] you too can get access to the project
+[478.88] source file by joining my patreon you
+[481.72] can download everything there and you'll
+[483.60] also get early access to my videos and
+[485.72] sneak peeks at Future tutorials thanks
+[488.48] for watching and as always keep creating
+[492.73] [Music]

@@ -1,0 +1,69 @@
+[0.16] in this episode of my G FPS tutorial
+[2.40] series we're creating a physics-based
+[4.04] door using G's hinge joint 3D node these
+[7.44] tutorials are part of a long series of
+[9.64] FPS tutorials for the got engine the
+[11.80] link to the door component episode is in
+[13.76] the description and as always you can
+[15.64] grab the source files for this and all
+[17.88] of my G engine tutorials on my patreon
+[20.92] to create a physics-based door we need
+[22.80] the following node structure for our
+[24.72] door first the actual door is a rigid
+[27.36] body 3D node that contains the door mesh
+[30.12] and the Collision shape this also
+[32.12] contains the interaction component from
+[34.00] earlier in the series and the door
+[36.32] component that we've been working on
+[38.04] then we need to add a hinge joint 3D
+[39.92] node this node acts like a hinge physics
+[42.48] constraint setting an angular limit for
+[44.92] our movement this node needs a reference
+[46.96] to our door rigid body which will load
+[49.28] into node a make sure the hinge joint 3D
+[52.20] orientation is correct and fits the
+[54.28] needs of your door you can check within
+[56.28] the viewport When selecting the node the
+[58.48] Gizmo shows the angular limit settings
+[61.36] then we make an adjustment to our door
+[63.20] component script if you need the script
+[65.32] check out the previous door tutorials to
+[67.32] get up to speed or grab the files on my
+[69.40] patreon in our script we add a new door
+[71.88] type named physics and an export
+[74.12] variable named physics Force which will
+[76.28] be the amount of impulse we add to the
+[78.16] door when we interact with it in the
+[80.04] connect par and function we add in or
+[81.84] check to see if the door type is set to
+[84.00] physics and if it is we connect our
+[86.20] interaction signal from the interaction
+[88.04] component to the check door function
+[90.24] within the check door function we want
+[91.76] to use the existing door forward
+[93.72] Direction check and player Todo
+[95.96] Direction check after we check the door.
+[98.52] product and set our rotation adjustment
+[100.88] we add an if check for our door type if
+[103.40] the type is physics we set a new
+[105.40] variable door to our parent casted as a
+[108.04] rigid body 3D I do this so I can get the
+[110.96] auto completes then apply impulse on the
+[113.60] door using the door direction as the
+[115.36] impulse Vector multiplied by physics
+[117.84] force and the negative rotation
+[120.04] adjustment this will add the impulse to
+[122.32] the door based on what side the player
+[124.36] is on similar to our dual way door setup
+[127.48] we did earlier and that's it you should
+[129.52] now have a door that when interacted is
+[132.04] pushed physically away from the player
+[134.56] depending on what side the player is on
+[136.84] in the next video we'll make it so the
+[138.40] door interacts when the player runs into
+[140.60] it as always you can get these source
+[142.92] files for everything that you saw in
+[144.48] this video on my patreon I'll catch you
+[146.52] in the next one and as always keep
+[148.24] creating
+[150.24] w

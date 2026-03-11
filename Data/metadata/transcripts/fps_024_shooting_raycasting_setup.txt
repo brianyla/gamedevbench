@@ -1,0 +1,437 @@
+[0.20] hey everyone I'm building an entire
+[1.76] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials in this
+[7.60] video we're adding a basic raycast
+[9.92] shooting mechanic to our FPS controller
+[12.68] the basic FPS controller project from
+[14.64] episode 1 is available for free on
+[16.52] GitHub and if you would like to download
+[18.36] all of the source files you can get
+[20.32] access by joining my patreon let's dive
+[24.52] in all right so it's been a long time
+[26.76] coming we're finally finally going to be
+[29.64] adding shooting to our first person
+[31.60] shooter game it's not going to be as
+[33.80] hard as you think um there are a few
+[36.76] different ways you can do shooting in a
+[38.80] game uh the two largest ones are going
+[41.48] to be called rate casting or hit scan
+[45.16] and a more physics-based projectile
+[48.12] setup all right we're going to be
+[49.52] focusing on
+[51.24] a raycast technique for this tutorial
+[55.24] just to get started uh the physics one
+[57.48] is a little bit more complicated it's a
+[59.60] lot more complicated the ray cast is is
+[62.00] actually pretty simple and you can get
+[63.28] it going without a whole lot of work and
+[66.20] you've got a shooting mechanic in your
+[68.24] game that you can just use and test and
+[70.96] and build from I'm working from the the
+[73.20] last episode again if you want to grab
+[75.76] the source files for this you can get
+[77.08] that on my patreon although you should
+[79.36] be able to just plug this in if you've
+[81.56] got your own controller your own weapon
+[83.16] setup it's very modular and really not
+[86.24] that
+[88.52] complicated the first first thing that
+[90.48] we need to do is get an input because we
+[93.24] need to be able to test how we're going
+[95.16] to shoot right so typically you're going
+[98.12] to be shooting with uh the left Mouse
+[100.00] button so we're going to adding a a new
+[102.56] input to our project we go to
+[105.12] project project settings input map and
+[109.08] I've got all of my existing inputs we're
+[111.84] going to add a new action and we're
+[113.64] going to call this attack you can call
+[116.24] it shoot if you only have shooting in my
+[119.28] case we we might be adding melee weapons
+[121.20] in the future so we'll have it be attack
+[124.00] we'll add that and then we're going to
+[125.36] press this add button and we're going to
+[127.60] make it listen to the left Mouse button
+[132.00] we have that in and we're all set and we
+[134.72] close okay now that we've got our input
+[137.60] set up let's test it right we need to
+[140.84] actually check if we're pressing this
+[143.48] this input now I'm going to do this in
+[146.76] my idle player State script now
+[150.56] eventually we'll we'll probably move
+[152.36] this into a weapon state machine or
+[155.04] something a little bit more complicated
+[157.92] we're just testing today so we're going
+[159.80] to add this into our idle player State
+[162.72] you could be adding it into a
+[165.16] firsters controller or or anything like
+[168.36] that and how we're going to do that is
+[170.44] the same way that we're doing all of
+[171.96] these inputs right here so we're doing
+[173.92] an if input is action just pressed and
+[177.72] then we're going to check for that that
+[179.12] action so we we can actually just copy
+[181.60] this paste that in there actually let's
+[183.92] put it down down below I like to
+[186.72] organize a little bit and we're going to
+[188.76] do is action just press and we're going
+[191.84] to do our attack that's going to pop up
+[195.40] we don't need is on floor we can get rid
+[198.60] of that and we're not going to
+[200.40] transition to a new state so we can get
+[202.04] rid of that and let's just
+[205.80] print
+[207.40] you attacked good for you all right
+[210.88] we'll save that all right so now when
+[213.04] we're in our idle State we'll press our
+[215.20] attack button and we should see a u
+[217.80] attack and our output so let's check
+[220.20] that real quick we've got our controller
+[222.80] we'll press our Mouse button and there
+[225.40] we go we have you attacked so we have
+[227.96] our input it's very easy to set those up
+[230.32] and now that we have our input we can do
+[233.20] our our
+[236.12] rcast now the idea for this is when we
+[238.96] press our ATT
+[240.56] we're going to run a function that's
+[242.84] going to fire array and then we'll check
+[245.52] if we hit anything that's kind of the
+[246.96] basic premise so to create that function
+[249.12] we're going to head to
+[250.72] our catchall Beall weapon script and I
+[254.60] promise we're going to we're going to
+[255.80] clean the script up because it's getting
+[257.88] it's getting a little clunky all right
+[260.24] so we're going to create a function for
+[262.44] our raycast we're going to call this
+[264.40] function
+[268.72] attack
+[270.40] we'll void that and there's a few things
+[274.56] that that you need when you are going to
+[276.44] create a raycast you need a space to do
+[280.96] that Ray cast in in this case we're
+[282.80] going to be doing it from the camera you
+[284.60] need an origin point for that Ray you
+[287.12] need an end point for that Ray and when
+[289.72] you have all of those things you check
+[292.76] if that Ray hits anything and you get a
+[294.64] result and that result is going to tell
+[296.60] us at what point at what position in our
+[299.36] world
+[300.40] we've hit something in our case our
+[302.76] origin point is going to come from our
+[304.80] camera so we need to get a reference to
+[307.48] our camera so we'll
+[309.84] create variable camera and then now in
+[314.44] this project we have a reference to that
+[316.48] within our Global uh Singleton script
+[320.40] so we get a reference to our player and
+[323.32] then within our player we have a
+[325.28] reference
+[326.72] to our camera controller now if you're
+[329.96] in your own project you might have to
+[331.16] get the camera in your own way and
+[332.92] that's totally fine just as long as you
+[334.76] get a reference to your camera 3D node
+[337.68] you're good to go so we have our camera
+[340.36] reference the next thing we need to do
+[342.44] is get a space State this is going to
+[345.60] tell the raycast and what world space
+[348.36] it's operating in now we want it to
+[350.32] operate within the 3D World space of our
+[353.16] camera so we get our camera reference
+[356.52] and then we use the function get world
+[359.84] 3D and then our property will be the
+[362.64] direct space State now we have our space
+[365.72] State we need to get our origin point
+[369.20] for our Ray cast again remember we need
+[371.88] our our beginning point for that Ray and
+[374.76] we need an end point for that Ray in
+[377.28] fact let's go ahead and uh comment this
+[380.16] out real quick let's go back to run our
+[382.32] game our our origin point is actually
+[385.36] that that cursor right there that is set
+[387.52] to the center of our screen
+[390.28] and it's not going to come from the gun
+[392.36] because the gun is weirdly positioned
+[395.36] and rotated and it's going to move
+[396.96] around for the player it's going to be
+[399.60] in that cursor so what we really need is
+[403.28] the center of our screen now in order to
+[405.80] get the center of our screen it's
+[408.08] actually very easy we're going to need a
+[409.80] variable for our screen center and it's
+[415.04] going to equal the result of a function
+[418.52] get
+[420.80] viewport and then
+[424.08] size divided by two so if our our
+[428.00] viewport our screen is 920 by 1080 it's
+[432.40] going to take 920 1080 divided by two
+[436.64] you get right in the middle right let's
+[438.44] go ahead and actually uh let's test that
+[440.36] out proof of
+[442.64] concept let's print the center of our
+[445.56] screen and we have our attack and now we
+[448.52] can actually go back into our idle
+[450.96] player State let's get rid of this
+[453.00] little print and get a reference to our
+[456.88] weapon and let's
+[458.68] run our oh I need to actually save that
+[462.36] for it to show up let's run our attack
+[466.64] function okay so now when we run this
+[470.24] we'll click our left Mouse button and we
+[472.64] should get the the center position of
+[474.60] our our screen and there we go so I'm
+[477.52] running in 1280
+[480.12] 720 so the center of our screen is 640
+[484.12] 360 perfect now it's not going to change
+[487.64] even if I move around we still have the
+[489.24] center of our screen accuracy we'll
+[491.36] we'll get into later and we'll we'll do
+[493.92] that in a different way basically we
+[496.00] want it to come from the center we don't
+[498.28] want it to come from somewhere else okay
+[500.04] so we have our screen center now we need
+[502.20] to get our origin point for our array to
+[504.88] do that we create a new variable origin
+[509.64] and we set that to equal camera and
+[514.68] project Ray origin makes sense right and
+[518.44] then we need a vector 2 for that
+[520.28] function and we will use our screen
+[523.80] center and that's going to take a point
+[526.16] from our our camera space and become the
+[529.72] origin for our array so we have our
+[531.80] origin next thing we need is our
+[533.52] endpoint so we create another variable
+[536.24] end and that's going to equal our origin
+[539.88] our origin points plus our camera
+[543.68] project Ray normal now a normal is a
+[548.16] direction right it's a direction usually
+[550.12] you talk about uh meshes or
+[553.76] vertices so we're getting a direction
+[557.16] from our origin Point again we're going
+[559.16] to use the screen center for our Vector
+[563.24] 2 and then we're going to multiply it by
+[566.92] a distance and in this case let's do
+[569.88] a th000 so that's the the distance that
+[572.88] that Ray is going to go so we have our
+[574.84] origin point we have our end point now
+[577.36] we're ready to run our query so we
+[581.64] create a who we create a new
+[586.68] variable that's not how you spell query
+[589.68] and here's where we do our our aray
+[592.16] magic so we're going to use physics Ray
+[596.20] query parameters 3D so this is a
+[599.96] built-in that we can use to create a new
+[603.64] raycast and what we need is a front
+[606.56] point and a twoo and we we've created
+[609.64] those we've created our
+[612.40] origin and our end now within this query
+[616.52] we want to make sure that we can collide
+[620.24] with static bodies or physics bodies so
+[623.76] we need to set that parameter within our
+[625.56] query so we get our query and then we do
+[629.04] col collide with bodies you can also do
+[632.44] collide with areas you can also set a
+[634.80] collision mask and and do everything
+[636.60] that you would typically do with
+[638.08] collisions in this case let's just do
+[641.20] collide with bodies and we'll set that
+[643.44] to true and then the final step to do
+[645.88] this Ray cast is we need a result so we
+[649.00] create another variable for result and
+[652.32] that's going to
+[654.52] equal our space State and then we'll do
+[658.56] the function
+[660.16] intersect Ray now you can also if you go
+[664.28] back you can also intersect point or or
+[668.44] shape even now if you had something um
+[672.36] you know really really large you might
+[674.40] do a shape maybe a a a grenade or a
+[679.40] rocket launcher or something like that
+[681.52] in this case we're going to do intersect
+[684.44] Ray and then for our parameter we need
+[687.76] our query parameters that we just
+[690.64] created and there we go now we can
+[693.48] actually test this so let's do a print
+[697.28] of that result now instead of us
+[699.84] printing uh you attack we should get
+[702.64] information about what this Ray is
+[705.60] hitting within our scene and again this
+[708.20] is only going to work if we're idle
+[709.92] because I haven't included it with any
+[712.36] other states so let's go ahead and click
+[715.44] and you'll notice down there in our
+[716.92] output we have a position
+[719.76] we have a normal uh a pH index a
+[722.64] collider ID collider of what you're
+[724.56] actually hitting the shape and the rid
+[727.52] so that's a lot of information already
+[730.04] and we're just clicking a button
+[732.24] shooting AR aray from the center of our
+[733.88] camera and we already know where it
+[736.12] stops what it's hitting and that's
+[739.92] enough information for what we need to
+[742.16] do so let's get out of that so let's add
+[746.04] a uh a mesh for Where We Are are
+[749.44] colliding with something right this will
+[752.00] act as a could be like a bullet hole you
+[753.92] could even do a bullet hole if you have
+[755.44] one ready to go and set up that as a a
+[757.96] decal or something so we'll keep that
+[760.52] there and let's create a let's create a
+[763.96] new scene let's do that we'll go
+[767.36] um I don't know why I have a scenes
+[769.56] folder there's nothing in there let's
+[771.08] move
+[772.56] that all right let's create a new scene
+[775.52] this will be a a 3D scene oops let's do
+[780.28] uh don't save it all right let's add
+[783.08] other
+[784.40] node mesh instance
+[787.40] 3D let's do a
+[791.44] sphere and we'll make this
+[794.72] material let's just make it red a nice
+[798.92] solid oh that's not how you do that is
+[800.72] it there we go let's make it red and
+[804.28] shading to unshaded so it's just solid
+[808.76] let's go check that out beautiful that
+[812.72] looks pretty boring but that's fine all
+[816.00] right let's make it small enough that it
+[818.96] won't look super super weird and let's
+[822.32] save this
+[823.52] scene as a
+[827.72] raycast
+[829.44] test all right so the
+[832.80] idea will be
+[835.44] to spawn that scene wherever we
+[839.76] hit in our raycast and we already have
+[842.24] our position so it's not that really
+[846.76] it's really going to be pretty pretty
+[848.08] easy to do so in order to spawn or
+[852.24] instantiate our scene we need to to load
+[854.96] it so let's load it and we'll add a
+[858.56] variable and we'll call this Ray who Ray
+[862.32] cast test equals preload we'll preload
+[867.04] it and there's our Ray C test scene
+[871.32] we'll select
+[872.88] that and then down here let's uh let's
+[877.12] make it a little bit cleaner let's
+[878.20] create a new function and we'll call
+[880.68] this test raycast and we'll use a
+[885.84] position for a
+[888.56] parameter because we're going to pass
+[890.72] the position of our raycast test result
+[895.52] to this function
+[898.04] and
+[900.24] void it because we're not returning any
+[903.00] values and let's uh let's create our our
+[906.12] instance so we'll run this function
+[909.44] we'll do our variable
+[912.76] instance and then let's get our raycast
+[915.68] scene and then we're going to
+[917.48] instantiate now if you're not using um
+[920.56] four or anything I think it's anything
+[922.40] four up it's going to be called
+[924.88] something different it's not instantiate
+[927.52] um it's probably instance
+[929.60] if I remember right I might be wrong but
+[932.12] in four it's instantiate so this creates
+[936.16] an instance of that scene that we've
+[938.64] loaded and now that we have that
+[940.72] instance we add
+[944.48] child and we add that instance okay now
+[947.48] that we have that instance we can set
+[951.20] the
+[953.04] global position to equal our position
+[957.08] parameter after that we'll
+[959.68] wait let's say 3 seconds now you can set
+[964.68] a timer within GD script this way this
+[968.20] is a little bonus tip for you so you do
+[971.72] await get
+[973.52] tree create timer and then set the
+[977.56] number of seconds within your
+[979.88] parameters and then timeout so now we
+[983.52] have a a timer for 3 seconds and after 3
+[986.28] seconds let's do destroy our instance
+[990.80] because we don't want thousands of uh
+[994.00] red spheres everywhere for no reason all
+[996.24] right so we have our test rast so let's
+[1001.04] run that function in our attack function
+[1004.24] and then we'll pass our position to get
+[1007.92] that position what we need to do is take
+[1009.88] the
+[1011.20] result get and then our key now our key
+[1015.36] is as we uh let me actually bring that
+[1017.40] up again
+[1019.56] so these each one of these within a
+[1022.32] quotes is a
+[1023.72] key just a a name within that dictionary
+[1027.36] of of that information so we need
+[1030.96] position and so we'll get our
+[1033.88] key
+[1036.88] position and I think we're good now
+[1041.56] there's going to be an issue I won't uh
+[1044.64] I won't fix it yet I'll show you by
+[1046.76] running so let's run our scene
+[1051.84] all
+[1055.72] right so we have two issues the first
+[1059.16] issue is where we're adding our our
+[1062.08] little sphere and our second issue
+[1064.84] is we have an error so the first problem
+[1068.64] the the reason for the error we're
+[1070.56] running our test rcast function and
+[1074.20] using our result get position well what
+[1077.20] happens if we don't have a result result
+[1079.20] because we didn't hit anything we end up
+[1080.92] with nothing and it's going to be
+[1082.72] confused it won't work so we add an if
+[1087.24] statement if result so if our result
+[1091.20] variable is not empty or nothing then we
+[1095.64] run our test rcast function the second
+[1098.24] issue is we're adding the child to our
+[1101.84] weapon which means it's it's going to
+[1103.64] move with our weapon so what we need to
+[1106.28] do is get the
+[1110.20] root of our
+[1112.04] scene and let's add the child to that
+[1116.28] instead so let's test that instead and
+[1119.16] and see what we get well let's first
+[1122.36] test our we didn't shoot
+[1124.72] anything all right we're okay we're not
+[1127.60] getting any more errors now let's test
+[1130.00] our array
+[1131.88] cast much better we've set up a ray cast
+[1135.96] from our weapon and really from the the
+[1138.80] middle point of the screen there and
+[1141.32] whenever we click our attack button
+[1143.28] we're firing that Ray finding out where
+[1145.96] we hit what we collide with and in some
+[1148.92] cases for example this does not have a
+[1152.60] collision so if I shoot at
+[1155.32] it it's going to go right through you
+[1157.68] see
+[1158.76] that because we're actually going to end
+[1161.08] up colliding with the floor which has a
+[1163.48] collider now
+[1166.40] these have a collision box and so it
+[1169.52] collides and that's a basic setup for
+[1172.44] array cast now that we have an attack we
+[1176.20] do array cast when we attack we know
+[1178.48] where we hit so now we have this
+[1180.20] information and we can make it a little
+[1182.36] bit more like a gun going forward all
+[1184.96] right guys if this tutorial was helpful
+[1186.68] consider it a like And subscribe to the
+[1188.56] channel as we're going to be covering a
+[1190.16] lot more thanks to all of my patrons who
+[1192.84] keep the series going you too can get
+[1195.32] access to the project source files by
+[1197.28] joining my patreon you can download
+[1199.76] everything there and you'll also get
+[1201.36] early access to my videos and sneak
+[1203.44] peeks at Future tutorials thanks for
+[1206.04] watching and as always keep
+[1213.80] creating

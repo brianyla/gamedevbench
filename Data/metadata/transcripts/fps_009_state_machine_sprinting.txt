@@ -1,0 +1,104 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.76] video we're adding our sprinting state
+[9.60] to our state machine and creating our
+[11.64] sprinting animation the basic FPS
+[14.08] controller project from episode 1 is
+[16.00] available for free on GitHub and if you
+[17.84] would like to use the written version of
+[19.48] this tutorial or download all of the
+[21.44] source files you can get access by
+[23.52] joining my patreon let's dive
+[26.96] in our first goal will be to add a new
+[30.20] to our state machine for our Sprint
+[32.68] let's head to the FPS controller scene
+[34.72] and add a new node to our player State
+[36.76] machine called sprinting player State
+[39.88] then let's attach a new script to our
+[41.60] new node that inherits from our state
+[43.52] class script before we jump into our
+[46.08] script let's also add our input mapping
+[48.20] for our Sprints head to project project
+[50.72] settings input map then add a new action
+[53.40] for Sprints and we'll use the shift key
+[55.92] for our input back on our script We'll
+[58.52] add our class name Sprint printing
+[60.20] player State and the following export
+[62.52] variables like we did for our walking
+[64.52] State animation will reference our
+[66.92] animation player node and our top
+[69.04] animation speed will set our animation
+[71.40] playback rate remember for our walking
+[73.76] State we dynamically change the
+[75.48] animation playback based on our velocity
+[78.32] we'll do the same for our Sprint when we
+[80.68] enter our sprinting State we want to
+[82.28] play our sprinting animation which we're
+[84.04] going to be creating in a minute first
+[85.96] We'll add our set animation speed
+[87.96] function from our walking state again
+[90.28] this function takes our player's
+[91.68] velocity and Maps it to a 0:1 alpha lurp
+[95.72] that will adjust the speed scale of our
+[97.56] animation with that in place we'll run
+[99.80] this function every frame with our
+[101.44] update function however we'll need to
+[103.88] use a different speed setting than
+[105.60] default because we'll be moving faster
+[107.76] when we Sprint let's head to our player
+[110.04] controller scripts and add a new speed
+[111.92] variable for Sprint that equals 7 then
+[114.60] we can adjust our function to use our
+[116.40] Sprint speed and while we're working on
+[118.44] our speed setting we also need need to
+[120.16] adjust our speed when we change between
+[122.16] our states to do that we'll add this
+[124.36] line in our enter function which will
+[126.40] change our max speed in our player
+[128.16] controller script we'll also need to do
+[130.52] the same thing in our walking state to
+[132.64] reset our default speed finally we need
+[135.12] a way to exit our sprinting State here
+[137.24] we'll add another built-in function
+[139.20] input where we'll check if we release
+[141.48] our Sprint input action if we do we'll
+[144.24] return to our walking State then back in
+[146.68] our walking State we do the same thing
+[148.72] by adding an input function fun to check
+[150.60] if we press our Sprint input action and
+[153.00] if we do we then transition to
+[157.12] sprinting the sprinting animation will
+[159.24] follow the same procedure we used in our
+[161.36] walking animation video check that video
+[163.40] out to get a more detailed walk through
+[165.80] for our Sprints We'll add a new
+[167.20] animation called Sprint in our animation
+[169.60] player for this we're going to animate
+[171.60] our camera 3D node position our
+[174.24] animation will also use a beer track and
+[177.04] feature what is essentially two sine
+[178.96] waves to to create a figure8 motion for
+[181.44] our camera there are other ways to
+[183.48] create a Sprint animation feel so adjust
+[186.28] this to your needs now when we test our
+[188.56] scene we can check our state and test
+[190.84] our Sprint Key you should have a faster
+[192.92] movement our Sprint animation and be
+[195.44] able to transition smoothly between
+[197.36] walking and
+[199.00] sprinting all right guys if this
+[200.88] tutorial was helpful consider it a like
+[202.92] And subscribe to the channel as we're
+[204.32] going to be covering a lot more thanks
+[206.72] to all of my patrons who keep the series
+[208.72] going you two can get access to the
+[211.12] written tutorials and the project source
+[213.52] files by joining my patreon you can
+[215.76] download everything there and you'll
+[217.36] also get early access to my videos and
+[219.52] sneak peeks at Future tutorials thanks
+[222.04] for watching and as always keep
+[224.52] [Music]
+[228.52] creative

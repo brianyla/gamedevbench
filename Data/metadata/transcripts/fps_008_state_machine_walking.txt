@@ -1,0 +1,211 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.92] video we're developing our walking state
+[9.96] for our player movement State Machine by
+[12.44] fine-tuning our state transition
+[14.28] movement acceleration and adding a
+[16.52] walking animation the basic FPS
+[18.80] controller project from episode 1 is
+[20.68] available for free on GitHub and if you
+[22.52] would like to use the written version of
+[24.20] this tutorial or download all of the
+[26.16] source files you can get access by
+[28.20] joining my patreon let's Dive In
+[32.52] we're working from the last episode
+[34.24] number seven where we set up our basic
+[36.36] state machine and idle and walking
+[38.44] States first we need to adjust our
+[40.56] transition rules for going from idle to
+[43.00] walking in fact this is a great example
+[45.52] of why State machines are so useful and
+[47.76] easy to adjust right now we transition
+[50.04] to our walking state if our velocity is
+[52.28] greater than zero which makes sense if
+[54.56] our player is moving then we must be
+[56.72] walking except our velocity can change
+[58.80] in other ways like jumping right now if
+[61.52] we jump our velocity is also greater
+[64.04] than zero and so we switch to our
+[65.76] walking State this will be fixed when we
+[68.28] incorporate an actual jumping state to
+[70.28] our state machine but let's do a quick
+[72.48] patch right now to see how we can alter
+[74.56] our state transitions first I'm going to
+[76.84] add another if check to see if our
+[78.64] player is on the floor as well if they
+[80.96] are then we transition to walking and if
+[83.68] not then we don't now when we jump we
+[86.52] won't go into the walking State
+[88.76] obviously we're missing our jump State
+[90.36] logic here but it shows how easy it is
+[92.20] to manage our states and adjust them
+[94.36] without having to check a giant
+[95.88] controller
+[97.04] [Music]
+[98.44] script the player Movement we have set
+[100.76] up already is pretty basic at the moment
+[103.48] but we can add some juice by adding two
+[105.60] things acceleration and deceleration
+[108.88] acceleration will make our player reach
+[110.32] our top movement speed gradually and
+[112.44] deceleration will slow them down
+[114.52] gradually in this movement script and
+[116.96] probably years two if you're working
+[118.64] from your own we we get our Movement by
+[120.80] setting our velocity to our input
+[122.60] Direction multiplied by our speed this
+[125.64] makes the player move at the speed we
+[127.48] set at all times let's create a new
+[130.48] export variable in our player controller
+[132.60] for acceleration and deceleration why
+[135.36] not just acceleration well we might want
+[137.64] to slow down and speed up at different
+[139.76] speeds so having two separate variables
+[142.12] allows for that for our acceleration
+[144.44] will have a more gradual increase by
+[146.72] using
+[147.76] 0.1 this value can be anything thing
+[150.08] between 0 and one for deceleration we'll
+[152.88] slow down more quickly with a value of
+[155.60] 0.25 then in our movement scripts we'll
+[158.00] swap our basic formula for a lurp
+[160.28] function where we go from our current
+[162.16] velocity to our desired Direction times
+[165.00] our Target speed increasing by our rate
+[167.96] of acceleration by adding aurp or linear
+[171.16] interpolation to our velocity code we
+[173.48] gradually increase our velocity until we
+[176.00] reach our set speed this rate of
+[178.20] increase is set by the alpha of our lurp
+[180.68] function or our acceleration for
+[183.76] deceleration we want to keep using the
+[185.64] move toward function because it will
+[187.20] make sure we always get to zero the
+[190.00] third value here our speed is the value
+[192.32] we're moving to our second value by
+[194.84] using speed we are immediately going to
+[197.12] Zero by using deceleration this becomes
+[200.28] a gradual transition and that's what we
+[202.64] want and with that small change we now
+[204.88] have a nice acceleration and
+[206.92] deceleration to our movement
+[211.28] okay so we have a nice transition
+[212.60] between states and we also show that
+[214.60] gradual transition with our acceleration
+[216.84] and deceleration but unfortunately when
+[219.20] we move it looks like we're just skating
+[221.68] on ice head bobbing animations in FPS
+[224.92] games can be done in different ways
+[227.20] either by manipulating the camera or
+[229.64] just the gun or hand models we'll end up
+[232.16] doing both for this project but for now
+[234.36] we're going to add a headbob animation
+[236.24] by manipulating our camera when we are
+[238.36] in our walking state we'll do this by
+[240.80] adding an animation to our player
+[242.56] controller's animation player node this
+[245.00] animation will add a slight headbob
+[247.08] movement to our camera controller and
+[249.16] give the sense that we're walking and
+[251.28] not skating in the Olympics to do this
+[254.00] let's go to our animation player and add
+[255.96] a new animation called Walking then
+[258.48] we'll add a bezi curve track to our
+[260.76] animation for our camera controller node
+[263.20] using a beier curve track will allow us
+[265.52] a lot more freedom in how we adjust our
+[267.56] camera the property we want to adjust is
+[269.88] our position property let's first add a
+[272.20] key frame for our camera controller
+[273.84] position at the start of our animation a
+[276.60] small bezier button here will bring up
+[278.56] the curve editor where we can set our
+[280.56] key frames and the interpolation between
+[282.64] them by holding control and alt we can
+[285.20] zoom in and out in our graph and edit
+[288.04] our X Y and Z values for our values our
+[291.60] Z will remain at zero and our X and Y
+[294.64] values will be as follows with key
+[296.64] frames at
+[298.56] 0.511 1.5 and 2 seconds we'll also need
+[302.36] to set the animation to loop our X
+[304.96] Position will shift left and right
+[307.12] slightly like so our y Position will be
+[309.96] more like a sine wave but with a sharper
+[312.48] bounce here at the bottom you can play
+[314.64] with these values to get the animation
+[316.08] and movement you're looking for and
+[317.80] there are lots of ways you can adjust to
+[319.96] get your movement for me I'm looking for
+[322.20] a basic Foundation that I can then
+[324.08] manipulate with some code later on to
+[326.32] add some randomization with our
+[328.24] animation set we need to run our
+[330.32] animation when we are in our walking
+[332.32] State we'll add our export variable in
+[334.56] our walking State script to assign our
+[336.92] animation player node called animation
+[340.04] then when we enter our walking States
+[342.04] we'll play our walking animation when we
+[344.68] enter our idle States we will pause that
+[347.20] animation pausing will stop any weird
+[349.76] animation glitching when we start
+[351.48] walking again and in the future we can
+[353.92] also add an idle animation and blend
+[356.04] between the two the next thing I want to
+[358.20] do is connect our walking animation
+[359.88] playback to our actual movement speed
+[362.88] right now when we walk the animation
+[364.64] will always play at the same rate which
+[367.12] isn't too realistic the headbob will be
+[369.44] quicker if we're moving quicker right
+[371.92] thankfully we've already done that work
+[373.80] with our acceleration and deceleration
+[376.24] let's head to our walking State script
+[378.08] and create an export variable called top
+[380.28] animation speed which will be the
+[382.72] fastest we want our walking animation to
+[384.68] run and a new function called set
+[387.12] animation speed with a speed parameter
+[390.04] where we'll pass our current velocity
+[392.28] our function will set the speed scale of
+[394.44] our animation player node to a lurp from
+[397.16] zero to our top animation speed based on
+[400.16] an alpha value that Alpha value needs to
+[402.64] be between 0er and one so we remap our
+[405.68] speed parameter I.E our current velocity
+[408.36] to a range of zero and our top possible
+[411.00] walking speed our speed default variable
+[413.44] in our player controller all of that
+[415.48] then gets remapped to a range of 0 to
+[418.08] one so what does this mean well it means
+[420.72] that when we accelerate to our top
+[422.64] walking speed we're also going to
+[424.80] accelerate our animation playback speed
+[427.36] so when we move faster our headbob
+[429.48] animation also moves faster now we add
+[432.08] this line to run our set animation speed
+[433.92] function every frame with that in place
+[436.48] we have a pretty nice headbob movement
+[438.24] when we are walking that matches our
+[440.00] overall movement velocity in the future
+[442.28] we can add some randomization to the
+[443.80] movement and create different animations
+[445.72] for different movement states exactly
+[447.84] like we just did which will do when we
+[449.84] add a sprinting state in the next video
+[452.60] all right guys if this tutorial was
+[454.04] helpful consider it a like And subscribe
+[456.04] to the channel as we're going to be
+[457.16] covering a lot more thanks to all of my
+[460.08] patrons who keep the series going you
+[462.20] too can get access to the written
+[464.00] tutorials and the project source files
+[466.56] by joining my patreon you can download
+[468.76] everything there and you'll also get
+[470.36] early access to my videos and sneak
+[472.48] peeks at Future tutorials thanks for
+[474.84] watching and as always keep
+[478.32] creative

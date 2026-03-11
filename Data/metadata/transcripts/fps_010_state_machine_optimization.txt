@@ -1,0 +1,191 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.76] video we're fixing some of our state
+[9.60] machine code to improve organization and
+[12.56] Logic the basic FPS controller project
+[14.76] from episode 1 is available for free on
+[16.88] GitHub and if you would like to use the
+[18.60] written version of this tutorial or
+[20.56] download all of the source files you can
+[22.76] get access by joining my patreon let's
+[25.04] dive
+[26.96] in this episode will be a little
+[29.56] different and that we're going back
+[30.80] through some of the code we've already
+[32.32] done the goal here is to clean up the
+[35.04] logic a bit and make improvements to the
+[36.84] code structure there might be some
+[38.92] jumping around so I apologize for any
+[41.04] confusion and I'll try to be as clear
+[43.28] and concise as possible honestly I
+[46.24] questioned whether to just do this
+[47.68] behind the scenes but I thought it was
+[49.36] really important to show every single
+[51.36] step of this process and the why behind
+[54.16] the choices that I'm making the first
+[56.16] thing I'm going to do is adjust the code
+[58.04] Logic for our state script our states
+[60.88] exist within our state machine system
+[62.52] and they are actually working fine but
+[64.92] as we add more States or even other
+[66.96] actors like enemies later on we want to
+[69.44] keep our core logic as modular as
+[71.84] possible right now I'm setting
+[73.76] references to my animation player in
+[75.88] each state script and my player
+[77.80] reference is in my Global variable
+[79.56] script what I would prefer is to just
+[82.04] reference each one time in a parent
+[84.72] class of my state logic and make it so I
+[87.16] can use this same state Logic for any
+[89.52] character or enemy in the future to do
+[92.60] that I'm going to create an additional
+[94.48] class in between my state class and my
+[97.28] individual states this class will be
+[99.64] named player movement State and the
+[101.92] script will create the references to my
+[103.60] animation player and my main player
+[106.04] script my individual states then will
+[108.72] extend my player movement State and
+[111.04] therefore already have any variables
+[113.96] that exist in that main state in the
+[116.36] ready function we first need to use a
+[118.32] wait until the owner is ready ready this
+[120.44] means our main scene parent node has
+[122.56] loaded and all of the info and children
+[124.56] nodes that it has are accessible then we
+[127.36] create a new variable player and
+[129.56] reference a new class name in our FPS
+[131.76] controller script within the ready
+[133.80] function we set player to equal the
+[135.80] owner which is our parent node script as
+[138.84] a player class now I'm doing this
+[141.44] because if I want to use the same state
+[143.28] machine and state logic in another scene
+[146.24] that isn't a player but say an enemy
+[148.92] it's just going to take that main parent
+[151.12] node again and set it as the owner for
+[153.64] the animation player we create a new
+[155.64] animation variable with our animation
+[157.80] player type then set the variable to
+[160.16] equal our animation player node
+[161.72] reference that we set in our player
+[163.48] script now in our idle walking and
+[166.16] sprinting States we extend our new
+[168.68] player movement State class and that
+[170.72] gives us access to the variables we just
+[172.76] created in each of these State scripts
+[175.52] then back in our state machine script we
+[177.64] also need to add the same await code to
+[180.36] make sure we have all of our nodes
+[181.92] loaded before we jump into our first
+[184.16] States or that first state is going to
+[186.24] throw us some
+[186.99] [Music]
+[188.80] errors okay so we haven't really touched
+[191.28] our player script for a little bit and
+[193.08] now that I've added a full-on state
+[195.08] machine and states to the player logic
+[198.08] we can clean up some of this code and
+[200.12] migrate some of it to individual states
+[202.76] the first thing we can do is deprecate
+[204.80] or comment out all of our crouching
+[207.00] Logic for now because we're going to be
+[210.16] moving this to the state machine pretty
+[212.28] soon we can do the same for any jump
+[214.56] logic because we're also going to be
+[216.44] moving that to our state machine
+[218.44] Additionally the set movement speed
+[220.56] function is also going to be deprecated
+[222.84] because our state machine is actually
+[224.56] going to be handling our player speed
+[227.24] we're left with roughly 95 to 98 lines
+[230.12] of code that holds our Mouse movement
+[232.48] camera movement and input movement and
+[235.32] honestly even the camera movement could
+[237.00] probably be moved somewhere else too now
+[239.36] because of I'm cleaning so much code
+[240.76] here I'm going to link to this fresh
+[242.72] script as it is right now in the
+[244.76] description patreon members obviously
+[246.84] will get the finished project now we can
+[249.20] reorganize our other code into callable
+[251.52] functions that we can use in our state
+[253.64] scripts we'll create three new functions
+[256.64] update gravity update input and update
+[259.84] velocity our update gravity function
+[261.88] will hold our velocity y minus equals
+[264.52] gravity time Delta our update input will
+[267.56] use our input and Direction code and
+[269.88] then our update velocity will just hold
+[271.84] our move and slide function now in our
+[274.60] individual states we can call these when
+[276.96] needed in the update function now even
+[279.84] with just these changes our script
+[281.44] should still be operating the same way
+[283.24] as they were before but now that we have
+[285.40] made our code a bit more modular we can
+[287.92] Implement our movement speed changes
+[289.60] again but with our new functions rather
+[292.12] than hold every speed value in our
+[294.04] player script we can have each state
+[296.24] contain a unique speed setting we add an
+[298.92] export variable for each state then in
+[301.24] our update input function where we use
+[303.60] speed to adjust our players velocity we
+[306.24] can add a parameter that will use to
+[308.08] pass our state speed settings when we
+[310.36] run the function we can do the same for
+[312.52] our acceleration and deceleration
+[314.88] variables Now by doing it this way it
+[317.20] also means that we can have different
+[318.76] acceleration and deceleration settings
+[321.08] for each of our states then in each
+[323.52] state we add our new speed variables to
+[325.64] our update input parameter we also need
+[328.52] to update our set an speed to just use
+[330.88] the speed variable we set in our state
+[333.44] rather than just a variable in our
+[334.96] player script and we can also swap out
+[337.88] our Global player references to our new
+[340.20] player variable from our player movement
+[342.16] State script and with that our player
+[344.48] script is much cleaner and our states
+[347.36] are a lot easier to
+[349.41] [Music]
+[350.60] customize I've also noticed an input bug
+[353.64] with the states when I create an input
+[355.48] check and a state script I only want to
+[357.88] run those checks when I in that state
+[360.80] right now with my input function method
+[363.20] it's checking for those inputs all the
+[365.20] time so I need to change how I check for
+[367.72] my inputs which is actually a pretty
+[369.56] easy fix rather than use the input
+[372.04] function method I check within my update
+[374.16] function with this code my update
+[376.68] function only runs when the state is
+[378.48] active which is what I want with those
+[380.96] changes I feel my code is a lot cleaner
+[383.40] and ready for more functionality I'm not
+[386.32] 100% on my animation transitions yet but
+[388.64] we'll approach that in the next few
+[390.08] episodes and if something is weird or
+[392.68] didn't make sense in this tutorial feel
+[394.28] free to ask in the comments and I'll do
+[396.28] my best to answer all right guys if this
+[398.48] tutorial was helpful consider it a like
+[400.52] And subscribe to the channel as we're
+[401.92] going to be covering a lot more thanks
+[404.32] to all of my patrons to keep the series
+[406.32] going you too can get access to the
+[408.72] written tutorials and the project source
+[411.12] files by joining my patreon you can
+[413.44] download everything there and you'll
+[415.00] also get early access to my videos and
+[417.12] sneak peeks at Future tutorials thanks
+[419.68] for watching and as always keep
+[422.14] [Music]
+[426.16] creative

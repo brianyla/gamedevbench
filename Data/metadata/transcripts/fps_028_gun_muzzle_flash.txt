@@ -1,0 +1,496 @@
+[0.00] [Music]
+[3.76] welcome to another FPS tutorial we're in
+[6.24] G engine 4.2 and we're making an FPS
+[10.16] step by step and today we're going to be
+[11.72] adding a muzzle flash and the process is
+[15.08] pretty simple so essentially we're going
+[17.20] to be adding a node a 3D node right in
+[20.68] front of this muzzle in our gun and
+[23.24] within that node we're going to have a
+[24.68] lights and we're going to have a GPU
+[27.24] particle mode and the lights going to
+[29.16] give us that flashing whenever we shoot
+[31.96] and then the particle node is going to
+[33.36] give us the the flame flare look that
+[36.04] comes out of the muzzle of the gun so we
+[37.64] have to do a couple of things uh within
+[39.96] our weapon scene I've got uh the weapon
+[43.84] script if you're working from your own
+[45.96] wherever you have your your weapon mesh
+[47.76] is going to be fine you're just going to
+[49.12] want to put that within that same scene
+[52.68] right in front of that that muzzle and
+[54.36] as always everything that I'm making is
+[56.36] available as a source file on my patreon
+[59.32] so you can check that out in the
+[60.56] description all right so to get started
+[62.88] I'm sitting in my my weapon scene this
+[65.24] is where we created The Recoil position
+[67.36] in the last episode and we're going to
+[69.56] start right here we're going to add
+[72.04] another node
+[74.52] 3D into this node so we're sort of
+[77.92] separating out these this functionality
+[80.52] into different nodes and different
+[81.80] scripts and making them independent of
+[84.84] everything else they're they're not
+[86.88] going to be connected all that much
+[88.48] within our our weapon script it's a
+[90.04] little bit more of a component style
+[91.88] setup so we've got our our node 3D and
+[94.52] we're going to call
+[96.36] this muzzle flash and then within this
+[99.32] node we're going to have two child nodes
+[103.32] two children we're going to have an omn
+[104.80] light 3D
+[106.56] node and we're going to have a GPU
+[109.64] particles 3D node and don't worry about
+[112.52] the uh low warning sign we we'll get to
+[114.76] that in a minute now with our two
+[116.40] children nodes added we're going to be
+[117.84] adding a script like we did to our
+[119.88] recoil position to our muzzle flash node
+[122.88] and it's going to be specifically just
+[125.64] for the muzzle flash so let's go ahead
+[127.92] and add that script we will put that in
+[132.28] our scripts folder call it muzzle
+[136.60] flash save that and there we go within
+[139.88] this script we're going to do basically
+[141.76] one thing we're going to have a function
+[144.16] that tells the node what to do for our
+[147.16] muzzle flash which is going to be to
+[149.00] activate the light and to emit our
+[151.52] particles and all it's going to do is
+[153.68] connect to our weapon fired which is
+[156.24] happening in our weapon script it's
+[157.64] honestly nice to keep the the scripts
+[159.60] really simple and have their job be very
+[162.72] clear if they get too many things going
+[164.56] on in the scripts you get uh you know
+[167.32] the equivalent of a spaghetti code
+[169.72] within unreal and it's a little hard to
+[172.24] see what's going on when you don't even
+[173.88] have the spaghetti lines so uh at least
+[176.56] within this node very simple the first
+[178.80] thing we need to do is add some export
+[182.16] variables and the first one as always as
+[185.20] we're working through our our weapon
+[187.48] features is to get a reference to our
+[189.92] weapon
+[190.76] controller and then our next
+[193.48] one is going to be flash time which is
+[197.60] going to be how long we want uh the
+[201.76] particles and how long we want the light
+[204.00] to to be flashing so you can edit that
+[206.64] change it and you can change that
+[207.92] depending on whatever your weapon is too
+[209.48] next we need to get references to our
+[211.68] omni light and to our GPU particle 3D
+[214.28] nodes now you can do this a couple
+[215.64] different ways uh I like to do export
+[218.32] variables on these nodes because even if
+[220.12] you move the node it keeps it and I I
+[223.44] kind of prefer
+[225.16] that now if you do an on ready or you
+[228.52] just drag in the uh the variable
+[230.60] reference like if you just drag it in
+[232.20] here if you move that node your your
+[235.16] reference is going to be broken because
+[236.64] it's not in the same place so I like to
+[239.00] do an export
+[241.28] it's one extra step in the beginning but
+[243.64] then after that you're good to go and
+[246.64] we'll do another export variable for our
+[249.72] emitter which is going to be a GPU
+[252.64] particles and we don't need to set in
+[254.56] equals and again I always like to set
+[257.16] the
+[258.48] type all right so we have our export
+[262.16] variables and let's assign get these set
+[265.00] up so the first one is going to go to
+[267.16] our weapon and because we've set the
+[269.52] type it's the only one that we can pick
+[271.28] for that and for our lights we select
+[274.24] our Omni lights and for our emitter we
+[277.76] have our GPU particle and Flash time
+[279.32] I've already set a default of
+[282.00] 0.05 so we've got our variable set up
+[285.44] the next thing we need to do is create
+[288.00] our muzzle flash function in fact we're
+[291.84] not going to be using our our process we
+[293.84] don't need that so we can delete that
+[296.28] and our muzzle flash function let's do
+[299.40] add
+[301.48] muzzle flash I like having a verb in
+[303.36] there because it's doing something
+[305.76] right so for our our muzzle flash what
+[308.92] are we trying to do right it's always
+[310.52] good to Think Through what are the steps
+[312.04] of what you're trying to do so the first
+[313.88] thing we need is we need to have the
+[315.72] light turn on which means we need to
+[317.76] start with the light off so let's go
+[319.40] ahead and click off the visibility so we
+[322.68] need to have the light turn on so we set
+[324.88] that to true we need to have the emitter
+[327.92] turn on now we haven't created our
+[329.32] partic yet we'll get to that and then
+[331.56] we're going to wait our flash time and
+[334.72] then we're going to turn the light off
+[336.48] again that's it that's all we really
+[338.80] need to do so we'll add a reference to
+[341.68] our lights we'll set the visible to our
+[345.12] lights to true and again why is it
+[348.80] important to do your types because when
+[350.80] you have your types chosen in your
+[353.20] variables you get the auto complete and
+[355.28] it's a lot easier to work through so we
+[357.32] have our lights set to true then then we
+[359.84] need to get our emitter reference and we
+[363.04] need to set emitting because it's going
+[365.12] to be a one shot and we'll talk about
+[367.80] that in a second we'll set emitting to
+[372.16] true and then awaits we're going to
+[375.96] create a timer for our flash time so how
+[378.72] you do that you do await which is a new
+[381.80] thing in go 4 get tree so we're getting
+[385.96] the the main tree of our scene and we're
+[387.92] going to create timer and then we set
+[390.72] the time in seconds which will be our
+[394.16] flash time now you don't forget you're
+[397.56] not just creating the timer you got to
+[399.72] have something happen right we're going
+[401.48] to get the signal for timeout so when
+[403.88] that timeout happens when that signal
+[406.80] fires which is what that await means
+[409.24] we're awaiting for that signal to fire
+[412.72] then we set our light visible not
+[417.04] visible PN we don't need that visible to
+[422.08] FL to
+[424.28] false okay I feel like I need a new
+[426.92] keyboard or maybe it's just me it's
+[429.16] probably just me uh all right light set
+[431.76] the visible false we're good so that's
+[434.76] our function we're done next thing we
+[437.40] need to do is connect that function to
+[441.12] the weapon fired signal that we're doing
+[443.12] in our weapon and i' I've talked about
+[445.36] this in previous episodes I'll talk
+[447.44] about it again within the weapon
+[449.64] controller script whenever we're firing
+[451.72] our gun whenever we're clicking on that
+[453.68] Mouse we are running a function and that
+[456.12] function is just our attack function and
+[459.36] the first thing that we have in that
+[460.72] attack function is to emit weapon fired
+[464.40] and that is a custom signal that we
+[466.96] created up here in our script so every
+[469.40] time we fire the gun that signal fires
+[472.20] as well and that means we can connect a
+[475.16] bunch of other things to that signal and
+[478.04] that that's the the depth of that
+[480.76] connection that's all you have to do you
+[482.68] don't have to put a bunch of stuff in
+[484.00] each script to to make everything work
+[485.84] you just add a listener as we did in our
+[489.72] recoil we did a reference weapon fired
+[493.32] connect add the callable we're going to
+[495.32] do the same thing in our muzzle flash so
+[497.52] we get our weapon
+[500.12] reference and we get our weapon fired
+[503.68] signal you see the little signal icon
+[506.48] and then we're going to
+[508.20] connect and
+[510.04] get the function name without our
+[514.68] parenthesis we don't want that we just
+[516.32] want the name of the colable and in this
+[518.36] case it's add muzzle flash we're done
+[521.92] except for our particle so we need to
+[523.60] create our our particle system but let's
+[526.76] uh let's test our light first so we'll
+[530.12] comment out our emitter and let's run
+[534.32] this I'm realizing I did not set what
+[536.92] the the light color should be or
+[538.28] anything
+[541.92] all right it's just white but you can
+[543.24] see
+[544.24] it so whenever we are firing our
+[547.60] gun we're getting a little bit of flash
+[550.12] of
+[551.12] light perfect so our script is working
+[554.08] let's uh let's position our light we
+[555.96] actually didn't we didn't do that step
+[557.88] yet
+[559.12] so we have our our muzzle flash node and
+[562.00] we have our omni light and we have our
+[563.40] GPU particles and what we want to do is
+[566.44] just slide this in front of our our gun
+[570.56] right there because the light's going to
+[572.36] be emitting technically from that little
+[575.36] hole right there so you want it uh just
+[578.56] kind of in front and you're going to get
+[580.48] some some light flashing on the gun and
+[583.52] it's going to be out more and when we do
+[585.20] our GPU particles you definitely want
+[588.36] that uh to pop in front of that muzzle
+[591.84] so let's test that again
+[600.40] looking good and we can also change the
+[604.52] color make it a little bit
+[609.68] warmer I have to admit I
+[612.28] don't I never liked the default color
+[615.88] just give me the the the rectangle all
+[618.28] right we'll get our uh kind of a
+[622.64] warm orangey
+[625.44] yellow we'll check that now you can set
+[628.60] those lights anything you you want you
+[629.76] can make it
+[638.84] blue looking good we can make it a
+[641.24] little bit stronger maybe increase the
+[646.08] range you can play with this however you
+[648.72] like to get the get the kind of look
+[651.00] that you're you're going
+[655.28] for you even get the little uh
+[657.84] reflection there which is nice all right
+[659.40] right so lights and particle are in the
+[663.08] proper spot next thing we need to do is
+[665.04] create the particle system now I I
+[667.32] mentioned earlier I'm not a huge fan of
+[670.32] of how gato is set up with the particle
+[673.92] thing it's it's a little clunky but
+[676.60] we're going to work through it uh stuff
+[678.24] is kind of all over the place so I I'll
+[680.08] try to go piece by piece I might forget
+[682.08] steps along the way but we'll come back
+[684.12] I I know what the setting should be so
+[686.40] all right so the first thing that we
+[688.72] need to do is we need to have a a draw
+[692.12] pass so we're going to go into
+[693.84] our draw passes drop down right here and
+[696.68] to our first pass we're going to create
+[699.08] a mesh as our particle we're going use a
+[701.88] quad mesh which is is basically a plane
+[705.52] that's always going to face the camera
+[707.36] so it looks like it's um a Sprite that
+[710.52] always is facing the camera so we have
+[713.00] our particle mesh we're going to set
+[714.36] this to a size of 0.05
+[722.44] so it's itty bitty tiny tiny now nothing
+[724.76] is showing up there yet which is that's
+[726.56] fine it's nothing is supposed to show up
+[728.16] yet and what we need to do now that we
+[730.92] have our our little uh quad in fact
+[733.64] let's go ahead and create our material
+[736.40] also so we're going to do a standard 3D
+[739.88] material get that set up and let's go to
+[743.00] our process material and this is where
+[745.72] you're going to create a new particle
+[748.16] process material
+[750.48] which is maybe not the greatest name for
+[752.88] that it's a little confusing once you
+[754.96] set that now you're going to have some
+[756.92] some particles dropping out every time
+[759.44] you create a particle set up within this
+[762.96] GPU particle node you're going to have
+[765.28] they're just going to drop like flies so
+[766.92] we need to turn that off we don't need
+[769.36] gravity so we'll go into accelerations
+[773.16] gravity there's our 9.8 per second we're
+[777.64] going to just zero that out we don't
+[779.68] need that now our what we do need is a
+[782.96] little bit of velocity we don't want an
+[785.08] acceleration we just want an initial
+[786.92] velocity when we spawn so we go to our
+[788.84] spawn go to Velocity we do a couple
+[792.68] things within here right now it's going
+[795.52] uh X and I think I need to remember to
+[799.36] turn this yeah into to local space
+[802.80] because we're not in global space we're
+[804.68] all rotated so we're going uh X which is
+[808.28] going to go down
+[810.12] we don't want to go down so in fact if I
+[812.20] add a little bit of a velocity here you
+[814.80] can see we're we're moving down already
+[816.76] fact I don't even do we want it to move
+[818.48] up I think we should move it just up a
+[820.56] little bit let's do uh -1 on the X so
+[824.44] we're going to have the the particles
+[825.72] move up and we're going to set an
+[827.36] initial velocity uh minimum as 0.5 in
+[831.80] fact it's kind of hard to see let me
+[834.20] open that up a little bit initial
+[836.52] velocity minimum and let's do initial
+[839.64] velocity Max all right now we're getting
+[842.12] a little bit of a a floatiness to it but
+[844.56] we've got this issue of it's not
+[846.48] following the camera so let's go fix
+[848.64] that we'll go back into our GPU particle
+[851.64] and we're going to go to the material of
+[854.20] our quad now if you go open this up and
+[857.44] go down to
+[858.84] billboard and set this to particle
+[862.24] billboard that's going to face it
+[864.56] towards the camera so a little bit extra
+[867.12] step way off into the material but
+[869.64] that's okay currently we're spawning
+[871.72] these particles constantly now what we
+[874.64] want is to just have a little short
+[876.12] burst just like that just
+[878.64] like snapping of the finger so close all
+[882.44] this stuff it gets a little cluttered
+[884.92] we're going to go to time okay you have
+[888.00] a bunch of settings in here that are
+[889.36] pretty pretty nifty and the first we
+[891.88] want to do is set
+[894.56] explosiveness all the way to one all
+[897.28] right now you can see they're all
+[899.08] emitting at one time you can adjust it
+[901.64] to make it a little bit more random if
+[904.32] you wanted to the other thing we want to
+[906.36] do is set the lifetime from one second
+[909.24] to a lot shorter because it's just going
+[910.84] to be a flash remember we're only
+[912.52] showing that light for Z five 05 seconds
+[917.36] so let's set that to
+[920.08] 0.1 seems like a good lifetime actually
+[922.72] no let's set that exactly that's what we
+[925.08] did for the light let's set it to the
+[926.44] same so now we're getting the
+[931.04] very short lifetime they're just kind of
+[932.72] going up a little bit and I'm not going
+[935.40] to do this yet but in the future we're
+[937.64] going to oneshot
+[939.00] this so they're just going to show up at
+[941.64] one
+[942.88] time and then the emitter is going to
+[944.80] turn off then whenever we fire the
+[947.16] gun we turn it back on I'm going to keep
+[950.40] this on though so we can can see what
+[952.52] we're working on I don't want to have to
+[954.08] go up there and click the check box
+[955.36] every two seconds we're we're getting
+[957.12] there we're getting there there's a lot
+[958.36] of little setting to to set up with
+[960.08] these particle systems I think we have
+[961.76] the the general shape where we want it
+[964.56] the next thing that we need to do is is
+[967.20] adjust the material okay so we're going
+[968.88] to go back into our draw pass we're
+[971.56] going to go to our our quad and then
+[973.80] down to our material and open that up
+[976.28] the first thing we want to do is adjust
+[977.80] the albo we want to create a texture for
+[981.00] this this flashing now you can download
+[983.20] something or create something within a a
+[986.08] image editor and that's totally fine I'm
+[988.28] just going to use something within the
+[990.24] editor I'm going to do a uh a gradient
+[992.64] texture 2D okay now the the standard
+[996.68] gradient is not going to look great but
+[998.28] you do have some other options so you go
+[1000.32] down to fill you can do a radial or you
+[1004.00] can do a square and I I kind of like the
+[1006.56] square it's going to give you a little
+[1008.28] bit of the the points on the corners we
+[1011.76] just need to adjust a little bit of how
+[1013.68] this is all set up so you can click
+[1016.20] those and and move those around or just
+[1018.96] go down to the from and and set that
+[1021.36] right in the middle let's flip that with
+[1024.48] that button right there and let's set
+[1027.72] this to our our orange I hate the
+[1030.40] default color thing um there we go just
+[1034.28] a little bit of an orange to to match
+[1036.28] our lights and you'll notice we still
+[1038.68] have this black outline we can totally
+[1041.76] get rid of that in fact let's set this
+[1043.56] whole thing to
+[1045.60] Orange maybe a little bit of a lighter
+[1048.04] orange on the out side except we're
+[1050.76] going to turn our
+[1053.48] Alpha down and nothing's happening yet
+[1057.56] but now that we've turned our Alpha down
+[1059.64] you notice that our our image that we've
+[1061.76] created has that transparency let's go
+[1064.28] up to transparency and set it to Alpha
+[1067.56] and you're starting to get a little bit
+[1069.32] of a look in fact I'm not actually not
+[1071.40] liking that uh that like let's turn this
+[1074.48] back let's turn this back
+[1077.40] to black
+[1081.12] all right so we've got our our Alpha and
+[1084.00] with your Alpha you can can adjust your
+[1086.16] your blend
+[1088.68] mode what we're actually going to do is
+[1091.44] take that
+[1093.88] texture pop it down to our emissive
+[1097.16] texture as well so we have that same
+[1099.92] texture within our albo we popped it
+[1102.44] down to our emission and we're going to
+[1105.04] set that emission
+[1107.40] up quite a bit higher all right now
+[1110.08] we're getting a little bit of a glowy a
+[1111.64] little bit of a fiery effect and that's
+[1114.00] that's what we're looking for and then
+[1115.60] we can
+[1116.84] also set the roughness down to to zero I
+[1120.40] think it gives a little bit of an extra
+[1122.28] shine especially when we have our our
+[1124.40] lights all right we're almost there
+[1126.92] we're we're looking pretty good when
+[1128.52] you're doing these particle things
+[1129.76] you're always making these little tweaks
+[1131.80] to improve upon the look I think one
+[1134.16] thing we're missing is you know these
+[1136.28] are all coming out the same Angle now we
+[1138.04] can adjust that actually within our
+[1141.48] process material so go back into our
+[1143.24] process material and let's go down to
+[1146.48] spawn and angle now we're going to add a
+[1149.52] little bit of variation on our Angle now
+[1153.28] you can see we're already getting a
+[1154.96] little bit of a better
+[1156.36] look so just add the you know somewhere
+[1159.44] between a negative and a positive you
+[1162.04] can actively see how this looks when
+[1164.36] you're doing it to see if you're getting
+[1166.72] the effect you want and all ready I
+[1169.28] think um I'm pretty happy with that now
+[1172.28] if we do this on a one shot
+[1178.00] now see we have our flash pretty cool
+[1181.20] and that's it I think we're we're ready
+[1182.56] to test this out so first thing make
+[1185.48] sure your light starts off or it's going
+[1187.76] to be it's going to be weird when you
+[1189.80] you start your your game and then we're
+[1191.80] going to go back into our muzzle flash
+[1193.52] script and we're going to uncomment or
+[1196.68] go to the line we're going to uncomment
+[1199.28] our emitter emitting equals true now
+[1201.40] whenever we run this muzzle flash
+[1204.04] function it's going to make the light
+[1205.88] visible it's going to turn on our
+[1208.44] particle emitter we're going to wait for
+[1210.08] the flash time and then we're going to
+[1211.32] turn off our light Let's test get over
+[1214.56] here to our our
+[1217.44] dude and there you go you can see your
+[1221.16] your muzzle flash is going maybe make it
+[1223.36] a little bit bigger lots of settings
+[1225.20] that you can adjust within the the
+[1227.04] particle system to change the look you
+[1229.96] can add your own texture to make it
+[1231.64] really unique but this is just a nice
+[1234.32] easy procedural way to create a musle
+[1236.84] Flash and Go 4 all right guys if this
+[1239.92] tutorial was helpful consider it a like
+[1241.96] And subscribe to the channel as we're
+[1243.36] going to be covering a lot more thanks
+[1245.76] to all of my patrons who keep this
+[1247.40] series going you too can get access to
+[1249.96] the project source files by joining my
+[1252.16] patreon you can download everything
+[1254.44] there and you'll also get early access
+[1256.24] to my videos and sneak peeks at future
+[1258.84] tutorials thanks for watching and as
+[1261.28] always keep creating
+[1264.36] [Music]

@@ -1,0 +1,63 @@
+[0.04] want to make a door for your 3D Gotto
+[1.92] game here's how first you need a door
+[4.40] I'm using a CSG wall and doorway using
+[6.88] two CSG box nodes the first parent node
+[9.80] creates the wall and the second
+[11.16] subtracts from the wall as a child
+[13.04] creating a hole for the door note that
+[15.00] in a game you want this to be a mesh the
+[17.28] door is an animatable body 3D node why
+[20.20] because a static body 3D node doesn't
+[22.32] affect objects when moved but an
+[24.28] animatable body 3D does and we'll want a
+[27.00] closing door to push our player out of
+[28.84] the way we add a door mesh to fill the
+[30.72] hole in our wall and generate a simple
+[32.48] Collis mesh for the door using the drop
+[34.68] down in the toolbar next add a new basic
+[37.16] node named door component and attach a
+[39.16] new script the script will use the class
+[41.24] name door component and we'll rely on
+[43.12] our interaction component to know when
+[44.76] the player interacts with the parent
+[46.44] object if you don't have that check out
+[48.80] my previous video in the description
+[50.60] basically the interaction component
+[52.00] creates a signal in the parent that
+[53.96] fires when the player presses an
+[55.36] interact button while looking at the
+[57.24] door if you're working from your own
+[58.76] interaction setup you'll just need a
+[60.28] signal to fire whenever you interact
+[62.08] with a door for export variables we need
+[64.28] direction for the direction we want the
+[65.80] door to move door size so we can copy
+[68.20] and adjust the movement amount speed for
+[70.48] how quickly the door will move close
+[72.36] time for how long it takes for it to
+[73.92] close and transition and easing to
+[76.04] adjust our animation we need a variable
+[77.96] for our parent and one to retain the
+[79.92] original position of our door for when
+[81.48] we close it in the ready function we get
+[83.44] our parent get our parents original
+[85.48] position and then wait until the parent
+[87.28] is ready to run our signal connection
+[89.36] function connect Parent Connect parent
+[91.60] connects our interaction signal in my
+[93.36] case interacted to our Open Door
+[95.44] function if you have your own
+[96.76] interaction signal that would go here
+[99.00] the open door function creates a tween
+[100.84] that will adjust the position of our
+[102.20] parent in this case the animatable body
+[104.36] 3D node using its original position plus
+[107.20] the set Direction and size of the door
+[109.32] tween interval gives us a delay before
+[111.52] we run a tween call back to run our
+[113.76] closed door function which does its own
+[116.12] tween to return to the original position
+[118.44] and that's it you can now create
+[120.08] different door types using just the door
+[122.20] component
+[123.50] [Music]

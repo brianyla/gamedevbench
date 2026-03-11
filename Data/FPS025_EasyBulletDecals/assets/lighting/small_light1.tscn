@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2hd1y4doeeav"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kcos5"]
+disable_ambient_light = true
+disable_fog = true
+emission_enabled = true
+emission = Color(0, 0.654902, 1, 1)
+emission_energy_multiplier = 100.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7o4tu"]
+material = SubResource("StandardMaterial3D_kcos5")
+radius = 0.05
+height = 0.3
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 16, -20)
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_7o4tu")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119317, 0, 0)
+light_color = Color(0, 0.807843, 1, 1)
+light_energy = 1.067
+light_specular = 7.619
+shadow_enabled = true
+omni_range = 7.946

@@ -1,0 +1,79 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.92] video we're making our jump more Dynamic
+[10.12] by letting the player control jump
+[11.68] strength with how long they hold the
+[13.56] jump button the basic FPS controller
+[16.04] project from episode 1 is available for
+[18.08] free on GitHub and if you would like to
+[19.80] use the written version of this tutorial
+[21.88] or download all of the source files you
+[24.16] can get access by joining my patreon
+[26.32] let's dive
+[28.28] in the current jump setup we created in
+[30.96] the last two episodes uses a basic one
+[33.92] application of force when the user
+[35.96] presses the jump key their upward
+[38.20] velocity is boosted to our jump velocity
+[40.72] setting and gravity immediately begins
+[43.04] to reduce that velocity creating a
+[45.28] parabolic movement it's basic it's
+[47.80] simple and it gets the job done but the
+[51.04] player does not have much control over
+[53.20] how high they jump and it can feel a bit
+[55.72] static the solution is to adjust how we
+[58.32] apply our velocity to our player
+[60.12] specifically if the player releases the
+[62.12] jump button before reaching the peak of
+[64.28] the jump and to do that we're going to
+[66.60] borrow from a
+[67.85] [Music]
+[69.20] classic Sonic was one of the first games
+[72.08] to include variable jump Heights based
+[74.24] on player input and it did it with a
+[76.64] small change to how we're already
+[78.44] creating our jump when the player
+[80.48] presses the jump button in Sonic a
+[82.60] vertical velocity is applied and gravity
+[85.00] gradually reduces it till the player
+[86.80] falls back to the ground the difference
+[89.12] is when the player releases the jump
+[90.92] button early their velocity is
+[93.28] immediately reduced shortening The Arc
+[95.88] of the jump and letting the player
+[97.32] control their jump strength let's head
+[99.48] to our jump State script and see how
+[101.36] easy it is to add this mechanic we enter
+[103.96] the state when we press our jump key so
+[106.00] we want to run an if check for when the
+[108.24] player releases the jump key when they
+[110.44] do we check to make sure we aren't
+[112.48] already falling downward by seeing if
+[114.88] our y velocity is greater than zero if
+[117.48] it is then we reset our player y
+[119.44] velocity to its current value divided by
+[122.28] two you could just set the velocity to a
+[124.76] smaller amount but I feel by dividing it
+[127.48] instead we make it more Dynamic basing
+[129.76] it on the current points of our jump Arc
+[132.52] and with three lines we already have a
+[134.60] more Dynamic jump that mimics jump
+[136.68] strength with how long the jump button
+[138.68] is held we can up our jump velocity
+[141.00] value to see the effect even more all
+[143.52] right guys if this tutorial was helpful
+[145.24] consider a like And subscribe to the
+[147.12] channel as we're going to be covering a
+[148.72] lot more thanks to all of my patrons who
+[151.40] keep this series going you too can get
+[153.88] access to the written tutorials and the
+[156.16] project source files by joining my
+[158.12] patreon you can download everything
+[160.08] there and you'll also get early access
+[161.88] to my videos and sneak peeks at Future
+[164.20] tutorials thanks for watching and as
+[166.64] always keep
+[168.18] [Music]
+[172.36] creating

@@ -1,0 +1,278 @@
+[0.20] hey everyone I'm building an entire
+[1.76] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials the basic
+[7.84] FPS controller project from episode 1 is
+[10.20] available for free on GitHub and if you
+[12.04] would like to download all of the source
+[13.68] files you can get access by joining my
+[16.00] patreon let's dive
+[19.20] in all right welcome to another
+[21.96] firstperson shooter tutorial we're in G
+[24.52] 4 now coming from the last episode where
+[26.84] we added a rotational recoil to gun
+[30.32] whenever we fired we don't have the gun
+[32.28] moving and I I did mention in that
+[34.48] episode that we are going to be adding a
+[36.76] positional recoil that that Kickback
+[39.08] motion to the gun and that's what we're
+[41.00] going to do in this episode the
+[42.64] technique is actually going to be almost
+[45.52] exactly the same as the rotation so if
+[47.52] you haven't done that uh rotational
+[50.36] recoil you can jump back to that episode
+[52.52] I'll put a link in the description I'll
+[54.28] give a short overview of how that works
+[56.20] and then we're going to jump into the
+[57.72] positional recoil so I'm sitting in my
+[60.00] firsters controller scene and our recoil
+[63.72] is handled by this node right here this
+[66.16] recoil node what happens is we're we're
+[69.00] just rotating that node which rotates
+[72.44] everything underneath it that's a child
+[75.08] within that script we're setting some
+[76.88] variables that determine how much recoil
+[79.28] we have and we're connecting this recoil
+[81.92] to a signal that's coming from our
+[83.64] weapon controller so whenever we fire
+[85.92] our weapon from our weapon controller
+[87.88] that signal is sent we've connected that
+[90.24] to our add recoil function which adds
+[93.28] that randomized uh rotation to that
+[96.60] recoil node we're going to be doing the
+[98.72] same thing for our position so let's
+[101.20] jump into adding this positional recoil
+[103.88] the first step is to add a new node
+[107.36] 3D right into our weapon scene this node
+[111.12] is going to be called recoil and you can
+[114.56] actually let's let's separate it out
+[116.84] because the other one's called recoil
+[118.24] we'll call it recoil position
+[120.52] and we're going to put our
+[122.52] meshes underneath that as children all
+[125.04] right now that we have our recoil
+[127.40] position note set up in that weapon
+[129.16] scene let's go ahead and attach a new
+[131.64] script and this script is going to
+[134.60] be where we add a uh a new recoil
+[139.28] function and we're going to call that
+[141.28] function again we're going to connect it
+[143.16] to that weapon fired signal
+[147.12] and that's it that's all we're going to
+[149.12] need to do so create that now again if
+[151.44] you watched that uh that last video
+[153.96] about the rotational recoil same process
+[157.60] here we're going to add some export
+[159.16] variables we're going to have a recoil
+[163.36] amount which will be a vector 3 so we
+[166.12] can set the x y and z and that's going
+[168.64] to be how much uh movement positionally
+[172.92] in 3D space that our our weapon is going
+[175.36] to do whenever we fire it next we're
+[177.72] going to have another variable for our
+[180.56] snap amount and that's going to be how
+[183.00] quickly we return to a position and then
+[185.76] our last export
+[187.80] variable which will be the
+[190.12] [Music]
+[192.44] speed and actually I lied there's going
+[194.76] to be another export variable and that
+[197.40] is to get a reference to our weapon
+[200.52] controller in the last episode we talked
+[202.68] a little bit about um you know getting a
+[206.12] reference to a node whether that node is
+[208.12] in the same scene whether it's apparent
+[209.92] whether it's a child uh if it's in the
+[212.08] same scene export variables work great
+[214.16] because you can get access to every
+[215.80] single node in that scene so we can do
+[218.48] that because our recoil position is in
+[220.72] our weapon scene now if we were in our
+[223.68] um you know within the level itself and
+[226.04] we're trying to get
+[227.88] a a node in our controller but we're
+[230.96] doing it from another uh scene or node
+[233.28] within the the level then you might have
+[236.08] to do it a little bit differently but
+[238.12] for this case a uh an
+[240.56] export variable will work
+[243.76] perfectly and uh this weapon controller
+[246.28] exist it's a class that we're using
+[248.52] within our weapon scripts you can do
+[251.00] whatever type that will fit that could
+[253.32] be a node node 3D that will all fit but
+[256.40] you'll notice now that I I'll save that
+[259.64] if you notice I'll go to this uh weapon
+[263.20] variable right here it's only going to
+[264.72] let me pick again see allowed weapon
+[268.08] controller it's only going to let me
+[269.52] pick pick the type that I set so we'll
+[272.40] set that for our weapon now that we have
+[274.36] a reference we'll need to use that when
+[276.72] we connect to a signal and then we need
+[279.64] two
+[281.28] more Vector 3 variables to hold some
+[285.12] some
+[287.04] information as we
+[289.36] go all right we've got those now the
+[292.76] first thing we're going to do is go into
+[294.48] our process function same thing we did
+[296.68] with our rotation and we need to update
+[300.04] constantly both the target position and
+[303.12] the current position Target position
+[305.12] where we want to go current position
+[307.32] where we are so in our process function
+[309.92] we take our Target position and we're
+[312.12] going to alert that from our Target
+[316.68] position to Vector 3 Z so a vector 3
+[322.40] where everything X Y and Z all equal
+[324.60] zero this is just a short hand that's
+[326.80] built into the engine and we're going to
+[329.28] do that
+[330.68] at the uh the rate of our speed multiply
+[333.60] by Delta you got to use Delta or you get
+[336.04] some weird stuff if your frame rate
+[338.04] changes now what this means is our
+[340.36] Target position is always going to want
+[342.56] to go back to zero that's going to
+[345.32] bringing us back to home
+[348.20] base then we set up
+[350.76] our oh if I could type I guess the
+[353.32] autofill would be nice wouldn't it there
+[355.08] we go now our current position is also
+[357.36] going to be alur and we're going to alur
+[359.28] from our current
+[361.72] position to our Target
+[364.80] position by our snap amount multiplied
+[369.64] by
+[371.72] Delta so we've got our two lurs set up
+[374.80] that are going to get our Target
+[375.92] position and our current position and
+[378.52] then we just need to set the position of
+[380.24] this node and hence the position of the
+[383.48] weapon mesh and the shadow mesh to our
+[386.64] current position and that's our process
+[388.56] function so every frame we're going to
+[390.44] be updating all those things the next
+[392.60] thing that we
+[393.80] need is an add recoil
+[397.00] function that we're going to create
+[399.88] ourselves now within our add recoil
+[402.72] function we're going to set a new Target
+[405.80] position and we're going to randomize it
+[407.80] with uh some randomization functions and
+[409.92] for this like the rotation we're going
+[411.48] to do a plus equals because we want to
+[414.76] uh constantly be adding to its rotation
+[416.96] we don't want it to reset every time we
+[419.76] we fire the weapon because you you want
+[421.80] to be going from where the weapon is not
+[423.72] from its home position so we're going to
+[425.80] add to the Target position not uh just
+[428.12] redo it every time and it's going to be
+[430.64] a vector 3 and for our X um actually I'm
+[435.12] going to talk about this real quick
+[436.48] because it might be a little confusing
+[438.60] and it might be different if you've got
+[439.84] a different weapon so let me go and
+[442.04] switch to the uh 3D scene here now if
+[446.48] you're looking at your your 3D scene
+[448.04] you've got your y up and your your your
+[449.64] X it's all based on the the global space
+[453.76] right we're actually working in local
+[456.24] space so if you see this button up here
+[458.16] it's the uh use local space and that's
+[461.96] going to shift some things because we've
+[463.52] we've rotated some stuff right now you
+[466.44] may have it different depending on how
+[468.24] you've set up your weapon um admittedly
+[471.04] my my weapon mesh is not super optimized
+[473.68] for this but we're going to be working
+[476.00] from a local space so our X is actually
+[479.64] is down and our Y is back and our Z is
+[483.16] is left and right so we got to keep that
+[485.76] in
+[486.80] mind that uh we're we're creating this
+[489.52] this new Target position Vector so again
+[491.88] our X is up and down we don't want a lot
+[494.20] of variation with our X right so for our
+[497.64] X range we're going to do the recoil
+[501.68] amount and let's go to our recoil amount
+[506.08] times two and we got to need we need our
+[508.76] x
+[510.20] that that might help so make sure you
+[512.00] have your which uh XYZ value that you
+[515.88] want so that's our X now for our y we're
+[518.72] going to be using the same random float
+[521.76] within a range the bottom of that range
+[524.08] will be recoil amount y the top of that
+[528.12] range will be recoil amount y * 2 so
+[533.16] that's going to be our our backwards
+[535.12] motion and then for our Z which is our
+[538.60] actually our left and right right we're
+[540.92] going to be doing uh random float range
+[544.64] and then the negative recoil amount
+[550.08] Z to the positive recoil
+[555.00] amount Z now if that's confusing because
+[558.88] it is a little confusing what you can do
+[561.12] is just put the Z in the X and that's
+[562.88] your left and right and so when you're
+[564.36] setting that Target position within the
+[566.40] variable it all makes sense um and that
+[569.72] that'll work fine so we've got our our
+[572.32] Target position set up for our ad rot
+[575.72] coil function now we just need to
+[577.80] connect that function to our weapon
+[580.20] fired signal so in our weapon controller
+[582.84] we've created a signal and the signal is
+[586.28] fired whenever we fire our weapon right
+[590.20] that makes sense so here's our weapon
+[592.00] fired Emit and when we connect to that
+[596.52] signal it just means that we're going to
+[598.72] be able to
+[599.96] run a function whenever that signal is
+[602.12] fired so we have our weapon reference
+[604.52] we've set that within our export
+[605.96] variable we get that reference with
+[609.04] weapon we get our weapon fired signal
+[611.96] and then we connect our callable which
+[614.68] is our add recoil same thing we did with
+[618.08] our rotation we save that and that
+[621.40] should be it we just need to set some
+[623.64] values go to that uh recoil position
+[626.36] node at script and let's set some
+[628.40] variables so our X that's our our
+[631.00] vertical movement let's set that
+[634.72] to um
+[637.40] 0.1 our backwards movement let's set it
+[640.20] to 0.5 and then that to
+[643.80] 0.1 snap amount we'll do 10 speed we'll
+[647.88] do 20 and let's get an idea of what that
+[651.00] looks
+[654.72] like there we go pretty simple so again
+[657.44] that that backwards motion
+[660.96] get a little bit of a randomized
+[664.08] movement and let me adjust these values
+[666.48] so you can really
+[668.00] see what uh what difference that makes
+[670.68] so let's make our our left and right a
+[672.16] little more
+[675.92] pronounced our back movement a lot more
+[681.32] pronounced and there you go so you can
+[683.64] again because it's procedural you can
+[686.00] customize how much movement you want I
+[689.00] feel feel that uh at least for my setup
+[692.04] right now that these values are pretty
+[694.40] are pretty good and there you go all
+[696.88] right guys if this tutorial was helpful
+[698.60] consider it a like And subscribe to the
+[700.48] channel as we're going to be covering a
+[702.08] lot more thanks to all of my patrons who
+[704.72] keep the series going you too can get
+[707.24] access to the project source files by
+[709.20] joining my patreon you can download
+[711.64] everything there and you'll also get
+[713.32] early access to my videos and sneak
+[715.36] peeks at Future tutorials thanks for
+[717.96] watching and as always keep creating
+[722.01] [Music]

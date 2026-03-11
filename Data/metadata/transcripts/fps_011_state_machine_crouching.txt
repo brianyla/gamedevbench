@@ -1,0 +1,116 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[8.28] video we're adding our crouching feature
+[10.48] back into our player safe machine the
+[13.20] basic FPS controller project from
+[15.00] episode 1 is available for free on
+[16.88] GitHub and if you would like to use the
+[18.60] written version of this tutorial or
+[20.56] download all of the source files you can
+[22.76] get access by joining my patreon let's
+[25.04] dive
+[26.80] in we sort of nuked our previous
+[29.48] crouching code in the last episode our
+[31.64] state machine logic is much improved but
+[34.28] obviously the crouching doesn't work
+[35.76] anymore thankfully because we've
+[37.48] adjusted our code adding it back in is
+[39.88] going to be a breeze first we need a new
+[42.20] child node for our states and a new
+[44.12] scripts to extend our new player
+[46.12] movement State class and create our new
+[48.24] crouching State remember we already have
+[50.56] our crouching animation set so we can
+[52.44] start coding our state logic and then
+[54.44] work out our transitions our crouching
+[56.64] State script will look like this we set
+[59.16] our class name and extend our player
+[61.08] movement State script to give us access
+[63.20] to our player and animation variables we
+[66.00] then have our collection of export
+[67.56] variables so we can set our speed
+[69.64] acceleration deceleration and the speed
+[72.68] of our crouching animation when we are
+[74.40] in our crouching State we then get a
+[76.60] reference to our shape cast 3D node that
+[78.96] we're using for our Crouch Collision
+[80.52] check I'm going to create a unique name
+[82.84] for this node and then an onready
+[84.92] variable to reference it later when we
+[87.00] enter our state we'll play our crouching
+[88.88] animation at our set crouching speed in
+[91.80] our update function every frame will run
+[94.36] our gravity input and velocity functions
+[97.04] like our other movement States then when
+[99.36] we release our Crouch button for now
+[101.52] we're going to keep this as a whole
+[102.84] button style of Crouch we'll run a new
+[105.52] function uncrouch where we'll keep our
+[107.68] uncrouch logic in our function we check
+[110.44] if our shape cast is colliding with
+[112.24] anything if false and if we aren't still
+[114.92] pressing our Crouch button we run our
+[117.00] uncrouch Logic the and here is for when
+[119.96] someone UNC crouches and then crouches
+[122.04] again so we need to still check for that
+[124.44] Crouch action if those requirements pass
+[127.32] then we play our crouching animation in
+[129.52] reverse the true here makes the
+[131.72] animation play from the end and we
+[133.52] reverse the animation with a negative
+[135.28] animation speed then we check if the
+[137.68] animation is still playing if it is we
+[140.32] wait until the animation is finished
+[142.12] using the animation finished signal then
+[144.80] we transition to our Ino player State
+[147.52] then we use an else if for when our
+[149.28] shape c hit something if it does we wait
+[152.16] 0.1 seconds with the await line here
+[155.56] then run the entire function again and
+[157.72] that's the entirety of our crouching
+[159.20] State logic we just need to add our
+[160.96] Transitions and make some adjustments to
+[162.80] our other
+[163.55] [Music]
+[165.08] states we want to be able to transition
+[167.52] to crouching from idle walking and
+[170.20] Sprint so we need to add transition
+[172.40] logic to each and idle we add an input
+[175.48] check and our update function along with
+[177.48] a check if we're on the floor and walk
+[179.96] we add the same input check now for
+[182.32] sprinting you can definitely add the
+[184.32] same input check but we're going to add
+[186.56] a sliding state for when we're going
+[188.88] from Sprint to crouch so I'm going to
+[190.60] leave that for now then one bug fix I
+[193.24] found relating to the animation speed
+[195.36] scale I'm adjusting that scale using the
+[197.80] player's velocity but I found that if I
+[200.20] sprinted or walked then stopped that
+[202.68] speed scale was set to zero and then if
+[204.96] I crouched the animation wouldn't play
+[207.60] luckily the fix is easy I utilized the
+[209.96] exit function for both the walking and
+[211.84] sprinting State scripts and then reset
+[214.32] the speed scale to one when we
+[216.20] transition from those States and that's
+[218.48] it we now have our crouching mechanic
+[220.64] back and fully in our state machine as
+[223.24] well as our uncrouch check for overhead
+[225.56] obstacles all right guys if this
+[227.44] tutorial was helpful consider it a like
+[229.48] And subscribe to the channel as we're
+[230.88] going to be covering a lot more thanks
+[233.28] to all of my patrons who keep the series
+[235.28] going you too can get access to the
+[237.64] written tutorials and the project source
+[240.04] files by joining my patreon you can
+[242.28] download everything there and you'll
+[243.92] also get early access to my videos and
+[246.04] sneak peeks at Future tutorials thanks
+[248.56] for watching and as always keep
+[251.07] [Music]
+[255.04] creating

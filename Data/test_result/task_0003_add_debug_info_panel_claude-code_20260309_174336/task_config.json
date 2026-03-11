@@ -1,0 +1,19 @@
+{
+  "task_id": "task_0003",
+  "task_name": "add_debug_info_panel",
+  "instruction": "Introduce an in-game debug overlay so the FPS project can surface runtime information without leaving play mode. The current controller and level setup run correctly, but there is no dedicated UI for inspecting live values. Add a styled debug panel to the user interface, place it in the upper-left corner with the tutorial's theme resources and layout containers, and wire the debug script so the panel can display at least the current frame-rate as the foundation for future diagnostics.",
+  "difficulty": "medium",
+  "skill_category": "user_interface",
+  "editor_type": "scene_editor+script_editor",
+  "requires_multimodal": true,
+  "files_to_edit": [
+    "controllers/fps_controller.tscn",
+    "environment/WE_test.tres",
+    "levels/level_003.tscn",
+    "materials/grid.tres",
+    "project.godot",
+    "scripts/debug.gd",
+    "ui/themes/debug.tres",
+    "ui/themes/debug_panel.tres"
+  ]
+}

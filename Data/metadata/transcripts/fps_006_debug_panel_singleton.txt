@@ -1,0 +1,145 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials this video
+[8.20] we're adding custom properties to our
+[10.00] debug panel that we can add from
+[11.88] anywhere in any script the basic FPS
+[15.12] controller project from episode 1 is
+[17.00] available for free on GitHub and if you
+[18.84] would like to use the written version of
+[20.52] this tutorial or download all of the
+[22.44] source files you can get access by
+[24.56] joining my patreon let's dive
+[28.08] in in the last episode we added a simple
+[31.44] debug panel to our front end and
+[33.36] manually added a frames per second
+[35.28] reference that's great but to really
+[37.80] make this debug panel useful we need to
+[39.96] be able to add any property or variable
+[42.12] we want from any script that we want we
+[45.08] could manually code those into the debug
+[47.12] script but that's going to get real
+[48.64] messy real quick and it's not very
+[50.52] flexible or modular to make this more
+[53.04] functional we need to use the autoload
+[55.36] feature or what's known as a
+[58.92] Singleton
+[60.80] Singletons are nodes or scripts that are
+[63.32] automatically loaded first in your game
+[65.80] they are always loaded and they can
+[67.44] store Global variables which is what
+[69.52] we're going to be taking advantage of
+[70.80] today our core problem is that we want
+[73.28] to reference our debug script from
+[75.04] anywhere and run our add debug property
+[77.88] to add new debug items to our panel the
+[81.40] problem is that it's difficult to
+[83.04] reference that exact script from
+[85.32] everywhere due to how got handles scenes
+[87.76] and objects so we create a Global script
+[90.60] that we can autoload and then set our
+[92.24] debug script as a variable to reference
+[94.76] from anywhere first we create a new
+[97.04] script called global. GD in our scripts
+[99.56] folder go to project project settings
+[102.20] autoload then add a node named Global
+[105.12] and click add this brings up the create
+[107.80] script screen where we can change our
+[109.72] script location and create notice this
+[112.64] checkbox here that says enable global
+[115.28] variables make sure that baby's checked
+[118.16] the script is going to be pretty empty
+[120.12] and that's totally fine we just need to
+[122.08] add one line for our purposes today this
+[125.08] variable will hold a reference to our
+[126.72] debug panel node which holds our debug
+[129.28] script we can directly reference the
+[131.48] node in our script because this Global
+[133.52] script loads before all other nodes to
+[137.04] connect the two is really simple in our
+[139.12] debug script go to your ready function
+[141.64] and add this Line Global can be used to
+[144.56] reference our autoloaded script from
+[146.32] anywhere and then we can work within it
+[148.92] calling on our debu variable to equal
+[151.16] self this sets the debug variable
+[153.40] reference in our Global script to equal
+[155.52] our debug panel
+[157.60] [Music]
+[159.32] node now that we can access our debug
+[161.80] script from anywhere let's clean up our
+[164.00] existing debug script and adjust our add
+[166.68] debug property function so that it's
+[168.68] more modular we can delete or deprecate
+[171.96] these lines here because we're updating
+[173.96] how this code is going to operate we'll
+[176.16] replace our old function with our new
+[178.68] add property function function we'll run
+[181.08] this function every time we want to add
+[182.80] a new property to our debug panel when
+[185.20] run it sets a new variable called Target
+[188.48] this will hold our new label node that
+[190.56] will be created each time we run the
+[192.84] function because we're calling this
+[194.76] function sometimes from process
+[196.44] functions we need to update our label
+[198.92] text and because we don't want to add
+[201.28] another line to create the label node
+[203.44] then another line to update it we're
+[205.68] going to run both processes in the same
+[207.88] function like this first we check if a
+[210.40] label node already exists with our
+[212.64] Target property title by using the find
+[215.44] child function if the node does not
+[218.16] exist yet we create a new label node add
+[220.72] it as a child to our property container
+[223.08] set our name to our title then set our
+[225.20] text to equal the name plus the value we
+[227.40] pass in our parameters if the node
+[229.88] already exists we don't need to create
+[231.76] it so we use an else if statement if the
+[234.48] debug panel is invisible again there's
+[236.64] no need to run the updates if you can't
+[238.32] see them then up update our label text
+[241.24] we can also add this line to reorder our
+[243.68] labels within our parent container we
+[246.32] just need a new parameter that we can
+[247.96] pass when we call the function called
+[249.76] order then use move child to move our
+[252.68] label node Target to the position we set
+[257.96] order with our function in place and our
+[260.48] debug script accessible everywhere it is
+[263.28] incredibly easy to add a variable or
+[265.40] property to our debug panel let's get
+[267.64] our current movement speed for example
+[269.60] and our player controller script head to
+[271.64] the process function and add the
+[272.96] following line This references our
+[275.24] Global script our debug panel and then
+[277.84] the add property function within our
+[279.88] function parameters we set our name for
+[281.40] our custom property what variable we
+[283.36] want to pass for our value and its order
+[285.88] priority and that's it you just need
+[288.36] that one line it's going to create the
+[289.96] property first and then update it every
+[291.84] frame go ahead and test it in our scene
+[294.00] and see how our speed changes when we
+[295.92] walk versus when we Crouch and again
+[298.40] this line can be added from anywhere and
+[301.00] it'll place it right in our debug panel
+[303.96] all right guys if this tutorial was
+[305.44] helpful consider it a like And subscribe
+[307.44] to the channel as we're going to be
+[308.60] covering a lot more thanks to all of my
+[311.60] patrons who keep the series going you
+[313.72] too can get access to the written
+[315.52] tutorials and the project source files
+[317.88] by joining my patreon you can download
+[320.12] everything there and you'll also get
+[321.76] early access to my videos and sneak
+[323.84] peeks at Future tutorials thanks for
+[326.16] watching and as always keep
+[328.48] creating
+[330.78] [Music]

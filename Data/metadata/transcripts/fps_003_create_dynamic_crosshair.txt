@@ -1,0 +1,89 @@
+[0.16] hey everyone I'm building an entire firstperson 
+shooter game from scratch in the GTO engine and  
+[5.04] documenting the progress with these tutorials in 
+this video we're setting up a dynamic Crosshair  
+[10.24] similar to what you see in games like Call of Duty 
+the basic FPS controller project from episode 1  
+[17.44] is available for free on GitHub and if you would 
+like to use the written version of this tutorial  
+[21.96] or download all of the source files you can 
+get access by joining my patreon let's dive  
+[26.88] in the Crosshair or reticle will be set up within 
+our player controller scene eventually this and  
+[34.32] other UI nodes will probably go into its own scene 
+but for now we're just going to house everything  
+[39.56] in our controller we'll be using a couple of 
+control nodes to set up our layout and Center  
+[45.00] our Crosshair on the screen your setup will look 
+like this the user interface node is a control  
+[51.40] node that will act as our parent node after 
+you add it to your scene you're going to make  
+[56.16] two changes in the inspector first under layout 
+change change the anchors preset to full wct or  
+[63.48] full rectangle this will stretch the size of our 
+control node to the full size of our screen it  
+[69.64] also means it will automatically adjust itself 
+if we change our screen size next under Mouse  
+[75.36] change filter to pass this will be set to stop 
+by default which will cause us to lose Mouse  
+[81.44] interactivity and we won't be able to move our 
+camera which is no good setting it to pass will  
+[87.04] keep the mouse free the next node called reticle 
+is a center container node and is a child of your  
+[93.84] user interface node reticle will hold our script 
+for our Crosshair and Center it on our screen  
+[100.04] you'll need two changes to the node settings 
+under layout change layout mode to Anchors and  
+[106.40] anchors preset to Center this will keep the 
+node and all of its children centered on the
+[112.12] screen first We'll add our Crosshair dot that 
+will represent the very center of our screen  
+[120.08] and where the player is aiming add a new script 
+to the reticle node named reticle in the script  
+[126.36] you'll need two export variables radius with 
+a default of one and color set to White these  
+[134.24] represent the size and color of our DOT then 
+add a function named draw it should be named  
+[140.72] this exactly as you're overwriting an existing 
+function then use the draw Circle function to  
+[147.60] create our DOT this function needs the position 
+for the dot we're using absolute Center here so  
+[153.28] 0 0 then the radius of our Circle we're using 
+our DOT radius setting and finally the color  
+[160.28] or our DOT color then in your ready function 
+add qore redraw this function tells the node  
+[167.40] to redraw any draw commands that you've put into 
+your script run your scene and you should now see  
+[172.72] a small dot in the center of your [Music] screen 
+for our Call of Duty inspired four line Crosshair  
+[181.12] we're going to be using four line 2D nodes as 
+children of our reticle node top right bottom  
+[188.44] and left one of got's strengths is the ability to 
+easily mix 2D and 3D and these line 2D nodes will  
+[195.36] load up right on top of our screen now could 
+you just place an image of a Crosshair here  
+[200.16] absolutely but it's going to be really difficult 
+to manipulate or have it react to your gameplay  
+[205.80] these four lines will allow us to adjust our 
+Crosshair shape size color position easily through  
+[212.56] scripting we need to set up each line by adding 
+two points for our Top Line add two elements or  
+[218.72] points to our Point array with these values then 
+change the width of our line to two pixels you  
+[225.52] should see a line in the center of your 2D play 
+area repeat those steps for the remaining lines  
+[230.96] using the following Point coordinates and feel 
+free to adjust the length or size of the lines  
+[236.20] for your game you should now be able able to run 
+your scene and see your new Dynamic Crosshair in  
+[243.56] the center of your screen all right guys if 
+this tutorial was helpful consider it a like  
+[249.56] And subscribe to the channel as we're going to be 
+covering a lot more thanks to all of my patrons  
+[254.64] who keep this series going you too can get access 
+to the written tutorials and the project source  
+[260.08] files by joining my patreon you can download 
+everything there and you'll also get early  
+[264.84] access to my videos and sneak peeks at Future 
+tutorials thanks for watching and as always keep
+[270.60] creating

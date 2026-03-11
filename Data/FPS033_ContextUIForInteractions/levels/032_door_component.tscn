@@ -1,0 +1,186 @@
+[gd_scene load_steps=16 format=3 uid="uid://b35g6oicva2e5"]
+
+[ext_resource type="Material" uid="uid://mln2navettj2" path="res://materials/grid_grey.tres" id="1_m776m"]
+[ext_resource type="Script" path="res://scripts/interaction_component.gd" id="2_aldyf"]
+[ext_resource type="Script" path="res://scripts/door_component.gd" id="3_qp7g2"]
+[ext_resource type="PackedScene" uid="uid://c3ffql15mo0aj" path="res://controllers/fps_controller.tscn" id="4_oanp3"]
+[ext_resource type="ArrayMesh" uid="uid://p6fs3b7nee17" path="res://meshes/demo/barrel.res" id="5_ys0da"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b8ixv"]
+albedo_color = Color(1, 0.654902, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xpwy4"]
+material = SubResource("StandardMaterial3D_b8ixv")
+size = Vector3(0.02, 2.2, 1.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0qwwx"]
+points = PackedVector3Array(0.01, 1.1, 0.75, -0.01, 1.1, 0.75, 0.01, -1.1, 0.75, 0.01, 1.1, -0.75, -0.01, 1.1, -0.75, -0.01, -1.1, 0.75, 0.01, -1.1, -0.75, -0.01, -1.1, -0.75)
+
+[sub_resource type="Environment" id="Environment_l2ivh"]
+background_mode = 1
+background_color = Color(0.101961, 0.101961, 0.101961, 1)
+fog_enabled = true
+fog_light_color = Color(0.0705882, 0.0823529, 0.0980392, 1)
+fog_density = 0.1
+volumetric_fog_albedo = Color(1, 0.607843, 0, 1)
+volumetric_fog_detail_spread = 3.605
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_s3fn3"]
+material = ExtResource("1_m776m")
+size = Vector2(80, 80)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_udfnt"]
+points = PackedVector3Array(-10, 0, -10, -10, 0, 10, 10, 0, -10, 10, 0, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_y7ygt"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tdckl"]
+material = ExtResource("1_m776m")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_8xsda"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qciom"]
+points = PackedVector3Array(1, 2, -0.000195742, 0.980619, 2, 0.194988, 1, 0, -0.000195742, 0.980619, 2, -0.195184, 0.980619, 0, 0.194988, 0.923845, 2, 0.382537, 0.980619, 0, -0.195184, 0.923845, 2, -0.382733, 0.923845, 0, 0.382537, 0.831441, 2, 0.555403, 0.923845, 0, -0.382733, 0.831441, 2, -0.555599, 0.831441, 0, 0.555403, 0.70693, 2, 0.70693, 0.831441, 0, -0.555599, 0.70693, 2, -0.707126, 0.70693, 0, 0.70693, 0.555403, 2, 0.831441, 0.70693, 0, -0.707126, 0.555403, 2, -0.831637, 0.555403, 0, 0.831441, 0.382537, 2, 0.923845, 0.555403, 0, -0.831637, 0.382537, 2, -0.924041, 0.382537, 0, 0.923845, 0.194988, 2, 0.980619, 0.382537, 0, -0.924041, 0.194988, 2, -0.980814, 0.194988, 0, 0.980619, -0.000195742, 2, 1, 0.194988, 0, -0.980814, -0.000195742, 2, -1, -0.000195742, 0, 1, -0.195184, 2, 0.980619, -0.000195742, 0, -1, -0.195184, 2, -0.980814, -0.195184, 0, 0.980619, -0.382733, 2, 0.923845, -0.195184, 0, -0.980814, -0.382733, 2, -0.924041, -0.382733, 0, 0.923845, -0.555599, 2, 0.831441, -0.382733, 0, -0.924041, -0.555599, 2, -0.831637, -0.555599, 0, 0.831441, -0.707126, 2, 0.70693, -0.555599, 0, -0.831637, -0.707126, 2, -0.707126, -0.707126, 0, 0.70693, -0.831637, 2, 0.555403, -0.707126, 0, -0.707126, -0.831637, 2, -0.555599, -0.831637, 0, 0.555403, -0.924041, 2, 0.382537, -0.831637, 0, -0.555599, -0.924041, 2, -0.382733, -0.924041, 0, 0.382537, -0.980814, 2, 0.194988, -0.924041, 0, -0.382733, -0.980814, 2, -0.195184, -0.980814, 0, 0.194988, -1, 2, -0.000195742, -0.980814, 0, -0.195184, -1, 0, -0.000195742)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DoorWall" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.1, 3, 5)
+material = ExtResource("1_m776m")
+
+[node name="Doorway" type="CSGBox3D" parent="DoorWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+operation = 2
+size = Vector3(1, 2.2, 1.5)
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="DoorWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+
+[node name="Door" type="MeshInstance3D" parent="DoorWall/AnimatableBody3D"]
+mesh = SubResource("BoxMesh_xpwy4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorWall/AnimatableBody3D"]
+shape = SubResource("ConvexPolygonShape3D_0qwwx")
+
+[node name="InteractionComponent" type="Node" parent="DoorWall/AnimatableBody3D" node_paths=PackedStringArray("mesh")]
+script = ExtResource("2_aldyf")
+mesh = NodePath("../Door")
+context = "Open Door"
+
+[node name="DoorComponent" type="Node" parent="DoorWall/AnimatableBody3D"]
+script = ExtResource("3_qp7g2")
+direction = Vector3(0, -1, 0)
+door_size = Vector3(0.02, 2.2, 1.5)
+speed = 1.0
+transition = 5
+easing = 2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_l2ivh")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_s3fn3")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("ConvexPolygonShape3D_udfnt")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-3.50991e-08, -0.596015, 0.802974, -2.60526e-08, 0.802974, 0.596015, -1, 0, -4.37114e-08, 0, 0, 0)
+visible = false
+shadow_enabled = true
+
+[node name="FPSController" parent="." instance=ExtResource("4_oanp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25867, 0, 0)
+visible = false
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0101, 3.71709, -5.67735)
+light_energy = 6.0
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.66905, 3.71709, 0.00078392)
+light_energy = 2.075
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0101, 3.71709, 5.14288)
+light_energy = 6.21
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0101, 3.71709, 0.193905)
+light_energy = 6.21
+shadow_enabled = true
+omni_range = 9.755
+omni_attenuation = 0.707107
+
+[node name="InteractableBox" type="StaticBody3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 1.42591, 0.5, -4.2261)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableBox"]
+shape = SubResource("ConcavePolygonShape3D_y7ygt")
+
+[node name="Box" type="MeshInstance3D" parent="InteractableBox"]
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../..")
+
+[node name="InteractionComponent" type="Node" parent="InteractableBox"]
+script = ExtResource("2_aldyf")
+context = "Open Box"
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(0.999993, 0, 0.0037874, 0, 1, 0, -0.0037874, 0, 0.999993, 1.01439, 0.5, -2.79714)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_8xsda")
+
+[node name="Box2" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../..")
+
+[node name="InteractionComponent" type="Node" parent="StaticBody3D"]
+script = ExtResource("2_aldyf")
+context = "Hello Box"
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(1.81094, 0, 0.00685882, 0, 1.81096, 0, -0.00685882, 0, 1.81094, 4.28431, 0.887114, -5.23686)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+shape = SubResource("ConcavePolygonShape3D_8xsda")
+
+[node name="Box3" type="MeshInstance3D" parent="StaticBody3D2"]
+mesh = SubResource("BoxMesh_tdckl")
+skeleton = NodePath("../..")
+
+[node name="InteractionComponent" type="Node" parent="StaticBody3D2"]
+script = ExtResource("2_aldyf")
+context = "This Is A Box"
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(0.999993, 0, 0.00378741, 0, 1, 0, -0.00378741, 0, 0.999993, 1.85971, -0.112886, -6.23223)
+
+[node name="Barrel" type="MeshInstance3D" parent="StaticBody3D3"]
+transform = Transform3D(0.543287, 0, -1.26494e-10, 0, 1.08657, 0, 1.26494e-10, 0, 0.543287, 0, 0, 0)
+mesh = ExtResource("5_ys0da")
+skeleton = NodePath("../../StaticBody3D2/Box3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+transform = Transform3D(0.543287, 0, -1.26494e-10, 0, 1.08657, 0, 1.26494e-10, 0, 0.543287, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_qciom")
+
+[node name="InteractionComponent" type="Node" parent="StaticBody3D3"]
+script = ExtResource("2_aldyf")
+context = "Explode Barrel"

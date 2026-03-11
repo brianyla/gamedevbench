@@ -1,0 +1,620 @@
+[0.20] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials in this
+[7.68] video we're creating a procedural Bob
+[10.00] animation for our weapon when the player
+[12.12] moves the basic FPS controller project
+[14.40] from episode 1 is available for free on
+[16.52] GitHub and if you would like to download
+[18.36] all of the source files you can get
+[20.32] access by joining my patreon let's dive
+[24.40] in so if you've been following the
+[26.64] tutorial Series so far you know that we
+[28.40] have a a look sway animation that we've
+[31.44] procedurally set up and we've also set
+[33.64] up a randomized idle animation that you
+[36.96] can see right there the goal for this
+[38.88] video is to add a bobbing animation for
+[41.28] when the player moves and to do that we
+[44.36] need to adjust some of the code that
+[45.84] we've already done now if we go into our
+[48.12] weapon script where we're running our
+[49.88] swaying scripts we currently are running
+[52.52] that sway weapon animation every single
+[55.08] frame and we're running it from the
+[57.32] script so the first goal we have is to
+[60.04] separate out this swaying animation and
+[62.52] our idle animation so we can control it
+[65.00] from our movement states to do that I'm
+[67.04] in the initiate weapon script where we
+[69.44] have our sway weapon animation function
+[72.44] and you can see that this whole area
+[74.32] right here is our sway weapon code now a
+[78.28] lot of this code is actually dedicated
+[80.24] to that idle animation and we want to
+[82.52] separate that out right so what we're
+[84.88] going to do is add another parameter to
+[87.12] our sway weapon function is Idle which
+[91.84] will be a Boolean so whenever we run
+[95.16] this function we can determine whether
+[96.80] or not we want that idle random
+[98.96] animation to run the next step is to
+[101.32] extract that idle logic from this
+[103.44] function and we can do that by creating
+[105.60] an IF function so if is Idle which again
+[110.76] is going to check our parameter we want
+[112.40] to run anything that is related to our
+[115.48] our idle random animation in this case
+[118.20] our git sway noise and anything related
+[120.64] to our time from our Delta and our
+[123.60] random sway is all related to that Idol
+[126.44] so we want to put that underneath that
+[128.84] if statement our Mouse movement is
+[130.88] actually going to happen regardless so
+[132.28] we can move that up to the top so that
+[134.12] it runs regardless of what our if
+[136.28] statement is saying and then the next
+[138.16] few lines of code are where we have the
+[140.88] distinction and there's a lot going on
+[143.28] it's mainly because my variable names
+[145.04] are super long but everything in this
+[147.96] line for example is going to run regard
+[150.08] L except for right here where we're
+[153.44] adding our random sway x to the X
+[157.24] position of our weapon that's where that
+[160.04] idle animation is coming in down here in
+[163.04] our rotation we're doing the same thing
+[164.96] but we've added an idle sway rotation
+[167.64] strength variable so this line right
+[169.76] here can be cut and then we've extracted
+[173.24] our idle animation so what we can do is
+[176.28] maybe a little bit chunky but let's move
+[180.88] all of that into our is Idle if
+[183.44] statement we're going to keep that
+[184.96] random idle movement within our position
+[187.44] and rotation and then we create our else
+[190.24] statement so if we're not idle we don't
+[194.16] want that to run we'll copy this over
+[196.76] paste it down here then we can take out
+[199.24] our random sway X random sway Y and take
+[204.80] out that same thing from our rotation
+[208.76] setup making sure we
+[211.72] don't get rid of our parentheses down
+[214.16] there now whenever we run our sway
+[217.20] weapon function and we set our is Idle
+[219.68] to True our code's going to run as it's
+[222.20] been running and include that random
+[224.00] idle animation if we set it to false
+[226.16] then we're going to leave out that idle
+[228.48] animation which is exactly what we
+[232.36] want now that we've separated that out
+[235.68] we can also delete this so we're not
+[238.84] running it every frame from this script
+[241.60] because we want to run it from our
+[243.56] movement States now in order to run
+[246.44] anything within our weapon script like
+[248.72] we do with our player scripts we need to
+[251.40] be able to access this weapon script
+[253.84] from our states so let's open up our
+[256.40] idle player State and you'll notice that
+[258.20] we're extending our player movement
+[260.68] state which is a version of our state
+[262.52] script that is adding some references to
+[264.88] things that we can grab from all of our
+[266.36] states so let's open that up we can do
+[268.88] that by hitting control and and clicking
+[270.88] on it within the script and you'll see
+[272.84] that we have a reference to our player
+[275.00] and we have a reference to our animation
+[277.40] so whenever we ready this script we wait
+[280.12] till everything loads and then we set
+[282.96] the player variable as the owner which
+[285.52] is in this case our FPS controller and
+[288.76] we use that same information to then
+[291.76] grab our animation player and just like
+[293.68] we did for our animation we're going to
+[295.12] do the same thing to get our weapon
+[297.48] script so let's go back to our FPS
+[300.20] controller script and see how we did
+[302.32] that all we did was create an export
+[304.40] variable and then assigned it to our
+[306.16] animation player because that animation
+[308.24] player is in our FPS controller scene so
+[311.68] let's do that same thing for our weapon
+[313.84] script We'll add an export variable
+[317.00] we'll call this weapon controller and
+[320.68] then we need a type right normally you
+[322.96] could do a node 3D and then you could
+[325.48] select any node 3D relevant node within
+[328.80] your scene but I always like to have
+[331.68] autofill available so it scripts know
+[334.32] what script I'm using and it makes a
+[336.32] little bit more sense and it's a little
+[337.44] bit easier it's also faster it's more
+[339.80] optimized so let's do that let's go into
+[342.52] our initiate weapon script which I guess
+[344.84] we should probably rename at some point
+[347.12] because it's it's doing a lot more than
+[348.80] just initiating our weapon and we're
+[351.28] going to add a class name so when we do
+[353.08] that we're creating a specific type for
+[355.60] the script and if we use that type then
+[358.32] the engine's going to know I know
+[360.08] exactly what script that's going to and
+[361.84] it's going to fill out all of our
+[363.24] variables all of our functions and it's
+[365.08] going to make it a lot easier to work
+[366.44] with so let's do that by going up here
+[368.88] to our extends line and adding class
+[372.88] name and then let's call this weapon
+[377.92] controller okay because that's really
+[380.28] what it's becoming it's becoming the
+[381.96] controller script for our our weapon
+[384.04] system now that we've done that we save
+[387.04] our script and let's go back to our FPS
+[390.08] controller and instead of node
+[392.48] 3D let's look for our weapon controller
+[394.88] reference and there it is so now that
+[397.24] we've set that it knows within our
+[399.28] export variable and if we go into our FS
+[402.80] controller scene we can do that by
+[404.36] clicking right there go to our main node
+[407.68] where our script is and you'll see our
+[410.08] export variable weapon controller has
+[412.52] shown up and we can assign and notice
+[415.28] that weapon is the only node that is
+[417.68] showing up that's because we've set the
+[420.00] type to weapon controller we select that
+[423.40] and now we have a reference to our
+[424.88] weapon controller node and therefore the
+[427.56] script now that that's ready let's go
+[429.72] back to our player movement State script
+[433.32] where we can create that reference for
+[435.04] all of our states so we'll add another
+[436.96] variable we'll call this weapon and
+[440.36] we'll call the type again so we know
+[442.68] what we're working with when we're doing
+[444.08] our script to weapon controller and just
+[447.76] like we did for our animation refence
+[449.60] reference when we are reading our script
+[452.76] we'll set weapon to equal we'll grab a
+[455.88] reference to our player controller and
+[458.80] then our weapon controller now you might
+[461.72] think because we've put in the scripts
+[463.88] then yay we can get a reference to our
+[466.16] weapons within the script but again
+[468.76] remember if we go back to our idle
+[470.60] player State we're extending from our
+[473.72] player movement state so what does that
+[475.40] mean it means any script that's
+[477.32] extending from our player movement state
+[480.64] is going to already include all of this
+[482.48] information essentially we don't need to
+[484.72] create a new reference every time we
+[486.36] create a new movement state so let's add
+[488.64] back our sway because if we run our
+[491.92] scene right now we've lost our idle
+[494.44] movement we've lost our sway movement
+[496.24] that's because we're not running the
+[497.40] function anymore so let's add that back
+[499.96] in except now we can do it with our
+[502.48] movement States so in our idle player
+[505.28] State we're going to run our sway weapon
+[507.48] function that we just adjusted and our
+[510.00] update or our our process version and
+[512.48] our
+[513.16] states right here so let's add a
+[516.08] reference to our weapon and you'll
+[517.72] notice that we have all of our functions
+[519.92] and variables showing up in our autofill
+[523.28] and that's because again we set our
+[524.96] class now we're looking for our sway
+[528.60] weapon function so we add that in it's
+[531.40] going to ask for our Delta which is
+[533.72] already a part of our update function
+[536.12] and then it's also going to be asking
+[537.68] for our Boolean
+[540.04] remember we have that show back up here
+[542.72] so it's also asking for is Idle Boolean
+[546.72] so in the idle State we want that to be
+[550.20] true we finish our function off and we
+[553.36] save now let's check to make sure that
+[555.72] everything is running like it's supposed
+[557.08] to all right we have our idle random
+[559.36] animation running and if we look around
+[562.64] we have our look animation running
+[564.84] although it's maybe a little bit too
+[567.40] strong but that's fine now let's add
+[569.72] this back to any state that we want to
+[571.92] have our our swing animations run so in
+[575.44] my opinion I think idle obviously makes
+[577.80] a lot of sense let's also do it within
+[580.00] our walking state so we'll do the same
+[582.48] thing we'll go down here at our weapon
+[585.88] reference in fact you can just copy that
+[587.68] code and instead of true because we're
+[590.16] not going to be idle we set that to
+[592.72] false and by setting it to false we will
+[595.04] not run any random idle animation that
+[598.56] same thing can be done for our sprinting
+[600.92] so we paste that back in there and then
+[603.48] also I would say the crouching can do
+[606.20] that same thing and we can save all of
+[608.80] those scripts and we should be ready to
+[611.28] go now before we test you might be
+[612.64] thinking okay why are we not doing it in
+[614.32] the sliding the jumping and the falling
+[615.96] well we can all we need to do is add
+[618.24] that line into that script if we wanted
+[620.64] to add it to falling per se you just add
+[624.04] that line you're good to go in this case
+[626.24] I think those might call for a little
+[627.96] bit of a different treatment
+[630.04] of that swaying motion but for now let's
+[633.28] test our idle our walking our sprinting
+[636.24] and our crouching we can run our debug
+[639.04] panel to check which state we're in our
+[641.44] idle is working fine now when we walk we
+[644.40] should lose that random motion which we
+[647.36] do and we should keep our looking which
+[651.28] we do let's test our sprinting that's
+[654.68] working fine and then finally our Crouch
+[657.80] and looks like we're good to go Okay so
+[660.00] we've separated everything out we've got
+[661.56] it running from the states why did I
+[663.84] even do that well because we're going to
+[665.92] add a bobbing animation I want a little
+[668.24] bit more control over when that runs and
+[671.48] if we do it within our States it also
+[673.76] means we can set up individual variables
+[676.48] within those states to control the
+[679.08] strength how much motion there is and
+[681.36] we're going to have a lot more control
+[683.36] over our procedural
+[686.40] animation so let's get started on that
+[688.84] code to get this motion I'm going to use
+[690.92] something very similar to what I did
+[692.68] with the swaying animation and that's
+[694.72] going to be to use a sine wave let's
+[697.00] think about what our gun is actually
+[698.76] going to be doing when we have this
+[700.48] bobbing animation to me at its most
+[702.84] simplest you're going to have this left
+[704.96] and right movement back and forth and
+[707.68] then you're going to have a movement up
+[709.16] and down although probably not down
+[712.20] because that's going to look a little
+[713.44] weird it's going to be almost like this
+[715.44] this bouncing effect and we'll use some
+[717.76] math to get there but first let's
+[720.56] illustrate what that sine wave is going
+[722.28] to look like so this is Desmos this is a
+[724.68] really cool uh graphing tool that you
+[726.68] can get online and what I've put in is a
+[730.28] simple sign function it's just y equals
+[732.96] the S of X so as X progresses you're
+[736.20] going to see y go up to one and then
+[738.40] back down to negative 1 I'm going to
+[740.28] flip this so you can see a little bit
+[742.00] more of what I'm talking about with that
+[743.48] left and right motion so let's do x
+[746.96] equal s of Y
+[749.84] and imagine now this is our left and
+[752.04] right movement of our gun so as time
+[754.16] progresses which is what y will will end
+[756.92] up being we want our gun to go right
+[760.04] left right and so on so to start this
+[763.04] we're going to go back to our weapon
+[765.48] controller initiate weapon script and
+[767.52] we're going to add a new function and
+[769.52] that function is going to be weapon Bob
+[773.28] we're going to need a Delta value within
+[774.92] our parameters because we're going to
+[776.20] run it every single frame and we'll set
+[779.84] up void because we're not going to use
+[781.24] this to return any value so for the
+[782.88] first step let's just see if we can get
+[784.56] our weapon to move left and right within
+[787.44] our our editor okay so to do that we
+[790.40] have our weapon bomb we have our Delta
+[792.56] parameter and then we're going to need
+[794.00] time because we're going to use time
+[796.08] within our sign function so we do time
+[799.84] plus equals Delta and we can just use
+[804.04] that as a as a base and then let's set
+[807.04] the position X of our weapon to equal
+[811.32] the sign of time all right and then
+[814.72] we're going to see what that does and in
+[816.20] order to see this in the editor let's go
+[818.36] ahead and add back our process function
+[821.84] and within this function we will run
+[824.72] weapon Bob and add Delta Okay so we've
+[828.60] got our position of our weapon going
+[831.36] left and right in fact let me uh undo
+[833.72] the camera there and you can see it a
+[835.00] little bit easier so there's our weapon
+[837.04] you can see that sign function is going
+[838.68] left to right obviously it's way too
+[841.68] much movement but we can adjust that so
+[843.60] let's do that go back to our script and
+[846.44] we're going to add a parameter within
+[849.60] our weapon Bob function in fact we can
+[851.80] add two parameters so we can adjust the
+[854.36] speed of that movement and also the
+[857.44] amount of that movement so let's add our
+[859.48] speed first we're going to call this Bob
+[863.08] speed it'll be a float and we'll also
+[866.80] add a horizontal h
+[869.56] Bob amount and that will also be a float
+[874.00] now notice that our function is freaking
+[876.04] out because we don't have enough
+[877.12] parameters now to see how we're going to
+[878.76] use these variables let's actually go
+[880.40] back to our graph so this is the the
+[883.52] function that we we currently have right
+[885.80] now we just have a right to left
+[887.72] movement and it's going only so far so
+[890.28] we want to be able to increase the
+[892.68] frequency how many waves we get and also
+[896.00] adjust the amplitude which is the
+[898.12] distance to to the left and to the right
+[900.68] to do the frequency what you need to do
+[903.20] is go into your your sign function right
+[906.24] there and we're going to multiply that y
+[908.28] value so if we multiply by 10 we've
+[910.92] increased the frequency by 10 or you can
+[914.52] multiply it by a fraction and then we've
+[917.72] created uh We've decreased it by by 10
+[920.40] that will be where we put our Bob speed
+[923.48] now if we want to adjust the amplitude
+[925.84] what we'll do is multiply everything by
+[929.20] value now you see that we've multiplied
+[931.64] everything by 10 and we've increased
+[933.44] that amplitude by quite a bit or we can
+[936.52] multiply by something a fraction of one
+[940.56] and it's going to decrease that
+[942.28] amplitude so let's go back to our script
+[944.12] so again our position x equals s and
+[946.68] then time is our our Y in this case we
+[950.12] multiply that time by our Bob speed and
+[954.04] then we multiply everything by our
+[957.48] horizontal Bob
+[959.44] amount now when we put those into our
+[961.96] parameter let's say uh let's increase
+[964.72] the speed by five and then the
+[967.72] horizontal Bob mount it was moving way
+[969.84] too much let's do um
+[972.04] 02 we'll save that and let's go back to
+[974.96] our our script that'll be a little bit
+[977.16] easier to see within our camera all
+[979.92] right so it's still way too much bobbing
+[983.20] movement but the speed is a little bit
+[985.72] better so we can reduce that even more
+[990.00] let's do this to um 0.5 check out our
+[994.44] movement and it's a little bit better so
+[996.44] we have our left and right movement
+[997.96] let's get our vertical movement now you
+[999.88] might think okay we've done our
+[1001.60] Exposition let's just use the same code
+[1004.04] and adjust our y position well let's put
+[1006.60] that in there and we'll see what
+[1009.04] happens so we are now adjusting our y
+[1012.48] position by the same thing our sign
+[1015.04] times Bob speed times horizontal Bob
+[1018.16] amount and obviously we're going to need
+[1020.56] a vertical Bob Mount let's save that and
+[1022.64] let's see what's what it's doing all
+[1024.32] right now we've got this uh kind of
+[1026.24] diagonal movement okay and if you think
+[1028.76] about it in terms of a a graph this
+[1031.04] makes sense we're shifting between the
+[1033.20] left and right back and forth and we're
+[1036.68] also shifting between the up down of our
+[1039.84] vertical but it's happening at the same
+[1041.68] rate which means we're just going to be
+[1043.12] going in a diagonal line what we need to
+[1045.24] do is actually use cosine and I'm going
+[1048.48] to show you what I mean all right so
+[1050.00] I've set up a s and a cosine function
+[1053.24] and it's actually a little bit harder to
+[1054.92] see this way so I'm going to swap these
+[1058.00] with uh the Y and X real quick and it's
+[1062.84] going to make this a little bit easier
+[1063.92] to see so we have our left and right
+[1066.56] movement and now we have our vertical
+[1068.28] movement graph and this doesn't look
+[1070.28] like much in fact if we go and and put
+[1072.12] this in the script it's not going to do
+[1073.36] what we want what we want the vertical
+[1075.88] to do is almost bounce right we want it
+[1079.40] to bounce because if you're having that
+[1081.56] up and down movement it's not like this
+[1084.28] it's more of a uh uh uh right and we
+[1088.40] have that here we just we need to add
+[1090.56] one more thing to our function and that
+[1092.76] is we need to take the absolute
+[1095.72] value of our function and there's our
+[1098.76] bounce now what does this exactly mean
+[1101.24] so this is our our left right left right
+[1106.20] so when our gun is on the left or the
+[1108.60] right right side we want the vertical to
+[1110.44] be at its lowest point and when it's in
+[1112.96] the middle of those two we want at the
+[1114.84] highest right we want this sort of Arc
+[1117.40] movement and you'll notice that when
+[1119.48] we're at our left our y position is at
+[1121.96] zero when we're at our right it's at
+[1124.64] zero and when we're in between it's at
+[1127.52] its highest point so that's why we need
+[1129.64] cosine and the absolute value although
+[1132.52] an offset sign would also work let's go
+[1134.64] back into our script and let's make this
+[1136.28] adjustment and see what we get so in
+[1138.76] instead of this sign what we're going to
+[1141.04] do we're going to get rid of that and
+[1143.28] we're going to take the absolute value
+[1145.76] of cosine time and then we're going to
+[1149.00] need a uh vertical Bob amount so we'll
+[1152.76] add that back
+[1154.36] in and then we also need to add in our
+[1158.28] Bob speed or everything's going to be
+[1160.12] wrong too so so here's the line for the
+[1163.40] Y position we're going to take the
+[1165.04] absolute value of our cosine of time
+[1169.44] times our Bob speed and then multiply
+[1172.44] that by our vertical Bob amount which
+[1175.24] we've set the same as our horizontal but
+[1177.40] we can adjust that later now let's take
+[1179.88] a look at our motion and there we go now
+[1183.24] we have that bouncing animation that we
+[1186.20] can adjust maybe can make our vertical a
+[1189.56] little bit less make the horizontal a
+[1192.16] little bit less and there you've got a
+[1194.80] procedural Bob animation not too bad for
+[1197.32] a couple lines of code right now we need
+[1199.36] to make this actually functional within
+[1201.44] the scripts that we're using and have it
+[1203.56] work in game so we're not going to be
+[1205.84] running this weapon Bob function uh
+[1208.56] within our weapons function we're going
+[1210.04] to do the same thing that we're doing
+[1211.40] with our sway weapon function and run it
+[1213.92] from our state scripts so let's delete
+[1217.80] that we don't need it the function
+[1219.76] itself is fine we're just going to go to
+[1221.64] our state so let's go to our walking
+[1224.76] State and let's do the same thing that
+[1227.04] we did with our s weapon we'll get a
+[1230.40] reference to our weapon script and
+[1233.68] then run our weapon Bob and we'll do a
+[1238.04] Delta and I think we said five on that
+[1242.16] horizontal Mount 2 and then a vertical
+[1245.28] amount of 0.1 and if you're thinking hey
+[1248.36] we can just put those in variables
+[1250.20] you're right and we will and if we walk
+[1252.96] we should get our bobbing animation
+[1254.44] let's see what happens all right we have
+[1256.20] our bobbing animation it just is is not
+[1259.28] very good we can fix this and do it
+[1261.44] pretty easily so let's go back to our
+[1263.76] initiate weapon script and we're going
+[1266.36] to add a variable we're going to call
+[1269.04] this variable weapon Bob amount and this
+[1273.92] is going to be a vector
+[1276.92] 2 and we'll default it to to zero now
+[1282.00] what we're going to do is instead of
+[1283.40] setting the position of our X and Y
+[1286.04] which is again setting the position of
+[1287.64] our node we're going to set the X and Y
+[1289.88] of this
+[1291.92] variable so we set weapon Bob Mount X to
+[1296.88] equal and weapon Boba Mount y to equal
+[1300.04] well we already have lurs to handle any
+[1302.96] movement of the weapon so let's just put
+[1305.36] them in there so we have our two
+[1307.76] position lurs right here right here this
+[1310.24] is for when we want our idle animation
+[1312.76] which we're not going to be bobbing if
+[1314.36] we're idle and this is when we're doing
+[1316.84] anything else which is moving running
+[1319.04] walking whatever this is where we want
+[1321.52] it so we're going to add it right in
+[1324.20] here and it's going to be our weapon Bob
+[1327.08] amount X this is going to take that x
+[1330.44] value that we've set added into our
+[1332.96] position lurp which is already taking
+[1334.88] into account the position of the weapon
+[1336.32] and everything that we need let's do the
+[1338.52] same
+[1339.56] thing for our y weapon Bob amount Y and
+[1344.84] let's test all right now it's subtle but
+[1347.80] it's there I just need to increase the
+[1350.20] the values a little bit you can see that
+[1352.44] slight Bob movement already so you can
+[1355.44] see it just a little bit clear we go
+[1357.24] back to our walking we'll make the uh
+[1359.52] horizontal
+[1360.60] amount let's make it two make it real
+[1364.64] obvious
+[1366.60] .5 let's check it again there you go so
+[1370.20] now we're adding that Bob movement in
+[1373.16] relation to all the other movement
+[1375.68] information that we've already set so
+[1377.88] we're almost there we just need to do a
+[1380.48] couple things and that is to adjust
+[1382.96] these to become export variables within
+[1385.36] each of our states and then take this
+[1387.64] function and run it with any state we
+[1390.12] need it in and all of that is actually
+[1392.84] very easy so let's take our walking
+[1395.04] player State first and what we're going
+[1397.56] to do is add three
+[1401.84] export
+[1403.52] variables the first one's going to be
+[1406.16] the weapon Bob speed
+[1410.00] the next one will
+[1411.88] be our
+[1415.60] weapon Bob horizontal
+[1420.08] movement and the final one will be our
+[1422.64] weapon Bob vertical movement
+[1427.32] and we should
+[1431.12] set each of these two afloat types are
+[1434.92] good and uh for the speed let's set this
+[1438.12] to to six are the horizontal let's set
+[1441.92] it to
+[1443.72] two and set this to one as a as a
+[1447.36] default now this means that you can
+[1450.68] adjust um and individually set all of
+[1453.76] these settings within each of the states
+[1456.12] which is what we
+[1457.32] want and then we can go down here and
+[1460.96] replace our values or parameters with
+[1464.44] these
+[1466.20] variables all right now let's test that
+[1469.32] out there we go now these now these may
+[1472.52] not be the exact values you want or the
+[1475.68] best looking values but again it's very
+[1477.60] easy to adjust so let's add all of this
+[1481.04] to any other states that we need
+[1483.20] sprinting and crouching States we're
+[1485.52] going to add this same logic so we can
+[1488.68] simply copy go back to our Sprint paste
+[1492.44] that in below our sway weapon and then
+[1494.92] go back and then copy all of these
+[1496.96] export variables
+[1499.00] and paste those in now for the sprinting
+[1501.48] you're going to have it be uh probably a
+[1503.12] little bit faster right um You can make
+[1506.08] that eight make a little bit more
+[1508.24] movement horizontally maybe a little bit
+[1510.64] more movement vertically and then for
+[1513.04] our crouching let's go ahead and paste
+[1515.36] that function as
+[1518.20] well and paste our export
+[1522.28] variables speed for this is going to be
+[1524.56] slower make it
+[1526.20] two a little bit less movement
+[1529.84] and let's go with that now we should be
+[1531.68] able to test each of these movement
+[1533.36] States and we should see a different
+[1536.08] bobbing pattern for each one all right
+[1538.56] we are in Idle No
+[1540.64] bobbing we're in our walking player
+[1542.92] States we are bobbing all right now
+[1545.48] let's Crouch it's a very slow slow Bob
+[1549.00] go back to walking we run it's even
+[1551.88] faster and there you go all right guys
+[1554.12] if this tutorial was helpful consider it
+[1555.92] a like And subscribe to the channel as
+[1557.76] we're going to be covering a lot more
+[1560.08] thanks to all of my patrons who keep the
+[1561.96] series going you too can get access to
+[1564.52] the project source files by joining my
+[1566.72] patreon you can download everything
+[1569.04] there and you'll also get early access
+[1570.80] to my videos and sneak peeks at Future
+[1573.40] tutorials thanks for watching and as
+[1575.84] always keep
+[1578.55] [Music]
+[1582.60] creating

@@ -1,0 +1,82 @@
+[0.40] in this episode of myato FPS tutorial
+[2.72] series we're extending the character
+[4.44] body 3D nodes Collision interaction so
+[6.96] that the player can interact with
+[8.44] physics objects and open doors by simply
+[10.84] pushing them these tutorials are part of
+[13.16] a long series of FPS tutorials for the
+[15.60] Gat engine the link to the door
+[17.24] component episode is in the description
+[19.32] and as always you can grab the source
+[21.12] files for this and all of my G engine
+[23.56] tutorials on my patreon one shortcoming
+[26.88] of the character body 3D node is that it
+[29.08] doesn't interact with with physics
+[30.60] objects like a rigid body 3D does so to
+[33.60] allow the player to push physics objects
+[35.48] we need to do some manual Collision work
+[37.64] to do this we're going to extend the
+[39.28] character body 3D noes Collision
+[41.04] mechanics with a new component script
+[43.52] I'm adding a new node to my FPS
+[45.28] controller scene as a child of the
+[47.16] parent called physics component because
+[49.64] this component is modular you should be
+[51.72] able to create this in your own
+[53.12] controller even if you haven't been
+[54.88] following the series attach a new script
+[57.04] to the node called something like
+[58.48] physics component in the script we need
+[60.64] three export variables controller which
+[63.28] will contain a reference to our
+[64.64] character body 3D node Force which will
+[66.92] be the amount of Base Force we apply to
+[69.16] our physics objects and an enabled
+[71.36] Boolean so we can switch the mechanic
+[73.44] off and on then we just need a physics
+[75.76] process function with the following code
+[77.92] character body 3D nodes don't have a
+[79.88] signal for Collision detection but the
+[82.00] default move and slide function is
+[84.44] constantly checking for collisions we're
+[86.44] going to tap into that information and
+[88.24] get the kinematic Collision 3 3D
+[90.24] movement data that contains our
+[92.08] Collision info if enabled is true and if
+[95.20] get slide Collision count is greater
+[97.04] than zero I.E if we are colliding with
+[99.60] something then we set a collision
+[101.36] variable to the last slide Collision
+[103.44] then if that Collision collider object
+[105.04] is a rigid body 3D object then we want
+[107.64] to apply an Impulse to that collider
+[109.92] direction is the normal of the Collision
+[112.08] but negative because we want the
+[113.76] collider to move in the opposite
+[115.52] direction of our Collision speed is the
+[118.00] velocity of our player character clamps
+[120.28] between 1 and 10 we want to make it so
+[122.84] faster movement creates more force and
+[124.88] vice versa then impulse position is the
+[127.56] exact Global position of our Collision
+[130.20] however when we apply our impulse we
+[132.12] need the position offset from the origin
+[135.04] of our collider not the global position
+[137.72] so we subtract the global position of
+[139.92] the collider from the Collision position
+[142.08] to get the relative position I.E our
+[144.76] offset then we apply impulse with our
+[147.12] Direction times our speed times the
+[149.56] force course we set at the impulse
+[151.24] position the player should now be able
+[152.92] to Simply push open the door when
+[154.48] walking into it and as a side benefit
+[157.60] push other rigid bodies as well note
+[159.80] that I'm using jolt physics in go 4.3 so
+[162.96] your physics interactions might vary if
+[165.44] you're using the default physics as
+[167.52] always you can get these source files
+[168.96] for everything that you saw in this
+[170.36] video on my patreon I'll catch you in
+[172.36] the next one and as always keep creating
+[175.24] [Music]

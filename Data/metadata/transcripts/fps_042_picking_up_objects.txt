@@ -1,0 +1,133 @@
+[0.28] in this episode of my G FPS tutorial
+[2.56] series we're making a pickup component
+[4.68] script that will let the player
+[6.20] physically pick up objects these
+[8.28] tutorials are part of a long series of
+[10.44] FPS tutorials for the G engine and as
+[12.96] always you can grab the source files for
+[15.04] this and all of my gato engine tutorials
+[17.64] on my patreon our goal for this episode
+[19.72] is to create a new pickup component that
+[21.68] when added as a child to our interaction
+[24.08] component will allow the player to pick
+[26.24] up the parent object in this case any
+[28.64] rigid body 3D object to do that we're
+[31.24] going to check when the player interacts
+[33.04] with the object emit a signal from our
+[35.32] interaction component that will be read
+[36.92] by the pickup component which will
+[38.68] adjust the transform of our object so
+[40.64] the player carries it around when the
+[42.52] player presses the interact button while
+[44.20] looking at an interactable object the
+[46.20] interaction raycast script fires a
+[48.48] signal which is read by the interaction
+[50.16] component in our interaction component
+[51.96] script we're going to add a new signal
+[53.72] that will fire in the on interact
+[55.60] function and pass along the parent rigid
+[58.04] body 3D node we then need a new node
+[60.48] called pickup component added as a child
+[62.72] of our interaction component along with
+[64.64] a new script being a child here is
+[66.84] important in how we'll structure our
+[68.48] code so wouldn't it be cool if we could
+[71.08] check if that's true and send a warning
+[73.56] if it isn't well we can by overwriting
+[76.16] the buil-in git configuration warnings
+[78.64] function this is basically what creates
+[80.60] that little warning logo when you don't
+[82.28] have a collision node sometimes in the
+[84.32] scene tree we add the function which
+[86.12] will return a packed string array at the
+[88.52] top of our script I've added my class
+[90.52] name and variables to hold the parent
+[92.40] node and object we are a child of
+[94.84] remember the parent is the interaction
+[96.56] component but the object is the rigid
+[98.64] body 3D node and already script we set
+[101.04] parent to get parent which should be the
+[103.12] interaction component class node if it
+[105.40] is we connect the parent interacted
+[107.52] signal we just created to a function
+[109.76] we'll make in a minute called update
+[111.76] state in the git configuration warnings
+[114.20] function we check if the parent is not
+[116.08] an interaction component class if it's
+[118.36] not then we return our warning string
+[120.52] array and if it is then we return
+[122.96] nothing the configuration warning needs
+[124.80] to be manually updated and we can do
+[127.08] that by using another built-in function
+[129.40] notification this function captures a
+[131.68] bunch of different notification events
+[133.44] that occur in the editor in it we check
+[135.64] if are what equals notification enter
+[138.20] tree or whenever we add or move our
+[140.68] pickup component when this happens we
+[142.84] reset our parent to the new parent and
+[145.04] update our warning with the update
+[146.68] configuration warnings function now
+[148.88] whenever we add or remve our node the
+[151.16] parent will get checked and a warning
+[153.12] placed if needed we also need to add the
+[155.72] tool keyword at the top of the script so
+[158.00] that this runs while we are in the
+[159.76] editor now that we have a check for our
+[161.64] node placements let's start picking up
+[163.76] our object we create a new export
+[165.76] variable pickup distance to adjust how
+[168.08] far we want the object to be in front of
+[169.84] us when we pick it up a picked up
+[171.92] Boolean variable and a constant pickup
+[174.12] lurp for luring the object's location
+[176.60] I've set mine to 0.3 then we create our
+[179.48] update state state function with a
+[180.96] parameter for our interactable object
+[183.52] remember we are passing that value in
+[185.68] our player interacted signal within that
+[188.20] function we set our object to
+[189.68] interactable set the rigid body 3D node
+[192.08] to freeze mode so that gravity is not
+[194.60] applied while holding it and turn pickup
+[197.28] to true then we have to make a decision
+[199.32] about how to handle our Collision you
+[201.28] can turn Collision off completely or for
+[203.84] specific Collision channels basically
+[205.92] you don't want to collide with yourself
+[207.76] or you're going to have some really
+[208.96] weird effect but you may want to collide
+[211.56] with other objects and you'll need to
+[213.44] collide with your raycast keep that in
+[215.60] mind when setting your Collision layers
+[217.40] we place that in an else statement and
+[219.72] add an if statement for when we are
+[221.52] already holding the object then we set
+[224.00] picked up to false object to null and
+[227.04] reset our Collision masks and freeze
+[228.88] setting finally in our physics process
+[231.00] function we need to update the object's
+[232.96] Global transform when we have picked it
+[235.08] up we check if picked up then I'm
+[237.60] getting the global transform of my
+[239.36] player camera and setting the global
+[241.48] transform of the picked up object to an
+[243.84] interpolate width value going from a my
+[247.20] object Global transform to be my camera
+[250.60] transform with a translated local
+[253.16] distance now when you add the pickup
+[255.08] component as a child of the interaction
+[256.92] component you should be able to pick up
+[259.04] that object when you interact with it
+[261.20] there is definitely more polish needed
+[263.20] here but this should give you an idea
+[264.84] for one way to achieve the effect you
+[266.92] could also place the object as a child
+[268.84] of the camera itself itself and remove
+[271.00] it when you drop it but I wanted to keep
+[273.48] the object in its scene Tree location as
+[276.40] always you can get these source files
+[277.88] for everything that you saw in this
+[279.24] video on my patreon I'll catch you in
+[281.24] the next one and as always keep creating
+[284.16] [Music]

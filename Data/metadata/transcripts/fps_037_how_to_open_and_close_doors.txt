@@ -1,0 +1,50 @@
+[0.16] in this episode of my gato FPS tutorial
+[2.64] series we're adding an option to our
+[4.40] door component to make doors manual
+[6.88] meaning players need to close the door
+[8.88] themselves these tutorials are part of a
+[11.24] long series of FPS tutorials for the Gat
+[13.76] engine the link to the door component
+[15.52] episode is in the description and as
+[17.52] always you can grab the source files for
+[19.60] this and all of my G engine tutorials on
+[22.36] my patreon if you want to require that
+[24.52] players close doors themselves you can
+[26.56] make a simple adjustment to our door
+[28.48] component script first add another
+[30.64] enumeration for our door status that
+[32.72] will have the options open and closed
+[35.32] then an export Boolean variable close
+[37.72] automatically that will set to True by
+[39.96] default if we want the door to be manual
+[42.44] we can set it to false in the inspector
+[44.76] then a door status variable that will
+[46.64] hold the current status of our door at
+[48.80] the bottom of our check door function we
+[50.52] add a match case for our door status if
+[53.32] we interact with the door and it's
+[54.76] closed run the open door function if the
+[57.20] door is open run the closed door
+[59.16] function in both both the open door and
+[60.96] closed door functions we set our door
+[62.88] status at the top so when we open our
+[65.32] door status changes to open and if we
+[67.32] close it's set to closed this ensures we
+[70.48] won't run the same function twice if the
+[72.40] player spams the interact button finally
+[74.68] we check our close automatically bullan
+[76.72] variable in the open door function if
+[78.92] true we will automatically run our
+[80.92] closed door function after our closed
+[82.92] time interval runs out and that's all
+[84.92] you need to add in order to create both
+[86.88] automatic and manual doors in the next
+[89.36] episode we'll take a look at how we can
+[91.20] create a truly automatic door that opens
+[93.76] when the player is near it and closes
+[96.04] when they move away as always you can
+[98.08] get these source files for everything
+[99.72] that you saw in this video on my patreon
+[101.92] I'll catch you in the next one and as
+[103.28] always keep creating
+[105.24] [Music]

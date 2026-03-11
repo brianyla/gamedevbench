@@ -1,0 +1,394 @@
+[0.20] hey everyone I'm building an entire
+[1.76] firstperson shooter game from scratch in
+[3.84] the GTO engine and documenting the
+[5.72] progress with these tutorials the basic
+[7.88] FPS controller project from episode 1 is
+[10.20] available for free on GitHub and if you
+[12.04] would like to download all of the source
+[13.68] files you can get access by joining my
+[16.00] patreon let's dive
+[19.20] in welcome back to another FPS tutorial
+[22.20] today we're going to be adding a
+[24.00] procedural recoil animation to our game
+[27.20] now if you're working on your own setup
+[28.36] this is going to be pretty plug-and
+[29.64] playay you can add this to your own
+[31.36] controller if you're doing your own
+[32.76] thing it's not going to be too much of
+[34.28] an issue for everyone else that's
+[35.88] working along we're going to be adding
+[38.76] another node a recoil node that's going
+[41.60] to completely handle the uh rotation
+[45.96] that's going to happen when we have our
+[48.08] procedural recoil that recoil is going
+[50.64] to be using a rotation method and we're
+[54.12] going to be essentially rotating our
+[56.64] camera 3D node which is going to make
+[59.20] our our our view jump when we shoot by
+[62.44] by adding a little bit of rotation
+[65.16] whenever we uh whenever we fire our gun
+[68.08] to do that we need to add a node in
+[70.24] between our camera controller and Camera
+[72.40] 3D node so let's jump over to our
+[74.80] firstperson controller
+[76.84] scene and let's add a node 3D
+[81.12] right
+[83.04] here we'll set that up above and then
+[86.56] we're going to take our camera 3D node
+[88.48] which is uh a parent to our our weapon
+[91.20] rig and our weapon and our weapon mesh
+[93.84] we're going to slide that as a child to
+[96.40] this new node and we're going to call
+[97.64] this new
+[99.56] node recoil now we could uh take this
+[103.32] script that we're creating and shove it
+[105.12] into where we already are are handling
+[107.64] our weapon rotation we absolutely could
+[110.40] do that this is more of a method of
+[112.84] separating out that uh that
+[115.32] functionality into a different node a
+[117.16] different script so everything's a
+[118.64] little bit cleaner we can communicate
+[120.80] with other nodes a little bit cleaner
+[122.60] and everything's just not shoved into
+[124.36] one script again the plan is to have
+[126.64] this node right here and now that we
+[128.56] have it let's actually uh demonstrate
+[130.92] this a little bit so this controls the
+[133.16] rotation now of our camera our weapons
+[135.88] everything and so if we rotate this
+[138.04] recoil node everything else is going to
+[140.32] be rotating along with it and that's
+[143.16] what we want so let's zero that out and
+[147.52] let's create a new script we're going to
+[149.16] create one right here in our recoil node
+[152.88] create a new script and let's save it
+[157.36] into our scripts
+[160.04] folder and let's call
+[163.44] this well let's be a little bit more
+[165.40] specific
+[166.56] weapon recoil all right so we're in our
+[169.52] new scripts we're going to add some
+[171.56] export variables let's
+[174.00] start by whoop clean nice clean spaces
+[179.40] it's adding add an export variable for
+[181.28] our recoil
+[183.32] amount this is going to be a vector 3
+[186.64] and this is going to allow us to to set
+[190.04] how far the uh that recoil node rotates
+[194.48] whenever we fire the gun and we can
+[196.56] customize that and in turn we can have
+[200.04] that be unique per per weapon using our
+[202.64] our already created weapon system so we
+[204.52] have our our export variable for our
+[206.20] recoil amount and then let's create
+[209.04] another export variable for our snap
+[212.60] amount this is going to be how quickly
+[215.72] we we snap back and forth when we are
+[218.44] are rotating that that node and then one
+[222.08] more export variable on a new line would
+[225.84] be
+[226.84] awesome and this one will be the speed
+[230.64] this is how
+[232.12] fast we are adding that that rotation
+[236.08] and again we're going to be doing this
+[238.20] through through lurs so these are going
+[239.60] to be our Alphas for those lurs you're
+[241.60] going to see that in a second let's add
+[243.56] a couple more variables this one's going
+[245.84] to be current rotation and it will be a
+[249.56] vector three and one more for our Target
+[254.84] rotation which will also be a vector 3
+[258.48] and again if you're unfamiliar with the
+[261.80] uh that green text and I'm putting that
+[264.36] that colon in there that's uh I'm
+[266.64] setting the type for that variable and
+[269.24] that's going to allow me to have uh some
+[272.16] some autocomplete options whenever I use
+[274.92] and throw that variable in the script
+[277.28] and it's also going to be faster because
+[278.92] the engine doesn't have to figure out
+[280.76] hey what is this variable actually so I
+[283.96] always like to set things just nice and
+[285.48] clean so how this procedural recoil is
+[288.08] going to work we're going to be working
+[289.68] a little bit in our process function so
+[292.52] every frame we want to be adjusting the
+[296.44] rotation of that recoil node based on
+[300.16] whether or not we've fired our gun so if
+[302.16] we fire the gun we want to add a new
+[304.92] Target rotation and it's going to go to
+[307.28] that Target rotation gradually using our
+[309.92] our speed variable and then eventually
+[311.96] it's going to go back to a vector of
+[313.88] 0000 0 for that rotation so back at
+[317.36] Center and how we can do that is get our
+[320.72] Target rotation and we're going to set
+[323.08] that equal to a lurp and it's going to
+[325.28] be a lurp from our Target rotation
+[330.36] to our Vector 3 Z so this is back to to
+[334.88] Center and then our weight our our Alpha
+[337.96] will be our speed value multiplied by
+[341.96] our Delta time so what is this line
+[344.28] going to do well if we set a a new
+[347.44] Target rotation let's say we we rotated
+[351.60] 5° vertically well every single frame
+[355.04] it's going to gradually go back to to
+[358.08] Center to Vector 3 0
+[360.32] at the speed that we set so that's our
+[363.04] return lurp now we're going to take our
+[366.40] current rotation and and we're going to
+[369.28] lurp that as well so we'll do another
+[371.68] lur we're going to lur from our current
+[374.84] rotation and we're going to go to our
+[378.60] Target rotation and then we'll use our
+[380.96] snap amount times Delta as our weights
+[385.40] all right now that we have the the
+[386.88] current rotation we want to actually set
+[389.96] the rotation of that node and we can do
+[392.20] that by getting the basis and setting
+[396.04] the basis equal to a
+[399.56] querian from Mueller and then we're
+[402.32] going to plug in our current rotation so
+[406.60] we're going to run that every frame but
+[408.24] we also need to get our Target rotation
+[411.56] right we're not actually setting that
+[412.84] yet so let's create a function and this
+[414.88] function is going to be called add
+[416.96] recoil and this is the function that is
+[420.36] going to be fired when we fire our gun
+[423.88] and it's going to set a new Target
+[425.56] rotation now this target rotation is
+[428.08] going to be set randomly because we're
+[430.16] going to get some randomization and
+[431.88] that's going to be the procedural effect
+[433.48] we don't want it to look the same every
+[434.88] time we want it to to be adjusted so
+[437.80] we're going to get our Target
+[439.56] rotation and we're going to set this
+[442.56] plus equal to we're going to add to our
+[446.84] our Target rotation so why not just
+[449.72] equal well if we are already under a
+[452.00] recoil we want to add to that rotation
+[454.80] right so the recoil gets gets to be more
+[457.28] so we're doing a plus equals we're going
+[459.84] to set that equal to a vector 3 that
+[462.68] we're going to compile here and it's
+[465.24] going to be using our recoil amount
+[468.88] Vector 3 with some randomization so for
+[471.28] our our Vector 3 we're going to use this
+[473.84] recoil amount export variable that we
+[476.52] set and we're going to get a random
+[478.24] value uh between the negative value that
+[482.52] we set and the positive version of that
+[485.48] value that we set and I'll show you how
+[487.56] how that's going to work so for our
+[489.52] Vector 3 we're going to create one with
+[491.56] an x y and a z so we
+[494.32] take this function the random F which is
+[498.92] float and a range and that range is
+[502.56] going to be our recoil amount for our x
+[506.16] negative to the the positive of that
+[509.08] recoil amount so if I set over here our
+[512.04] our recoil amount to one then it's going
+[514.56] to pick a float between -1 and 1 for
+[517.96] that X rotation and we want to do that
+[520.40] for every
+[522.96] single value in our Vector so we just
+[525.92] can copy and paste that instead of that
+[528.84] X we'll use our y I missed an X there
+[532.28] let's add that in and then we'll add our
+[534.64] Y and we'll do the same for our Z
+[541.76] all right so there we go so make sure
+[543.12] you've got your your random F range
+[545.64] function and then between the negative
+[548.32] value of that X the positive value of
+[550.60] that X so when we set that it's going to
+[552.88] give us a completely random rotation
+[555.68] every time we fire our gun and that's it
+[558.24] that's the The Recoil code now the issue
+[561.40] that we have to to figure out is we want
+[563.88] this to run whenever we fire the gun and
+[567.60] we want to actually run this add recoil
+[570.88] function and this is a good lesson in in
+[574.00] signals and how you communicate between
+[576.20] nodes the the weapon is actually a a
+[580.52] child right of this recoil recoil camera
+[583.84] 3D weapon rig weapon and this is where
+[586.52] our script for when we are firing our
+[588.88] gun is taking place now this might be in
+[590.80] a different place if you're working on
+[592.64] your own setup but for us it's a child
+[596.24] of this recoil so this is the the script
+[599.12] that's going to be doing something it's
+[601.16] initiating that event but it's the child
+[603.72] so whenever you're communicating up that
+[607.08] is from a a child to a parent or you
+[610.88] know up the hierarchy you want to use a
+[613.36] signal and we can create our own custom
+[616.08] signals and if you've ever gone to your
+[617.80] your node tab over here you'll notice if
+[620.28] you click on a node you'll have all
+[622.60] these pre-built signals over here now
+[626.12] you can create your own you can do that
+[627.76] in your script so let's create a new
+[630.12] signal within our weapon script and you
+[634.92] you place those signals after your class
+[636.88] name before your your variables and
+[639.28] we'll call this signal
+[641.40] weapon fired usually when naming signals
+[646.56] you do a past tense um like you've
+[649.44] you've done something something has
+[650.80] happened so the weapon has fired right
+[653.52] that's our our signal now we've created
+[655.64] the signal that's it the signal is ready
+[658.40] to go now we have to emit that signal
+[662.16] and to do that we go to wherever we want
+[665.44] to emit that and we want to emit that
+[667.60] signal when we attack right so we'll go
+[670.40] to our attack function we'll grab our
+[673.16] weapon fired and then we add our Emit
+[677.84] and that fires that signal so now that
+[680.20] we have that signal we need a way to
+[682.88] listen to it and we're going to connect
+[684.88] it actually if we go back to our our
+[687.12] recoil now back in our recoil which is a
+[690.20] a parent it's higher in the hierarchy to
+[693.68] our our weapon node it's very easy to
+[696.76] add a reference to our weapon node
+[698.96] within our recoil script so let's do
+[702.48] that we'll add another export
+[705.16] variable and we'll call this weapon and
+[708.52] our our weapon script is using the
+[710.48] weapon controller class so we'll set
+[714.16] that as the type and and that's it an
+[717.12] export uh variable is a great way to
+[719.64] grab a node that's a child of the the
+[722.28] script the node that you're working in
+[724.00] now that we have that we can go to our
+[725.92] recoil node find our weapon variable and
+[729.40] assign this puppy to our weapon node and
+[732.68] now we have a reference and now that we
+[734.56] have that reference we can connect to
+[737.60] that signal in the weapon script when I
+[740.00] say connect it means whenever that
+[742.08] signal fires we're going to tell it to
+[745.16] run a function within the script so we
+[747.36] can do that by getting that reference to
+[749.84] our
+[750.80] weapon looking for the weapon fired
+[754.08] signal that we created and we're going
+[756.28] to use the connect function and then we
+[759.24] connect that signal to our add recoil
+[764.28] callable now notice that I I don't have
+[767.92] the
+[768.84] parentheses I'm I'm not adding this is
+[771.28] not the function I'm just adding that
+[773.16] reference to the callable to the
+[775.52] function and that's it that's the line
+[777.48] that we need now you can
+[779.72] uh this is
+[780.84] beyond this tutorial but you can pass
+[785.08] variables from a signal into the
+[788.12] function that you're calling which is a
+[790.12] cool thing but we won't get into that
+[792.00] today and we we've connected it uh
+[794.48] that's it we're we're ready to test this
+[797.52] so let's uh make sure you you set some
+[800.88] values because if you if everything's
+[802.52] zero nothing's nothing's going to happen
+[805.04] so let's uh let's save everything we'll
+[807.68] go to our FPS controller scene and let's
+[811.68] add some values
+[813.76] um what let's make it just super
+[816.56] pronounced we'll add one to our X We'll
+[820.16] add .5 to the Y to the Z we'll keep it
+[823.28] the same snap amount we set that to
+[825.88] eight and speed we'll set to four and
+[829.40] that should do it now when we test what
+[832.16] should happen is we'll fire the gun and
+[834.68] the camera is is supposed to move that's
+[836.92] what's going to happen let's actually
+[839.12] run it within this
+[841.12] um new scene that I I set up it's a
+[844.16] little bit it's a little nicer I like it
+[846.56] a little bit better uh 26 all right now
+[850.76] let's test okay we've got our
+[853.96] gun now when I
+[856.36] fire we've got a recoil you notice that
+[859.72] it's it's quite
+[862.52] uh quite random where it's going now
+[866.48] that is the the target rotation that we
+[868.68] set up now we can adjust that so we can
+[870.48] get exactly the The Recoil that we want
+[873.80] if I keep pressing you'll see that it
+[875.24] just it goes Haywire it's also adding to
+[879.00] the rotation that it's currently at so
+[880.72] let's let's bounce out of that and let's
+[882.96] let's adjust this script a little bit go
+[886.32] back to our recoil script okay so here
+[890.36] here's what's uh managing all of that
+[893.08] now you'll notice that we got some some
+[896.32] vertical uh up and down recoil that we
+[899.24] we didn't really need so if you go into
+[903.24] the FPS controller let's let's see
+[906.20] what's actually rotating what right so
+[908.76] our our X rotation is the up and down
+[912.16] and we are are doing a negative value
+[914.44] it's a positive value so we're actually
+[916.08] like going up and down we don't want to
+[917.92] go up and down we just want it to go up
+[920.60] so let's go back to that and let's
+[925.20] just set a uh let's just set this to our
+[928.12] X right it's just going
+[931.40] to take whatever we set for our X and
+[935.08] that's going to be the The Recoil every
+[936.76] time now our y amount if we go back here
+[940.04] is going to be this like left and right
+[942.92] movement and uh that's not too bad it's
+[945.88] probably just it's too strong like we
+[947.44] want a little bit left to right and then
+[949.96] our Z if we go back to our thing is this
+[954.28] is that movement and honestly I don't I
+[957.56] don't even know if we really want that
+[959.68] so let's uh let's just set that to zero
+[962.68] which we did which is good so let's
+[965.20] let's make this smaller let's do
+[968.04] a05 and then for the X well we've we've
+[972.44] gotten rid of the negative so let's
+[974.68] let's just test out when we just set it
+[977.80] to one
+[980.36] right okay that's a little bit more of
+[983.04] the the motion we're looking for it's
+[985.28] just
+[987.16] uh it's too much way too much so let's
+[990.72] adjust uh the magic of procedural right
+[993.72] you can adjust this however you want you
+[995.92] can add any value in there and you don't
+[998.52] have to sit there and animate or or
+[1000.92] adjust an animation over and over and
+[1002.84] over again all the time all right let's
+[1005.16] set that to 0.15 and let's test that
+[1009.68] out yeah that's that's a little bit
+[1012.00] better I like that and you can set that
+[1015.20] to however strong you want you can
+[1018.00] adjust it so it's really a big uh recoil
+[1022.64] you can make it recoil left and right a
+[1024.16] lot more I know it looks a little bit
+[1026.40] ugly that the gun's not doing anything
+[1029.52] when we shoot and we'll we'll adjust
+[1031.40] that in the next video and in fact uh
+[1034.72] we're going to use the same technique
+[1036.28] because it works it works just as well
+[1039.20] all right guys if this tutorial was
+[1040.68] helpful consider it a like And subscribe
+[1042.68] to the channel as we're going to be
+[1043.84] covering a lot more thanks to all of my
+[1046.68] patrons who keep this series going you
+[1048.92] to can get access to the project source
+[1051.00] files by joining my patreon you can
+[1053.64] download everything there and you'll
+[1055.28] also get early access to my videos and
+[1057.44] sneak peeks at Future tutorials thanks
+[1060.20] for watching and as always keep creating
+[1064.48] [Music]

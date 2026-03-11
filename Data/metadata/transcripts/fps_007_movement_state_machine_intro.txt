@@ -1,0 +1,225 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.80] video we're creating our state machine
+[9.60] and state scripts and testing our idle
+[12.16] to walking State transition the basic
+[14.68] FPS controller project from episode 1 is
+[17.00] available for free on GitHub and if you
+[18.84] would like to use the written version of
+[20.52] this tutorial or download all of the
+[22.44] source files you can get access by
+[24.56] joining my patreon let's dive
+[28.00] in there are different ways to create a
+[30.52] finite State machine when making a game
+[32.64] and in this example we are going to be
+[34.36] using a node system why that's best
+[37.44] answered by what a state machine
+[39.40] actually is so far all of our player
+[41.72] code logic is sitting in our player
+[43.44] script which isn't terrible so far but
+[46.12] we've barely scratched the surface and
+[48.56] what we want our controller to do enter
+[51.08] State machines a state machine is a way
+[53.72] to organize really categorize your
+[56.12] gameplay logic in this tutorial we are
+[58.68] creating two states one for when the
+[60.72] player is idle and another for when they
+[62.96] are walking we categorize our movement
+[65.52] logic into two separate scripts called
+[68.12] States and a main State machine script
+[70.68] then handles the logic of what state the
+[72.76] player is currently in and how to
+[75.08] transition into another state the
+[77.48] benefit is that the core logic of moving
+[79.48] between states is handled by one generic
+[81.72] script all we need then are individual
+[83.92] State scripts that detail what to do
+[86.48] when we enter or exit a state and during
+[89.16] each frame our main logic will look like
+[92.08] this a group of basic nodes a state
+[94.88] machine parent that will handle
+[96.28] transitioning between its children nodes
+[98.48] or our states naming conventions do
+[101.48] exist and generally you will name your
+[103.28] state machine like player State machine
+[106.08] and then the children will be named with
+[107.64] their unique State plus player
+[110.39] [Music]
+[111.68] State the first script we'll need is a
+[114.28] generic State script this will outline
+[117.04] what every unique state will need we'll
+[119.64] also also set a class name so any
+[121.48] further State like idle or walking we'll
+[123.96] use our state script as a base we then
+[126.68] need to create our own signal that we'll
+[128.36] use to communicate between our state
+[130.08] machine script and our state scripts
+[132.64] then four generic functions to handle
+[135.00] different actions we want when we
+[136.84] transition to a state enter exit update
+[141.20] which is our process function or every
+[143.36] frame and physics update or our physics
+[146.56] process these are just placeholders to
+[148.76] set the default functions for every
+[150.44] state we create in the future and they
+[152.48] can be empty with our generic State
+[154.72] script complete we can create our state
+[157.04] machine
+[158.22] [Music]
+[159.64] logic we'll need to create a new script
+[162.16] called stat machine. GD this will
+[164.72] actually be attached to our parent State
+[166.96] machine node over here the main purpose
+[169.16] of this script is to determine which
+[170.88] states are loaded I.E what children
+[173.08] nodes exists what the current state is
+[175.60] and then call on the four functions we
+[177.36] created in our state script whenever a
+[179.92] new state is loaded first we create a
+[182.76] new class for our state machine and two
+[185.52] variables an export variable to set our
+[187.88] initial State and states which will be a
+[190.36] dictionary variable that will hold any
+[192.40] state that is a child of our state
+[194.48] machine for example we have idle and
+[196.88] walking then our state variable will
+[198.92] have a reference to idle and walking
+[201.76] next in our ready function we cycle
+[203.84] through the child nodes check if that
+[205.96] child is in our state class in other
+[208.28] words if it has a state script that
+[209.76] attached if true we add our child state
+[212.80] to our states dictionary we can also add
+[215.40] a warning if we find a node that is in a
+[217.48] state then we enter the current state we
+[220.04] set in our export variable our process
+[222.72] functions are pretty simple they just
+[224.16] call on the parallel functions we
+[225.96] created in our state script and whatever
+[228.36] our current state is the core logic is
+[231.16] in our onch child transition function in
+[234.00] it we get a state name being passed as a
+[236.32] parameter set a new state variable to
+[238.92] the state that matches in our dictionary
+[241.20] of the states we compiled in our ready
+[243.08] function if we find the state in our
+[245.44] dictionary which we should unless we
+[247.64] mess up a name somewhere we then check
+[249.96] if it isn't already the state that we're
+[251.52] in currently if it is a different state
+[253.80] we call our exit function on our current
+[256.12] state call the enter function on our new
+[258.56] state then set our current state to our
+[261.44] new state this process ensures a couple
+[263.88] things we can control what happens
+[265.56] whenever we enter and exit a state and
+[268.04] we are never in more than one state at a
+[270.04] time at least in this particular State
+[272.08] machine finally we add this line in our
+[274.40] ready function so that we connect the
+[276.28] signal we created in our state script to
+[278.88] our onch child transition function these
+[281.92] two scripts State machine and state
+[284.44] handle the majority of the logic of
+[286.28] moving between States now we can be more
+[288.76] creative in the how and the
+[292.60] when now that we're thinking about our
+[294.68] states it's important to plan how the
+[296.40] states interact because it will
+[298.20] determine how we C oriz them in our
+[300.64] state machine or if they're going to
+[302.40] need their own separate State machine
+[304.32] for now we're sticking to a one state
+[306.48] machine and we're wanting to move
+[308.24] between idle and walking we're going to
+[310.32] determine which state we are in by our
+[312.44] velocity basically if our velocity is
+[314.88] zero then we're idle if it's not zero
+[317.88] then we're walking with our Core State
+[319.80] machine logic in place let's create a
+[321.44] new script for our idle player State
+[323.68] node the script will extend our state
+[325.88] class and we'll give it its own class
+[327.92] name we're testing whether our has any
+[330.12] velocity and we'll want to check that
+[331.72] every frame so we'll use the update
+[333.88] function that we created earlier now we
+[336.08] need a reference to our player scene and
+[338.08] script and there are a couple ways that
+[340.08] we can go about it you can create an
+[342.24] export variable within your state script
+[344.60] and select a reference in the editor but
+[346.40] you'll have to do that for every state
+[348.12] which is kind of a pain or like we did
+[350.80] in our last debug episode at a global
+[353.96] variable reference to our player so we
+[356.08] can just call it from anywhere back in
+[358.12] my Global scripts I'll just add a player
+[360.24] variable then in my ready function of my
+[362.72] player controller script I'll set
+[364.72] global. player to self so when the game
+[367.84] loads it will set my Global variable to
+[369.84] my player controller and I can reference
+[371.56] it from anywhere back in my idle player
+[374.24] State script we can then check if
+[376.36] global. player. velocity. length is
+[380.00] greater than zero and if it is we emit
+[382.96] our transition signal with our walking
+[385.20] player State as our parameter this will
+[387.48] call on the transition function we
+[389.04] created in our state machine script exit
+[392.08] our idle State and enter our walking
+[394.60] State the beauty is that this one line
+[396.72] is the only thing that needs to be
+[398.16] called to handle that logic we can
+[399.92] decide how and when we call it but don't
+[402.08] need to worry about resetting booleans
+[403.80] or a bunch of if statements
+[405.60] unfortunately we don't have a walking
+[407.48] State script yet so let's create one for
+[410.00] the other child node the same process
+[412.04] applies create a class name which is the
+[414.20] same as our node name extend State then
+[417.20] an update function where we'll create a
+[419.12] w to return back to our idle state if
+[422.20] our velocity length equals zero then
+[424.68] transition to idle player State we can
+[427.24] now also set our default State and our
+[429.40] state machine to
+[433.08] idle with our states and state machine
+[435.60] ready we should be moving between our
+[437.12] states when we run our scene to check
+[439.56] that for now since we aren't altering
+[441.44] any movement speed or animations yet
+[443.80] let's use our Global debug script from
+[446.12] our debug episode you can check that out
+[448.40] in the description to show our current
+[450.56] state in the debug panel in our state
+[453.08] machine We'll add this line here to add
+[455.48] the current state property to the debug
+[457.56] panel and check our current state when
+[460.44] you run your scene you should now see
+[462.40] the current state change when you move
+[464.48] and stop this of course is just a basic
+[467.56] setup and we'll need to better Define
+[469.56] what walking is because right now when
+[471.68] we jump it thinks we're walking so in
+[473.44] the next episode we're going to nail
+[474.88] down our walking State and add some
+[476.92] basic animations before adding more
+[479.36] States all right guys if this tutorial
+[481.40] was helpful consider it a like And
+[483.20] subscribe to the channel as we're going
+[484.52] to be covering a lot more thanks to all
+[487.48] of my patrons who keep this series going
+[489.68] you too can get access to the written
+[491.68] tutorials and the project source files
+[494.04] by joining my patreon you can download
+[496.28] everything there and you'll also get
+[497.88] early access to my videos and sneak
+[500.00] peeks at Future tutorials thanks for
+[502.28] watching and as always keep
+[506.89] [Music]
+[508.24] creating

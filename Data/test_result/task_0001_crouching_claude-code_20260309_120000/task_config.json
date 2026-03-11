@@ -1,0 +1,14 @@
+{
+  "task_id": "task_0001",
+  "task_name": "crouching",
+  "tutorial_id": "fps_002_crouching",
+  "task_source_type": "bootstrap",
+  "instruction": "Extend the project's basic first-person controller with a full crouch system so the player can intentionally lower their profile to move under low cover without breaking movement. The current project already has a working FPS controller and a test environment, but the player still only moves at full height. Update the controller and scene setup so crouching becomes a real player state with its own input, reduced collider or body height, lower movement profile, and the expected movement constraints needed to fit under short obstacles in the tutorial level.",
+  "difficulty": "easy",
+  "skill_category": "gameplay_logic",
+  "editor_type": "script_editor",
+  "requires_multimodal": false,
+  "files_to_edit": [],
+  "start_source_folder": "FPS002_Crouching",
+  "solution_source_folder": "FPS002_Crouching"
+}

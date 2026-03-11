@@ -1,0 +1,215 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[8.08] video we're adding a sliding mechanic
+[10.00] for when we Crouch while
+[12.00] sprinting the basic FPS controller
+[14.52] project from episode 1 is available for
+[16.52] free on GitHub and if you would like to
+[18.24] use the written version of this tutorial
+[20.32] or download all of the source files you
+[22.56] can get access by joining my patreon
+[24.76] let's dive
+[26.68] in to create our new sliding mechanic
+[29.24] we're going to add another state to our
+[31.00] movement State machine this new sliding
+[33.48] state will occur when the player
+[34.80] crouches while in the sprinting State
+[37.08] the player will Crouch while reducing
+[38.72] speed from a Sprint to a Crouch then
+[41.08] transition to the crouching estate after
+[43.32] creating our new State Child node and
+[45.60] attaching a new sliding player State
+[47.80] script let's take a look at our script
+[50.32] we set our new class name and extend our
+[52.76] player movement State script we've set
+[54.60] up in an earlier episode we'll then have
+[56.88] our four export variables like we do in
+[59.00] other states speed acceleration
+[62.32] deceleration and tilt amount which will
+[64.92] be our base camera tilt and our sliding
+[67.88] animation speed multiplier then we're
+[69.96] going to grab a reference to our shape
+[71.76] cast 3D node we're making a change to
+[74.40] our state machine setup by adding a
+[76.48] parameter to our inter function so we
+[78.96] can check what state we're actually
+[80.68] coming from this will be important in a
+[83.12] minute to do this we add the parameter
+[85.32] to each state we've created then in our
+[87.68] state machine we pass our current state
+[90.00] variable when we run our enter function
+[92.00] on our new state with our new parameters
+[94.44] set we'll continue our sliding State
+[96.68] script when we enter our sliding State
+[98.92] we'll run the set tilt function and pass
+[101.60] the current y rotation of our player
+[104.28] using the class variable we created in a
+[106.92] previous episode for this we'll need to
+[108.88] head to our player script to create a
+[110.60] new variable in the player script we add
+[112.96] a current rotation variable then in our
+[115.36] update camera function we set that
+[117.56] variable to equal the rotation of our
+[119.36] input
+[120.40] we could use the rotation input directly
+[122.80] but we're resetting it each frame so it
+[125.20] ends up just equaling zero now in our
+[127.60] sliding State script we can use that new
+[129.48] variable to get the current y rotation
+[131.36] of our player this function will tilt
+[133.44] the camera in the horizontal direction
+[135.72] that the player is going so sliding
+[137.72] while turning left will tilt the camera
+[139.52] to the left and vice versa and the
+[141.80] amount of tilt will depend on the amount
+[143.92] of rotation let's check that tilt
+[146.08] function below we pass our player
+[147.84] rotation in a parameter then create a
+[150.36] new variable tilt set to zero then we
+[153.36] set the zv value of our Vector to equal
+[155.64] our base tilt amount times our player
+[158.24] rotation clamps between .1 and 0.1 we
+[163.40] can also check if tilt equals z and add
+[166.40] some minimal tilt as a fallback then
+[169.04] we'll adjust key frames within our
+[170.72] sliding animation using our tilt value
+[172.88] we don't have an animation yet so we'll
+[174.96] come back to these two lines a little
+[176.52] bit later back in our inner function
+[178.84] after we set our tilt we'll also adjust
+[181.08] the key frame for our speed and our
+[183.24] animation because we'll want to start
+[185.20] our speed at our current speed then slow
+[188.08] down from there then we force a reset of
+[190.80] the animation speed scale to one just as
+[193.36] a precaution and we'll play our sliding
+[195.48] animation in our update function we run
+[197.84] our update gravity and velocity
+[199.64] functions you can also run your input
+[201.84] function if you want to be able to move
+[204.00] while you slide or for my example not
+[206.68] run it so once the player slides they're
+[209.00] locked in that direction and can look
+[211.28] around and aim the Finish function will
+[213.84] run once our animation is well finished
+[216.64] and will transition to the crouching
+[218.32] player state where we'll run our
+[220.28] uncrouch check as usual before we wrap
+[223.20] up the script let's create our
+[225.27] [Music]
+[226.76] animation first we create a new
+[228.84] animation in our animation player node
+[231.08] called sliding I've created nine
+[233.36] different tracks using the following
+[235.16] nodes and properties there isn't a super
+[237.84] great way to pass this information along
+[239.84] so I'm going to try to walk through each
+[241.64] track for our Collision shape 3D we're
+[244.56] adjusting our Collision Heights and
+[246.28] position like we do on our Crouch
+[248.20] animation the height has a key at 0
+[250.96] seconds with a value of 2 m and 1 second
+[253.72] with a value of 1.5 M the position goes
+[256.68] from a y value of 1 at 0 seconds to a
+[259.84] value of
+[261.04] 0.75 at 1 second then we shift our
+[264.24] camera controller down using position
+[266.72] and adjust its rotation for our sliding
+[268.92] tilt position keys at 0 and 1 seconds
+[272.24] going from y = 1.5 M to 1 M and our
+[276.96] rotation has keys at 0 0.5 3 and
+[281.76] 4.9 values can actually stay zero here
+[284.80] because we're going to be setting them
+[286.12] within our script our shape cast 3D node
+[288.40] will adjust its position at 0 and 1
+[290.80] second going from 1.5 M to 1 M then we
+[294.64] animate the speed value in our sliding
+[296.88] player State node We'll add a key frame
+[299.20] at 1 1 second and 5 seconds with values
+[302.08] of 6 and four but we're actually going
+[305.28] to reset that first value via script as
+[308.12] well then we add a method track to run
+[310.40] our finish function at the very end of
+[312.48] our animation finally We'll add some
+[314.72] juice by altering the feel the view for
+[316.88] our camera with keys at 0 0.3 and 4.3
+[321.72] going from 75 fov or whatever your
+[324.36] default is to 84 then back to the
+[327.40] default feel free to adjust to your
+[329.72] needs now back in our script we can
+[332.44] finish our track set key value functions
+[335.36] each time we need the track index the
+[337.44] key index and the value we want to set
+[340.16] to find the track index you can use the
+[342.60] track G path function and an index
+[345.80] number to print and check which track
+[348.08] goes with which index though it should
+[350.80] be the order you created your tracks
+[352.76] with zero being the first track the key
+[355.20] index should be left to right with the
+[357.56] first being zero for me my values ended
+[360.60] up being this and that's our sliding
+[362.96] State now we just need to adjust our
+[364.68] other states so we can transition
+[366.68] between
+[368.64] them we'll only transition to the
+[371.00] sliding state from the sprinting States
+[373.44] and then we'll transition out only to
+[375.84] the crouching State and our sprinting
+[377.92] State script will add this if check for
+[380.36] when we press our Crouch button and I'm
+[382.40] also adding a velocity check so that we
+[385.00] only slide if we have gained enough
+[387.00] speed then in our crouching state we're
+[389.88] making a couple changes the first change
+[392.48] is that we want our inter function to
+[394.40] behave differently if we're coming from
+[396.60] the sliding State our normal enter
+[399.08] causes us to crouch down but since we're
+[401.20] already crouching in our slide we don't
+[403.32] want to run our crouching animation from
+[404.92] the start rather we want to prime it to
+[407.48] play at the end later on so we use our
+[410.44] new previous state parameter to check if
+[412.96] the previous state is the slide state if
+[415.76] not then we play our crouching animation
+[417.40] as normal if it is we set our current
+[420.08] animation to crouch and use the seek
+[422.40] function to place our playback position
+[424.48] at the end of the animation next we need
+[426.96] to check if the player is still holding
+[428.88] the Crouch button through our sliding
+[431.04] State transition to do that we add a new
+[433.80] Boolean variable to hold the state of
+[436.16] our button in our update we keep our
+[438.24] regular transition check for when the
+[439.76] player releases the Crouch button while
+[441.80] in the crouching State then an else if
+[444.68] for when the player is not pressing the
+[446.40] Crouch button and our released variable
+[448.96] is still false if both checks pass then
+[452.48] we set released to true and run our
+[454.84] uncrouch function setting release to
+[457.16] True means we only run our uncrouch
+[459.12] function once and not every frame
+[461.72] finally in our exit function we reset
+[464.12] our released variable back to false you
+[466.84] should now have a functional slide
+[468.72] mechanic when you crouch while sprinting
+[471.00] with a tilt and feel the view effect all
+[474.00] right guys if this tutorial was helpful
+[475.76] consider it a like And subscribe to the
+[477.64] channnel as we're going to be covering a
+[479.08] lot more thanks to all of my patrons who
+[481.88] keep this series going you too can get
+[484.36] access to the written tutorials and the
+[486.64] project source files by joining my
+[488.60] patreon you can download everything
+[490.56] there and you'll also get early access
+[492.36] to my videos and sneak peeks at Future
+[494.68] tutorials thanks for watching and as
+[497.12] always keep
+[498.66] [Music]
+[502.84] creating

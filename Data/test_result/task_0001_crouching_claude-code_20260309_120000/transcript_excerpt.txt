@@ -1,0 +1,27 @@
+[0.12] welcome to the G engine firstperson
+[1.96] shooter project I'm building an FPS from
+[3.80] scratch in the G engine and today we're
+[6.80] adding crouching the goals for this
+[8.44] video are to add a new input for
+[10.28] crouching adjust our player size and
+[12.48] collision when we Crouch and fix some
+[15.12] common issues like bugging out when UNC
+[17.28] crouching adjusting movement speed and
+[19.32] giving the player the option to toggle
+[21.12] or hold the Crouch button We're working
+[23.36] directly from the last episode where we
+[25.56] created a basic FPS controller you can
+[28.00] grab those source files directly from my
+[30.00] GitHub and if you want the source files
+[32.12] for this episode please consider
+[34.20] becoming a GitHub sponsor to gain access
+[37.00] not only to the source files for
+[38.24] crouching but for everything we create
+[40.80] over the next
+[43.28] year to begin we're going to need two
+[45.64] platforms one that will allow our player
+[48.08] to crouch and another that will be too
+[50.16] low to crouch underneath I've set my
+[52.40] high platform to be 2 m above my floor
+[55.52] and my low platform to be 1.5 M from the
+[58.64] floor both plat platforms are using a

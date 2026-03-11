@@ -1,0 +1,174 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.76] video we're creating a debug panel that
+[9.88] we can toggle on and off and adding our
+[12.40] current frames per second in the future
+[14.60] we'll be able to add our own custom
+[16.32] properties the basic FPS controller
+[18.60] project from episode 1 is available for
+[20.60] free on GitHub and if you would like to
+[22.32] use the written version of this tutorial
+[24.44] or download all of the source files you
+[26.64] can get access by joining my patreon
+[28.84] let's Dive In
+[31.80] the node setup is fairly straightforward
+[34.44] first we have a panel container node as
+[36.80] a child node of our user interface node
+[40.16] I've named it debug panel this node will
+[43.20] act as the main container for our debug
+[45.40] information and importantly house both
+[48.00] our UI theme and our debug script I've
+[50.76] made two changes in the inspector tab
+[53.04] first set a minimum width of 200 pixels
+[55.80] then set the position to be offset by 10
+[58.04] pixels from the top and left of the
+[60.12] screen our panel will be sitting in the
+[62.56] top left corner next we need a margin
+[65.24] container node as a child this node will
+[67.96] create padding within our container and
+[70.04] you don't need to make any changes for
+[71.68] this one next another child using a vbox
+[74.88] container node this node will lay out
+[77.12] any children nodes in a vertical column
+[79.44] on top of one another this node will
+[81.88] house label nodes which will be where we
+[84.24] place our debug text information in the
+[87.04] end your node setup should look like
+[89.04] this
+[90.52] [Music]
+[92.64] UI elements in the GTO engine use a
+[95.32] theme resource these themes allow you to
+[98.24] customize the visual properties of your
+[100.08] UI to create a theme for our debug panel
+[103.64] head back to our debug panel parent node
+[106.52] under theme you'll select new theme
+[109.24] which we want to save as a resource I've
+[111.68] put mine into a ui/ themes folder with
+[115.36] your theme selected make sure you have
+[117.40] the Theme tab open at the bottom this
+[119.48] shows various control node UI elements
+[122.32] and their current visual Theme by using
+[124.68] the ey dropper you can hover over the
+[126.52] different elements and select them to
+[128.20] edit them or you can add a type by using
+[131.08] the plus button on the right we're going
+[133.56] to adjust our margin container theme
+[135.88] First grab the eyedropper and select the
+[138.24] margin container you'll see some
+[140.48] properties you can edit on the right we
+[142.84] want the do C or constant tab where
+[145.72] you'll find our margin settings by
+[147.96] clicking the plus button these prop
+[149.80] properties will be added to our theme
+[151.24] options in the inspector here I've set
+[153.76] my margins to 10 pixels next we'll alter
+[156.96] our panel container so that it has a
+[158.88] slightly transparent background and
+[160.96] Border use the plus button on the right
+[163.32] to add a panel container type then click
+[166.08] the style box tab here and create a new
+[168.92] style box flat save this as well so we
+[171.84] can create a resource we can load later
+[173.64] on here we can alter our background
+[176.20] color add borders and create rounded
+[178.76] corners I'm using these settings
+[182.83] [Music]
+[184.44] here for this episode we're just
+[187.20] focusing on bringing our current frames
+[189.32] per second into our debug panel in the
+[191.76] next episode we'll explore how to add
+[193.60] our own properties from other scripts on
+[195.88] our debug panel node attach a new script
+[198.72] called debug this will hold our debug
+[201.44] logic and where we'll add new properties
+[203.52] in the future first We'll add a new
+[205.64] input map in project project settings
+[208.28] input map called debug I'm using the
+[211.44] till key as the input in our debug
+[214.20] script we want to be able to toggle our
+[216.04] panel with our new input key first we'll
+[218.68] set the panel to Invisible when we start
+[220.84] by setting visible to false in our ready
+[223.48] function then we'll use the input
+[225.88] function to check when we press our
+[227.64] debug input and when we do we want to
+[230.36] flip-flop our visible value and already
+[233.52] we can turn our panel off and
+[235.84] on the next goal is to create a function
+[238.48] that we can call whenever we we want to
+[240.28] add a new property to our debug panel
+[242.92] we'll call this function add debug
+[245.16] property with the parameters for our
+[247.00] property title and the value of our
+[249.24] property first we create a new variable
+[251.56] called property then every time we run
+[253.96] this function we'll create a new label
+[256.32] node within our property variable then
+[258.56] add the node as a child and our scene we
+[261.48] also need to add a reference to our
+[263.00] vertical box container where we'll add
+[265.48] new label nodes for our debug text
+[267.72] called property container a cool trick
+[270.16] you can do is to rightclick your node
+[272.24] and allow unique name then drag it into
+[275.00] your script using a unique name allows
+[278.00] you to just put a percentage sign in
+[280.00] front of the node name to reference it
+[282.28] then use this reference in our function
+[284.20] here change the name of our new label
+[286.40] node to match the title we give our
+[288.16] parameters then set our property text to
+[291.00] equal the name plus our value parameter
+[294.28] let's test our function by adding this
+[296.28] line here and running our scene when you
+[299.24] enable able your debug panel you should
+[301.04] see your test
+[302.52] property to add frames per second as a
+[305.28] debug property we'll need a new string
+[307.24] variable frames per second within our
+[310.04] process function we'll use this line to
+[312.16] set our frames per second to equal 1 /
+[315.32] the time between frames which should
+[317.52] give our approximate frames per second
+[320.08] the code in front says that we want to
+[321.72] show our float with two decimal places
+[324.36] at all times then we set our property
+[326.88] text to equal our property name Plus are
+[329.72] frames per second because this is a
+[331.88] string using plus appends the values so
+[334.92] that they just get added to the end of
+[336.72] the first string you could also use
+[339.32] engine G frames per second but this
+[341.84] literally only updates the value every
+[343.88] second additionally if you have vsync on
+[346.80] in your project settings your frames per
+[348.96] second will be capped at the refresh
+[350.84] rate of your monitor we'll change our
+[353.24] add debug property function parameters
+[355.32] to FPS for our title and frames per
+[358.44] second for our value
+[360.16] now you can run your test scene and you
+[362.00] should see your current frames per
+[363.76] second in your debug panel and be able
+[366.16] to toggle the panel off and on and one
+[369.28] other thing we can add quickly is a way
+[371.08] to not update our debug properties if
+[373.68] our panel is not being shown because
+[375.72] that's just a waste of resources simply
+[378.32] add an if statement that says if our
+[380.56] panel is visible then run our update
+[384.52] code all right guys if this tutorial was
+[386.96] helpful consider it a like And subscribe
+[388.96] to the channel as we're going to be
+[390.16] covering a lot more thanks to all of my
+[393.12] patrons who keep this series going you
+[395.28] too can get access to the written
+[397.04] tutorials and the project source files
+[399.44] by joining my patreon you can download
+[401.68] everything there and you'll also get
+[403.28] early access to my videos and sneak
+[405.32] Peaks at Future tutorials thanks for
+[407.68] watching and as always keep
+[414.64] creating

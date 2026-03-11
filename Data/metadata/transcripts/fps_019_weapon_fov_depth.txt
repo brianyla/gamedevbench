@@ -1,0 +1,194 @@
+[0.16] hey everyone I'm building an entire
+[1.72] firstperson shooter game from scratch in
+[3.80] the GTO engine and documenting the
+[5.68] progress with these tutorials in this
+[7.72] video we're separating our weapons field
+[9.52] of view from the rest of our rendering
+[11.24] scene and fixing issues of rendering
+[13.72] depth the basic FPS controller project
+[16.12] from episode 1 is available for free on
+[18.20] GitHub and if you would like to download
+[20.04] all of the source files you can get
+[22.00] access by joining my patreon let's dive
+[25.84] in the fov or feel the view for our
+[29.08] camera determines what the player can
+[31.12] see and ultimately defines the viewing
+[33.68] angle of the camera we already use this
+[36.28] feature to create a small effect when we
+[38.04] slide unfortunately this effect can have
+[40.76] unintended problems when having a weapon
+[42.84] that is so close to the player and fixed
+[45.36] the camera we end up with a distortion
+[47.88] that we don't want additionally our
+[50.04] weapon also gets clipped when the player
+[52.12] is too close to an object one solution
+[54.84] is to separate the weapon rendering to
+[56.44] another viewport and camera so that the
+[58.40] field of view for the weapon and or
+[60.24] player model is separate from the field
+[62.28] of view for the rest of the environment
+[64.36] doing this will also allow us to adjust
+[66.40] the environment or weapon fov without
+[68.56] affecting the other and also fixes any
+[71.12] clipping issues another way is to adjust
+[73.80] what is called the projection Matrix of
+[76.04] our weapon mesh using a custom Shader
+[78.88] we're going to cover
+[81.60] both first we need to add a viewport to
+[84.32] our player controller we use the sub
+[86.96] viewport container node and set the
+[89.12] anchor preset to full wct so that it
+[91.40] covers the entire screen then we add a
+[93.84] sub viewport node as a child which will
+[95.80] hold a camera 3D node our subview Port
+[98.68] also needs a few setting adjustments
+[100.80] first we set our background to
+[102.12] transparent because we're layering it on
+[104.24] top of the player camera and we're just
+[106.40] going to render our weapon in this
+[108.08] viewport we also have to disable handle
+[110.84] input next we need to size the viewport
+[113.76] you can do this manually or set the size
+[116.36] via script a script can be attached to
+[118.64] the sub viewport where we we set a
+[120.32] screen size variable to hold our Vector
+[122.52] 2 then in our ready function we set
+[125.24] screen size to equal get window. size
+[128.36] and then our size to equal our screen
+[130.32] size this will set our viewport to our
+[132.32] window size when we start to use two
+[135.04] different camera layers we need to
+[136.68] create two different 3D render names one
+[139.92] for our default or world and one for our
+[142.96] weapon you can do that by going to
+[145.16] project project settings General layer
+[148.36] names and then 3D r render now within
+[150.92] our render layers we can distinguish
+[152.88] between our world and our weapon let's
+[155.72] set up our weapon scene by creating a
+[157.48] new 3D scene it will contain a 3D node
+[160.40] as a parent and then a mesh instance 3D
+[162.64] node for our weapon mesh if you're using
+[165.04] the Crowbar mesh you'll likely have a
+[166.88] glb file which contains all of the mesh
+[169.44] information for our mesh instance node
+[171.88] we just want our mesh resource to get
+[174.44] that we double click on our crowbar glb
+[176.72] file and enter the import settings then
+[179.44] go to meshes and click on our mesh on
+[181.72] the left side within the import window
+[184.12] you can save individual parts of the
+[186.20] import to file and we want to save our
+[188.36] mesh as a mesh resource we set save to
+[191.56] file as enabled and save our mesh inside
+[193.60] our file system and click repport now we
+[196.72] can select our new mesh resource in our
+[198.96] mesh instance 3D node and with our mesh
+[201.60] within a visual instance 3D child we can
+[204.32] set which render layers we want the
+[206.12] weapon to render on in our case we don't
+[209.12] want it to render on our world layer and
+[211.24] we do want it to render on our weapon
+[213.24] layer then within our two cameras we can
+[215.72] call their respective rendering layers
+[218.32] for a player character we don't want to
+[220.12] render our weapon so we call our weapon
+[222.24] layer then in our weapon camera we call
+[224.56] our world layer we've now separated the
+[226.84] rendering of our world and weapon model
+[229.80] meaning we can set two different field
+[231.44] of views and our weapon will always be
+[233.72] rendered last finally we need to match
+[236.36] the weapon camera transform to our
+[238.20] player camera transform we can easily do
+[240.68] that by attaching another script to our
+[242.28] weapon camera where we get our main
+[244.36] camera node and set the global transform
+[246.88] of our weapon camera to the global
+[248.72] transform of our player camera there are
+[251.72] however some downsides to this method
+[254.12] first Dynamic lighting needs to be set
+[256.12] for all layers and there is a
+[258.28] performance cost to do this because
+[259.84] there's an additional render pass and
+[261.76] for myself I've not gotten Dynamic
+[263.72] Shadows to work all that well with the
+[265.52] weapon that's why there's another
+[267.24] solution we can use that doesn't require
+[269.64] a whole additional
+[272.56] viewport rather than create a whole new
+[275.12] viewport and render pass we can create a
+[277.36] custom fov and fix our depth clipping
+[280.04] issues by using a custom Shader on our
+[282.76] mesh with the viewport we just created
+[285.04] disabled and our weapon mesh rendering
+[287.08] again on our world render layer we need
+[289.72] to convert our mesh material to a Shader
+[292.60] which we can save as a new resource our
+[295.08] new Shader gives us access to the Shader
+[297.20] code where we can make adjustments to
+[299.16] the render rendering of our mesh we're
+[300.60] going to use our vertex function to
+[302.64] adjust how the vertices are rendered
+[305.04] based on an fov variable that we set
+[308.16] this will separate the fov of our weapon
+[310.80] from the fov of our player camera with
+[313.48] our Shader open we add a new uniform
+[316.08] variable fov set to 77 or whatever
+[319.56] preference your fov is then within the
+[322.24] vertex function we create a new float
+[324.92] called scale that recalculates our
+[327.32] projection with this function using our
+[329.72] set fov variable we then set our
+[332.40] projection Matrix values as follows with
+[335.00] these two lines and that may sound like
+[337.52] magic to some of you and it count it
+[339.32] does to me and frankly that's fine we
+[341.64] don't all need to know 3D rendering
+[343.64] mathematics to make a game right just
+[345.96] know that you're altering how the mesh
+[347.64] is rendered within your camera view
+[349.92] those lines alone will separate your
+[351.68] field of view these final two lines will
+[353.96] minimize any clipping with the
+[355.68] environment so that your weapon mesh
+[357.12] does not go through walls you should now
+[359.60] have a separate fov weapon model that
+[361.80] also is affected by Dynamic lighting and
+[364.00] shadows one issue I did have was with
+[366.88] Dynamic spotlights the shadow appeared
+[369.56] reversed and in full honesty I wasn't
+[371.92] able to figure out a way around this so
+[374.16] if youve spot something that could be
+[375.52] fixed let me know in the comments my
+[377.84] bandid solution was to duplicate the
+[380.16] mesh instance 3D node and weapon mesh in
+[382.64] my weapon scene the second node would
+[385.40] act as a dummy Shadow mesh my custom
+[387.96] Shader mesh had Shadows turned off and
+[390.20] my dummy mesh had cast Shadow to Shadows
+[392.68] only this gave me an unaltered dep
+[395.36] projection for my mesh and accurate
+[397.76] Dynamic Shadows while also keeping my
+[400.04] custom fov and depth Shader both
+[402.44] Solutions have some caveats and even
+[404.28] Gotto engine founder Juan lenki replied
+[406.56] to my Twitter post saying they should
+[408.40] include some default option to separate
+[410.44] fov or depth for FPS games going forward
+[414.44] I'm sticking with the Shader option and
+[416.56] we'll incorporate that into my weapon
+[418.68] system setup
+[419.92] all right guys if this tutorial was
+[421.40] helpful consider it a like And subscribe
+[423.40] to the channel as we're going to be
+[424.56] covering a lot more thanks to all of my
+[427.44] patrons who keep the series going you
+[429.56] too can get access to the project source
+[431.76] files by joining my patreon you can
+[434.36] download everything there and you'll
+[436.00] also get early access to my videos and
+[438.16] sneak peeks at Future tutorials thanks
+[440.92] for watching and as always keep
+[444.71] [Music]
+[448.32] creating

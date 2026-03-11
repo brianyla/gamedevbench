@@ -1,0 +1,18 @@
+{
+  "source_type": "youtube_tutorial",
+  "tutorial_title": "Crouching",
+  "task_source_type": "bootstrap",
+  "youtube_urls": [
+    "https://www.youtube.com/watch?v=qzncNwdSIkA&list=PLEHvj4yeNfeF6s-UVs5Zx5TfNYmeCiYwf&index=2"
+  ],
+  "video_ids": [
+    "qzncNwdSIkA"
+  ],
+  "transcript_paths": [
+    "/Users/sejoonchang/Desktop/Data/metadata/transcripts/fps_002_crouching.txt"
+  ],
+  "start_project_path": "/Users/sejoonchang/Desktop/Data/FPS002_Crouching",
+  "solution_project_path": "/Users/sejoonchang/Desktop/Data/FPS002_Crouching",
+  "derived_from": "GameDevBench-style tutorial-to-task distillation without local validation.",
+  "notes": "Bootstrap tutorial with no predecessor snapshot; start and solution both point to the tutorial snapshot."
+}

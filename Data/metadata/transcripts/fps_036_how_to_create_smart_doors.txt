@@ -1,0 +1,80 @@
+[0.08] in this episode of myato FPS tutorial
+[2.52] series we're adjusting our door so that
+[4.68] it always opens away from the player
+[7.44] these tutorials are part of a long
+[9.28] series of FPS tutorials for the G engine
+[11.88] the link to the door component episode
+[13.72] is in the description and as always you
+[15.68] can grab the source files for this and
+[17.92] all of my gat engine tutorials on my
+[20.32] patreon opening a door and having it hit
+[23.00] you in the face is going to suck for the
+[25.00] player so to make the door always open
+[27.48] away from the player we need to check
+[29.56] what side of the door the player is on
+[31.48] when they open it first we need to know
+[33.16] the facing direction of the door in the
+[35.08] form of a vector 3 the direction to the
+[37.52] player's Global position from the door's
+[39.68] Global position then compare those two
+[42.04] vectors with a DOT product a DOT product
+[44.56] gets the relation of two vectors in the
+[46.60] form of a float between 1 and - 1 if
+[49.44] they're perpendicular the dotproduct is
+[51.68] zero if they are in the same direction
+[53.76] it equals 1 if opposite directions it
+[56.28] equals 1 with the dot product we can
+[58.72] check if the direction to the Player
+[60.52] points in the same direction or opposite
+[62.80] direction as our forward Direction and
+[65.04] therefore which side of the door the
+[66.60] player is on and our door component
+[68.60] script add a new enumeration forward
+[71.04] Direction an export variable for that
+[73.32] direction and two variables to be
+[75.40] assigned later rotation adjustment and
+[77.64] door direction for our forward Direction
+[79.88] we'll set this manually since the
+[81.56] orientation of my door versus your door
+[84.52] may not be the same my door for example
+[86.84] is aligned to the xaxis making its
+[89.00] forward vector equal to what is called
+[91.00] the global transform X basis your door
+[93.96] may be aligned to the z-axis or if
+[95.92] you're making a trap door the y axis so
+[98.64] we'll manually set that axis and use the
+[100.88] appropriate basis in our script add a
+[103.32] new function check door that uses a
+[105.52] match case to check our forward
+[107.32] Direction then get the global position
+[109.52] of the door parent in this case the
+[111.32] animatable body 3D node the global
+[113.76] position of the player note that I have
+[116.00] my player set as a reference in my
+[118.04] Global script autoload then the
+[120.12] direction from the door position to the
+[122.16] player and the dotproduct of the
+[124.12] direction to the player and the door
+[125.76] direction we set earlier in the function
+[128.12] this gives us a value between -1 and 1
+[130.92] depending on where the player is in
+[132.96] relation to the door next check if the
+[135.20] dotproduct is less than zero if it is
+[137.76] then flip the rotation of the door by
+[139.56] setting the rotation adjustment variable
+[141.60] to -1 if greater than Zer the rotation
+[144.96] adjustment equals 1 then we run our Open
+[147.76] Door function in the open door function
+[149.60] we incorporate our rotation adjustment
+[151.56] modifier to our rotation and before you
+[153.92] test be sure to change the cable in the
+[156.44] connect parent function to check door
+[158.40] instead of Open Door since that function
+[160.56] is now the first to run you should now
+[162.36] be able to open your door away from you
+[164.44] no matter what side of it you're on as
+[166.76] always you can get these source files
+[168.24] for everything that you saw in this
+[169.60] video on my patreon I'll catch you in
+[171.64] the next one and as always keep creating
+[174.32] [Music]

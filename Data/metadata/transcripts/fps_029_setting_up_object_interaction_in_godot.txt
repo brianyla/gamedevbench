@@ -1,0 +1,291 @@
+[0.00] [Music]
+[3.36] hey everyone welcome to another FPS
+[5.36] tutorial in the GTO engine today is the
+[7.64] beginning of our interaction setup and
+[10.12] when I say interactions I mean things
+[11.84] that the player can interact with that
+[13.64] would be maybe a door or a pickup like
+[16.68] health or ammo as always the source
+[18.80] files for the project are available on
+[20.32] my patreon so you can grab those there
+[22.80] otherwise let's get started our goal for
+[24.48] this video is to set up a raycast from
+[26.56] the center of our camera that's going to
+[28.72] tell us what it hits out in the world
+[30.92] environment now if you don't know what a
+[32.32] raycast is it's just a line in 3D space
+[35.92] it has a beginning point and an end
+[39.16] point and through code we can check
+[41.88] along that Vector to see if we hit
+[44.60] anything within the Collision layer that
+[46.72] we set our first step is to step into
+[48.60] our FPS controller script that's where
+[50.20] we're housing our camera and because
+[51.96] we're going to be interacting in pretty
+[53.56] much every state that we have we're
+[56.44] going to put this in our our main
+[57.76] controller script and then we need to
+[59.40] start with two different variables one's
+[61.88] going to be an export variable and this
+[64.00] variable will be our interact distance
+[67.48] this will be the distance that the ray
+[69.08] cast can go and therefore the max
+[71.36] distance that we can interact with
+[72.92] anything and then we need an empty
+[75.20] variable that's going to hold the result
+[78.44] of that raycast but down at the bottom
+[80.48] we're going to add two functions to our
+[82.76] script the first is going to be an
+[85.24] interact function and we're going to run
+[87.52] this whenever we press our interact
+[89.44] button which we're going to add in a
+[91.12] second for now we'll just add our pass
+[93.32] to that and then another function that
+[96.20] is going to be run on every frame that
+[99.16] is going to cast
+[104.32] array now you can set up a raycast node
+[108.80] up here in your scene that works too I
+[111.68] like to to do it in code because I know
+[113.88] where it's at you can control it within
+[115.36] the script and then you can also adjust
+[117.80] a little bit more easily where it's
+[119.52] coming from and where it's going to end
+[120.88] up now we've done this before when we
+[122.76] did our our weapon our shooting so I'll
+[125.24] walk through that process of creating
+[126.80] that raycast again in script to get
+[129.48] started you need a reference to the
+[132.40] camera because that's where we're going
+[134.16] to be starting our Ray cast and casting
+[138.36] from then you need to get the space
+[141.08] state so we set a a variable for that
+[144.00] space States and set it to our camera
+[148.40] get world 3D so get the the 3D world
+[151.96] that that camera is a part of and then
+[154.96] direct space state next we need to get
+[158.84] the center of our
+[160.76] screen and we can do that by getting the
+[164.16] size of our viewport in fact let me draw
+[167.16] this out real quick you can do that by
+[169.48] getting the size of our viewport say
+[173.24] that is our viewport right there and
+[176.44] let's say our width is 100 and our
+[178.32] height is 50 and we we want that spot
+[180.60] right in the middle well all we need to
+[181.88] do is divide that by two divide this by
+[185.04] two and that's going to give us right in
+[187.88] the middle our Center spot so we get the
+[190.08] viewport with our get viewport function
+[193.84] we get the size property of that
+[195.60] viewport and then we divide that by two
+[198.00] that's our screen center then we need
+[199.96] the origin point of our aray cast we get
+[203.12] another
+[204.36] variable we get a reference to our
+[206.56] camera we
+[208.08] project Ray or origin and we do that
+[211.56] from the screen center from the center
+[213.56] of our
+[215.68] screen and we're doing the screen center
+[218.08] because that's where our our reticle is
+[220.00] that's where essentially the mouse is
+[222.04] for the player now that we have our
+[224.64] origin point we need the end point of
+[226.56] that array so we set another variable
+[229.12] called end and we equal that to
+[232.88] origin plus we're going to get the the
+[236.32] normal from our camera and then we're
+[238.32] going to add our act distance to it so
+[240.96] to do that we do our camera project Ray
+[245.48] normal from our screen center and then
+[249.24] we multiply that by our
+[251.68] interact distance
+[253.88] now if you're thinking about our
+[257.28] beginning point and our end point we
+[260.08] need to get a a vector right and that's
+[262.08] what that normal is so if our camera is
+[265.32] going out like that we get our normal to
+[267.88] that point so wherever we're looking
+[269.88] with our camera that's going to be where
+[271.72] that that raycast ends with our origin
+[274.00] and endpoint we have the information
+[276.20] that we need to actually do our query
+[279.08] our raycast to do that we set another
+[281.52] variable we call it query and we use the
+[284.88] physics Ray query parameters 3D we're
+[288.48] going to create one of those and it
+[291.64] needs a front point and a twoo and our
+[294.28] from is our origin and our two point is
+[297.24] our
+[298.04] end we also want to make sure that
+[301.52] within our query within our our raycast
+[304.00] that we're going to make uh bodies
+[306.12] collidable and we do that by uh setting
+[308.76] collide with
+[310.04] bodies to True our raycast is now set up
+[313.28] and whenever we do our raycast we're
+[315.16] going to get a result and we need to get
+[317.24] that result and put it into another
+[319.40] variable there's definitely a lot of
+[321.44] variables involved and honestly what I
+[324.08] would do um probably in a an end goal is
+[327.80] take this whole thing and create a
+[329.32] function
+[330.28] within a global script so you can just
+[332.24] call it whenever you want not have to
+[333.60] write this out all the time but that's
+[335.96] uh beyond what we're doing today so we
+[338.32] get our result and to do that we uh
+[341.88] space States get our space State and
+[345.00] intersect Ray with our query and our
+[349.12] result variable now holds all of the
+[351.52] information that we need and
+[352.92] specifically if you go into the this
+[355.64] intersect array and you can click on
+[357.24] this if you control and and left click
+[360.40] you can see within our intersect array
+[362.04] we're going to get a lot of information
+[363.68] including the colliding object the idea
+[366.16] of that object the normal of the uh the
+[369.56] surface that we're hitting at the
+[370.80] intersection point the face index of the
+[372.84] intersection point and the shape index
+[375.28] of that colliding shape so lots of
+[377.24] information that we're going to be
+[378.28] getting and if it doesn't hit anything
+[380.24] it's just going to pass null it's just
+[382.40] nothing we don't get anything back we'll
+[384.92] have to account for that uh in a little
+[386.88] bit back in our script now we have our
+[389.08] results and we're going to get the
+[391.84] collider we want to get the the node
+[394.28] basically uh that we're hitting and so
+[396.60] let's do that with another variable and
+[399.12] we're going to call this current cast
+[402.28] result and that's going to equal result
+[406.44] get collider that's the extent of the
+[409.16] function that we need to get some
+[411.04] results so let's go ahead and
+[413.28] print our cast result and let's test
+[417.28] this out we need to also make sure that
+[419.08] we're going to be running this every
+[421.12] frame so let's go up to our physics
+[424.56] process and add our interact cast
+[427.84] function and let's run this and when we
+[430.52] do we should get some results down in
+[434.48] our output now our rcast is happening uh
+[437.68] from the center of our screen and we're
+[439.56] currently getting a bunch of null values
+[442.12] down in our output remember we set our
+[444.60] interact distance to two that means in
+[446.96] in two meters that's as far as we're
+[448.40] going with our rcast so we get a little
+[450.60] bit closer to some objects we're going
+[452.36] to start getting some results you can
+[454.76] see our raycast is finding and hitting
+[457.76] our static body 3D nodes over here also
+[461.72] remember that you need a collision
+[463.76] object for the raycast to do anything uh
+[466.40] and it also has to be in the layer that
+[468.00] you're you're checking for and this
+[469.56] information is going to be exactly what
+[471.68] we need when we continue our our
+[473.72] interaction set up in other videos we
+[475.60] just need to know what we're hitting and
+[477.80] to be able to control the distance that
+[480.12] we are able to to hit those objects so
+[482.52] the fact that I can get static body 3D
+[485.16] is is perfect now that we're getting a
+[487.20] result from our our raycast the other
+[489.92] part of the puzzle is whenever we
+[491.72] interact whenever we press say the E key
+[494.56] we want to take whatever we're hitting
+[496.12] and be able to interact with it so just
+[498.28] for our setup we're going to create an
+[500.12] input map for a interact key and we're
+[503.04] going to prints we're going to print out
+[504.96] what we're currently looking at if
+[507.36] anything so we'll head up to our project
+[510.64] project
+[512.04] settings
+[513.56] and input map and then we're going to
+[516.08] add an action called
+[518.44] interacts and for this one in fact let
+[521.08] me resize this a little bit for this
+[523.64] button let's just do the uh e key for
+[527.20] our interact button now to add our
+[529.32] interaction let's go up to uh this
+[532.72] function right here so this is the the
+[534.68] input function and it's it's an existing
+[537.28] function that it's always there and
+[539.08] we're overwriting it within our our
+[541.48] script we're adding to it and what this
+[543.64] does is it it fires whenever there's an
+[546.16] input event now it's more complicated in
+[548.92] terms of when certain ones fire for
+[551.44] example I've got an unhandled input up
+[553.84] there and an input there's a a sequence
+[556.56] where these are are set up and I I won't
+[558.32] get all into that maybe in a a future
+[560.72] tutorial video but for now just know
+[563.16] that this is all going to fire whenever
+[565.28] there's any input event at all we're
+[567.16] already using this to to exit from the
+[569.40] window right so let's add another one so
+[572.64] if the event is the action pressed
+[576.12] interact we're going to run our
+[579.60] interact function right there in our
+[582.36] interact function we're going to take
+[584.44] whatever that current cast result is
+[587.24] check if it exists first and if it does
+[590.40] we'll we'll just print it out okay in
+[592.28] the future what we can do is access that
+[595.28] uh that node that script whatever that
+[597.40] might be maybe it's a door or a pickup
+[600.16] item and we can run some some code from
+[602.72] there for now we're just going to print
+[605.00] and remember we did create a variable up
+[608.60] here to hold that information and that's
+[610.32] the interact cast result so I guess the
+[613.56] first thing we need to do we don't need
+[615.68] to print that so the first thing we
+[617.36] really need to do is get the interact
+[619.24] cast result and set it to the current
+[622.72] cast result now that variable that
+[625.52] information is accessible from anywhere
+[627.32] in our script and we'll check in our
+[631.56] interact function if cast result is not
+[634.72] null and if it is not
+[638.04] null we'll print
+[641.24] it but only if we press the E key so
+[644.04] let's test that out head over to our
+[646.88] boxes and we took off our our constant
+[649.84] printing so I'm I'm looking at the box
+[652.36] when I press e it should print and there
+[655.36] it is and same goes for any objects that
+[660.00] is has a
+[662.44] collider now in the next video we're
+[665.72] going to take a look at how to
+[666.96] distinguish between other objects in the
+[669.80] scene right because currently we can
+[672.00] interact with the walls and the floor
+[674.84] and we we don't want that we want to be
+[676.36] able to interact with the objects that
+[678.16] we want not everything so what we'll do
+[681.04] in the next video is set up uh what is
+[683.16] called the component we're going to add
+[684.60] a an interaction component that we can
+[686.72] add to any object that our scenes and
+[690.68] and make them interactable all right
+[692.72] guys if this tutorial was helpful
+[694.24] consider it a like And subscribe to the
+[696.12] channel as we're going to be covering a
+[697.72] lot more thanks to all of my patrons who
+[700.36] keep this series going you too can get
+[702.84] access to the project source files by
+[704.80] joining my patreon you can download
+[707.28] everything there and you'll also get
+[708.92] early access to my videos and sneak
+[711.00] peeks at Future tutorials thanks for
+[713.60] watching and as always keep creating
+[717.64] [Music]

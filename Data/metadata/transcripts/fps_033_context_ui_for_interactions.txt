@@ -1,0 +1,68 @@
+[0.04] want to make a context based interaction
+[2.28] UI for your 3dg game here's how add some
+[5.32] control nodes to your user interface I
+[7.52] have a user interface scene in my player
+[9.40] controller you can work from your own UI
+[11.44] setup or get the one that I'm using via
+[13.40] my patreon in your UI add a center
+[15.72] container call it context component and
+[18.04] add a script go to layout and set the
+[20.08] layout mode to Anchors and use the full
+[22.36] wct option which centers all children
+[24.32] noes to the center of the screen add an
+[26.36] hbox container and two child notes
+[28.88] texture wct and label text re will hold
+[31.76] our icon and label our interaction text
+[34.64] and position transform shift the context
+[37.44] component down slightly so it's below
+[39.64] your reticle or position it for your own
+[41.84] UI needs in the context component script
+[44.72] add a class name context component and
+[47.32] three export variables icon and context
+[49.88] will reference the two children nodes we
+[51.60] added and default icon will hold the
+[53.56] default interaction icon remember to
+[55.84] assign these after saving for my icon
+[58.04] I'm using Kenny's free input icons and
+[60.16] the E key from the keyboard set link to
+[62.48] that in the description we need to
+[64.12] create a global reference to our
+[65.76] contacts component if you don't have a
+[67.96] global script you can add one by going
+[69.72] to project project settings autoload and
+[72.60] add a new script as an autoload this
+[74.76] script will be available to reference in
+[76.52] every other script in the global script
+[78.64] add a UI context variable then in our
+[81.16] context component script assigned self
+[83.72] to that variable when we ready reset
+[86.16] empties our label text and icon texture
+[88.80] this runs immediately after loading
+[90.96] update icon runs when focusing on an
+[93.12] interactable object and has two
+[94.96] parameters a custom icon image and an
+[97.28] override Boolean if override is true we
+[99.88] load our new icon if false we load our
+[102.44] default icon update content passes a
+[105.00] unique string set by each interaction
+[107.12] and updates our label text to know when
+[109.24] we interact I'm using my interaction
+[111.20] component check out that video in the
+[113.20] description to make it yourself or grab
+[115.16] it via my patreon this interaction
+[117.32] component is attached to any object we
+[119.32] want to be able to interact with working
+[121.44] from this interaction component we add
+[123.28] an export variable for our context
+[125.36] string this might be something like open
+[127.48] door or pick a box an override Boolean
+[130.52] if we want a custom icon and then a
+[132.64] custom icon variable we then call the
+[134.84] update content and update icon functions
+[137.20] within the in range function as a
+[139.40] reminder this fires when we look at an
+[141.24] object and we pass our context new icon
+[144.60] and override icon variables when we are
+[147.08] not in range or when we look away we run
+[150.00] our reset function and that's it
+[152.68] [Music]
