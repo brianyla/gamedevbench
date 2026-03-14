@@ -1,0 +1,9 @@
+{
+  "task_0001_crouching": {
+    "manual_review_required": true,
+    "audit_start_should_fail": false,
+    "notes": [
+      "Bootstrap task override: no start-to-solution diff exists, so validator generation requires manual review."
+    ]
+  }
+}

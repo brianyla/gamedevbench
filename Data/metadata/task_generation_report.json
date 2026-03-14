@@ -1,0 +1,79 @@
+{
+  "tasks": [
+    {
+      "task": "task_0002_create_dynamic_crosshair_animate_dynamic_crosshair",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0002_create_dynamic_crosshair_animate_dynamic_crosshair",
+        "solution_pass": true,
+        "start_pass": false,
+        "manual_review_required": false
+      }
+    },
+    {
+      "task": "task_0003_add_debug_info_panel",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0003_add_debug_info_panel",
+        "solution_pass": true,
+        "start_pass": false,
+        "manual_review_required": false
+      }
+    },
+    {
+      "task": "task_0004_debug_panel_singleton",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0004_debug_panel_singleton",
+        "solution_pass": true,
+        "start_pass": false,
+        "manual_review_required": false
+      }
+    },
+    {
+      "task": "task_0005_movement_state_machine_intro",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0005_movement_state_machine_intro",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false
+      }
+    },
+    {
+      "task": "task_0006_state_machine_walking",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0006_state_machine_walking",
+        "solution_pass": true,
+        "start_pass": false,
+        "manual_review_required": false
+      }
+    }
+  ]
+}
