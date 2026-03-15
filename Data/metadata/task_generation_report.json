@@ -1,48 +1,23 @@
 {
   "tasks": [
     {
-      "task": "task_0002_create_dynamic_crosshair_animate_dynamic_crosshair",
-      "manual_review_required": false,
+      "task": "task_0001_crouching",
+      "manual_review_required": true,
       "wrote_files": [
         "task_spec.json",
         "task_config.json",
         "test.gd"
       ],
       "audit": {
-        "task": "task_0002_create_dynamic_crosshair_animate_dynamic_crosshair",
-        "solution_pass": true,
+        "task": "task_0001_crouching",
+        "solution_pass": false,
         "start_pass": false,
-        "manual_review_required": false
-      }
-    },
-    {
-      "task": "task_0003_add_debug_info_panel",
-      "manual_review_required": false,
-      "wrote_files": [
-        "task_spec.json",
-        "task_config.json",
-        "test.gd"
-      ],
-      "audit": {
-        "task": "task_0003_add_debug_info_panel",
-        "solution_pass": true,
-        "start_pass": false,
-        "manual_review_required": false
-      }
-    },
-    {
-      "task": "task_0004_debug_panel_singleton",
-      "manual_review_required": false,
-      "wrote_files": [
-        "task_spec.json",
-        "task_config.json",
-        "test.gd"
-      ],
-      "audit": {
-        "task": "task_0004_debug_panel_singleton",
-        "solution_pass": true,
-        "start_pass": false,
-        "manual_review_required": false
+        "manual_review_required": true,
+        "task_bundle_health": "manual_review_required",
+        "bundle_failure_label": "task_spec_failure",
+        "bundle_failure_evidence": [
+          "Task bundle is marked manual_review_required."
+        ]
       }
     },
     {
@@ -57,11 +32,16 @@
         "task": "task_0005_movement_state_machine_intro",
         "solution_pass": false,
         "start_pass": false,
-        "manual_review_required": false
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
       }
     },
     {
-      "task": "task_0006_state_machine_walking",
+      "task": "task_0007_state_machine_sprinting",
       "manual_review_required": false,
       "wrote_files": [
         "task_spec.json",
@@ -69,10 +49,455 @@
         "test.gd"
       ],
       "audit": {
-        "task": "task_0006_state_machine_walking",
-        "solution_pass": true,
+        "task": "task_0007_state_machine_sprinting",
+        "solution_pass": false,
         "start_pass": false,
-        "manual_review_required": false
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0009_state_machine_crouching",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0009_state_machine_crouching",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0010_state_machine_sliding",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0010_state_machine_sliding",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0011_state_machine_basic_jump",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0011_state_machine_basic_jump",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0012_state_machine_double_jump",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0012_state_machine_double_jump",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0013_state_machine_jump_strength",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0013_state_machine_jump_strength",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0014_state_machine_jump_animation",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0014_state_machine_jump_animation",
+        "solution_pass": true,
+        "start_pass": true,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Task start state unexpectedly passed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0015_state_machine_falling",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0015_state_machine_falling",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0018_weapon_modular_system",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0018_weapon_modular_system",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0022_shooting_raycasting_setup",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0022_shooting_raycasting_setup",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0023_easy_bullet_decals",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0023_easy_bullet_decals",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0024_procedural_gun_recoil",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0024_procedural_gun_recoil",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0025_procedural_gun_recoil_part_two",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0025_procedural_gun_recoil_part_two",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0026_gun_muzzle_flash",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0026_gun_muzzle_flash",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0028_creating_a_modular_interaction_component",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0028_creating_a_modular_interaction_component",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0030_interactive_door_component_make_an_fps_in_godot",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0030_interactive_door_component_make_an_fps_in_godot",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0031_context_ui_for_interactions",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0031_context_ui_for_interactions",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0032_creating_a_message_bus_for_signals",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0032_creating_a_message_bus_for_signals",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0034_how_to_create_smart_doors",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0034_how_to_create_smart_doors",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0035_how_to_open_and_close_doors",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0035_how_to_open_and_close_doors",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0036_how_to_make_automatic_doors",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0036_how_to_make_automatic_doors",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0037_open_doors_with_physics",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0037_open_doors_with_physics",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
+      }
+    },
+    {
+      "task": "task_0039_using_the_raycast3d_node_for_interactions_picking_up_objects",
+      "manual_review_required": false,
+      "wrote_files": [
+        "task_spec.json",
+        "task_config.json",
+        "test.gd"
+      ],
+      "audit": {
+        "task": "task_0039_using_the_raycast3d_node_for_interactions_picking_up_objects",
+        "solution_pass": false,
+        "start_pass": false,
+        "manual_review_required": false,
+        "task_bundle_health": "audit_failed",
+        "bundle_failure_label": "validator_failure",
+        "bundle_failure_evidence": [
+          "Canonical solution failed the generated validator."
+        ]
       }
     }
   ]

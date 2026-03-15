@@ -40,26 +40,36 @@ def main() -> None:
 
     result["status"] = "completed"
     result["completed_at"] = datetime.now().isoformat()
+    existing_solver = result.get("solver") or {}
+    existing_tokens = existing_solver.get("token_usage") or {}
     solver_payload = {
-        "success": bool(args.solver_success),
-        "message": args.solver_message,
-        "duration_seconds": args.duration_seconds,
-        "is_rate_limited": bool(args.rate_limited),
-        "model": args.model,
-        "cost_usd": args.cost_usd,
+        "success": bool(args.solver_success or existing_solver.get("success")),
+        "message": args.solver_message or existing_solver.get("message", ""),
+        "duration_seconds": args.duration_seconds if args.duration_seconds else existing_solver.get("duration_seconds", 0.0),
+        "is_rate_limited": bool(args.rate_limited or existing_solver.get("is_rate_limited")),
+        "model": args.model or existing_solver.get("model", ""),
+        "cost_usd": args.cost_usd if args.cost_usd else existing_solver.get("cost_usd", 0.0),
         "token_usage": {
-            "input_tokens": args.input_tokens,
-            "output_tokens": args.output_tokens,
-            "total_tokens": args.input_tokens + args.output_tokens,
-            "cache_read_tokens": args.cache_read_tokens,
-            "cache_write_tokens": args.cache_write_tokens,
+            "input_tokens": args.input_tokens if args.input_tokens else existing_tokens.get("input_tokens", 0),
+            "output_tokens": args.output_tokens if args.output_tokens else existing_tokens.get("output_tokens", 0),
+            "total_tokens": 0,
+            "cache_read_tokens": args.cache_read_tokens if args.cache_read_tokens else existing_tokens.get("cache_read_tokens", 0),
+            "cache_write_tokens": args.cache_write_tokens if args.cache_write_tokens else existing_tokens.get("cache_write_tokens", 0),
         },
     }
+    solver_payload["token_usage"]["total_tokens"] = (
+        solver_payload["token_usage"]["input_tokens"] + solver_payload["token_usage"]["output_tokens"]
+    )
     result["solver"] = solver_payload
 
     result_path = run_dir / "result.json"
     write_json(result_path, result)
-    update_trajectory_sections(run_dir, solver=solver_payload)
+    update_trajectory_sections(
+        run_dir,
+        solver=solver_payload,
+        classification=result.get("classification"),
+        task_bundle_health=result.get("task_bundle_health"),
+    )
     append_trajectory_event(
         run_dir,
         "run_finalized",

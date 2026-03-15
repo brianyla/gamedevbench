@@ -13,6 +13,8 @@ from run_utils import (
     ROOT,
     RUNS_DIR,
     append_trajectory_event,
+    classify_run_failure,
+    infer_task_bundle_health,
     load_json,
     update_trajectory_sections,
     write_json,
@@ -66,7 +68,7 @@ def shutil_which(binary: str) -> Optional[str]:
     return None
 
 
-def update_result_json(run_dir: Path, validation_payload: Dict) -> None:
+def update_result_json(run_dir: Path, validation_payload: Dict, task_bundle_health: Dict, classification: Dict) -> None:
     result_path = run_dir / "result.json"
     result = load_json(result_path)
 
@@ -82,6 +84,8 @@ def update_result_json(run_dir: Path, validation_payload: Dict) -> None:
     if result.get("status") == "prepared":
         result["status"] = "validated"
     result["validation"] = validation_payload
+    result["task_bundle_health"] = task_bundle_health
+    result["classification"] = classification
 
     write_json(result_path, result)
 
@@ -186,10 +190,19 @@ def main() -> None:
         "failure_messages": failure_lines,
         "validated_in_isolation": True,
     }
-    update_result_json(run_dir, validation_payload)
+    result_snapshot = load_json(run_dir / "result.json")
+    task_bundle_health = infer_task_bundle_health(result_snapshot.get("task_name", ""))
+    classification = classify_run_failure(
+        validation_payload=validation_payload,
+        validator_output=combined_output,
+        task_bundle_health=task_bundle_health,
+    )
+    update_result_json(run_dir, validation_payload, task_bundle_health, classification)
     update_trajectory_sections(
         run_dir,
         validation=validation_payload,
+        classification=classification,
+        task_bundle_health=task_bundle_health,
         artifacts={"validator_output": "validator_output.txt"},
     )
     append_trajectory_event(
@@ -202,6 +215,11 @@ def main() -> None:
             "exit_code": completed.returncode,
             "validated_in_isolation": True,
         },
+    )
+    append_trajectory_event(
+        run_dir,
+        "run_classified",
+        classification,
     )
 
     print(validator_output_path)

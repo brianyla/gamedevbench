@@ -680,6 +680,26 @@ def audit_task(task_dir: Path, godot_bin: str) -> Dict[str, Any]:
             result[f"{label}_pass"] = success
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)
+    if result["manual_review_required"]:
+        result["task_bundle_health"] = "manual_review_required"
+        result["bundle_failure_label"] = "task_spec_failure"
+        result["bundle_failure_evidence"] = ["Task bundle is marked manual_review_required."]
+    elif result["solution_pass"] is True and result["start_pass"] is False:
+        result["task_bundle_health"] = "ok"
+        result["bundle_failure_label"] = None
+        result["bundle_failure_evidence"] = []
+    elif result["solution_pass"] is False:
+        result["task_bundle_health"] = "audit_failed"
+        result["bundle_failure_label"] = "validator_failure"
+        result["bundle_failure_evidence"] = ["Canonical solution failed the generated validator."]
+    elif result["solution_pass"] is True and result["start_pass"] is True:
+        result["task_bundle_health"] = "audit_failed"
+        result["bundle_failure_label"] = "validator_failure"
+        result["bundle_failure_evidence"] = ["Task start state unexpectedly passed the generated validator."]
+    else:
+        result["task_bundle_health"] = "unknown"
+        result["bundle_failure_label"] = None
+        result["bundle_failure_evidence"] = ["Task bundle audit did not produce a stable result."]
     return result
 
 

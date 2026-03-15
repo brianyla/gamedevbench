@@ -1,13 +1,16 @@
 import json
+import re
 import shlex
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 ROOT = Path(__file__).resolve().parents[1]
 TASKS_DIR = ROOT / "tasks"
 RUNS_DIR = ROOT / "test_result"
+METADATA_DIR = ROOT / "metadata"
+TASK_REPORT_PATH = METADATA_DIR / "task_generation_report.json"
 
 EXCLUDED_RUN_ARTIFACTS = {
     ".DS_Store",
@@ -130,6 +133,8 @@ def build_initial_trajectory(
         "events": [],
         "validation": None,
         "solver": None,
+        "classification": None,
+        "task_bundle_health": None,
         "artifacts": {
             "trajectory_file": "trajectory.json",
             "raw_terminal_log": raw_terminal_log,
@@ -157,6 +162,8 @@ def update_trajectory_sections(
     *,
     validation: Optional[Dict] = None,
     solver: Optional[Dict] = None,
+    classification: Optional[Dict] = None,
+    task_bundle_health: Optional[Dict] = None,
     artifacts: Optional[Dict] = None,
 ) -> None:
     path = trajectory_path(run_dir)
@@ -165,6 +172,10 @@ def update_trajectory_sections(
         trajectory["validation"] = validation
     if solver is not None:
         trajectory["solver"] = solver
+    if classification is not None:
+        trajectory["classification"] = classification
+    if task_bundle_health is not None:
+        trajectory["task_bundle_health"] = task_bundle_health
     if artifacts:
         trajectory.setdefault("artifacts", {}).update(artifacts)
     write_json(path, trajectory)
@@ -174,3 +185,144 @@ def read_text_if_exists(path: Path) -> Optional[str]:
     if not path.exists():
         return None
     return path.read_text(encoding="utf-8").strip()
+
+
+def load_task_generation_report() -> Dict[str, Any]:
+    return load_json(TASK_REPORT_PATH, default={"tasks": []})
+
+
+def infer_task_bundle_health(task_name: str) -> Dict[str, Any]:
+    report = load_task_generation_report()
+    for task_entry in report.get("tasks", []):
+        if task_entry.get("task") != task_name:
+            continue
+        audit = task_entry.get("audit") or {}
+        manual_review_required = bool(task_entry.get("manual_review_required"))
+        if manual_review_required:
+            return {
+                "status": "manual_review_required",
+                "bundle_failure_label": "task_spec_failure",
+                "evidence": ["Task bundle is marked manual_review_required."],
+                "audit": audit,
+            }
+        solution_pass = audit.get("solution_pass")
+        start_pass = audit.get("start_pass")
+        if solution_pass is True and start_pass is False:
+            return {
+                "status": "ok",
+                "bundle_failure_label": None,
+                "evidence": [],
+                "audit": audit,
+            }
+        if solution_pass is False:
+            return {
+                "status": "audit_failed",
+                "bundle_failure_label": "validator_failure",
+                "evidence": ["Canonical solution failed task audit validation."],
+                "audit": audit,
+            }
+        if solution_pass is True and start_pass is True:
+            return {
+                "status": "audit_failed",
+                "bundle_failure_label": "validator_failure",
+                "evidence": ["Task start state unexpectedly passed task audit validation."],
+                "audit": audit,
+            }
+        return {
+            "status": "unknown",
+            "bundle_failure_label": None,
+            "evidence": ["Task audit information is incomplete."],
+            "audit": audit,
+        }
+    return {
+        "status": "unknown",
+        "bundle_failure_label": None,
+        "evidence": ["No task bundle audit information found."],
+        "audit": None,
+    }
+
+
+ENVIRONMENT_ERROR_PATTERNS = [
+    r"SCRIPT ERROR: Compile Error",
+    r"SCRIPT ERROR: Parse Error",
+    r"ERROR: Failed to load script",
+    r"Identifier not found:",
+    r"Could not find type",
+    r"Could not find base class",
+    r"autoload",
+    r"Invalid project path specified",
+    r"Could not resolve Godot binary",
+]
+
+
+def classify_run_failure(
+    *,
+    validation_payload: Optional[Dict[str, Any]],
+    validator_output: str,
+    task_bundle_health: Dict[str, Any],
+) -> Dict[str, Any]:
+    if validation_payload and validation_payload.get("success"):
+        return {
+            "primary_label": "ok",
+            "failure_subtype": None,
+            "classification_stage": "validation",
+            "classification_confidence": "high",
+            "failure_evidence": [],
+        }
+
+    for pattern in ENVIRONMENT_ERROR_PATTERNS:
+        if re.search(pattern, validator_output, flags=re.IGNORECASE):
+            return {
+                "primary_label": "environment_failure",
+                "failure_subtype": "validator_runtime_error",
+                "classification_stage": "validation",
+                "classification_confidence": "high",
+                "failure_evidence": extract_failure_evidence(validator_output),
+            }
+
+    bundle_label = task_bundle_health.get("bundle_failure_label")
+    if bundle_label:
+        return {
+            "primary_label": bundle_label,
+            "failure_subtype": task_bundle_health.get("status"),
+            "classification_stage": "task_bundle_audit",
+            "classification_confidence": "medium",
+            "failure_evidence": task_bundle_health.get("evidence", []),
+        }
+
+    failure_evidence = extract_failure_evidence(validator_output)
+    if failure_evidence:
+        return {
+            "primary_label": "agent_failure",
+            "failure_subtype": "validation_requirements_not_met",
+            "classification_stage": "validation",
+            "classification_confidence": "high",
+            "failure_evidence": failure_evidence,
+        }
+
+    return {
+        "primary_label": "environment_failure",
+        "failure_subtype": "unknown_validation_error",
+        "classification_stage": "validation",
+        "classification_confidence": "medium",
+        "failure_evidence": extract_failure_evidence(validator_output),
+    }
+
+
+def classify_pipeline_failure(message: str) -> Dict[str, Any]:
+    return {
+        "primary_label": "pipeline_failure",
+        "failure_subtype": "pipeline_step_failed",
+        "classification_stage": "pipeline",
+        "classification_confidence": "high",
+        "failure_evidence": [message],
+    }
+
+
+def extract_failure_evidence(output: str) -> List[str]:
+    lines = []
+    for line in output.splitlines():
+        stripped = line.strip()
+        if "VALIDATION_FAILED:" in stripped or "Compile Error" in stripped or "Parse Error" in stripped or "Failed to load script" in stripped:
+            lines.append(stripped)
+    return lines[:10]
